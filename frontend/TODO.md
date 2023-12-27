@@ -1,0 +1,2 @@
+- Heading + direction
+- A better state class: prevent the type isses we've seen 

@@ -1,18 +1,20 @@
-import "./app.css";
-import Bea2021Sagdp2N from "./Bea2021Sagdp2N.json";
-import EconomyPie from "./EconomyPie";
-import { StateRecord } from "./Model";
-import { getDataSet, getStateRecord } from "./util";
+import EconomyPie from "./components/EconomyPie";
+import GuessInputs from "./components/GuessInputs";
+import TargetStateRecord from "./util/TargetStateRecordContext";
+
+import "./style/app.css";
+import { StateRecord } from "./model/model";
 
 export function App() {
-  var stateRecordName = "New York"
-
-  getDataSet(getStateRecord(stateRecordName))
+  const targetStateRecord = StateRecord.of("Colorado");
 
   return (
     <>
-      <h1>{ stateRecordName }</h1>
-      <EconomyPie pieChartData={getDataSet(getStateRecord(stateRecordName))}/>
+      <h1>{targetStateRecord.name}</h1>
+      <TargetStateRecord.Provider value={targetStateRecord}>
+        <EconomyPie /> 
+        <GuessInputs />
+      </TargetStateRecord.Provider>
     </>
   );
 }

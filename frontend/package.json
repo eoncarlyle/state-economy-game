@@ -9,9 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "install": "^0.13.0",
-    "preact": "^10.16.0",
-    "react-google-charts": "^4.0.1"
+    "@emotion/react": "^11.11.3",
+    "@emotion/style": "^0.8.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.2",
+    "@mui/material": "^5.15.1",
+    "@mui/x-charts": "^6.18.4",
+    "@types/haversine": "^1.1.8",
+    "preact": "^10.16.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",

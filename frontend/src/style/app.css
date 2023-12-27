@@ -1,0 +1,25 @@
+:root {
+    font-family: "Roboto","Helvetica","Arial",sans-serif 
+}
+
+.guess-input-container {
+    flex-direction: column;
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.guess-row {
+    align-items: center;
+}
+
+.guess-row-item {
+    border-radius: 0.5rem;
+    background-color: #e0e0e0;
+    height: 2rem;
+    margin: auto;
+}
+
+.legend {
+}
