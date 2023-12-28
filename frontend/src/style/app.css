@@ -10,8 +10,12 @@
     justify-content: center;
 }
 
-.guess-row {
-    align-items: center;
+.empty-guess-row {
+    border-radius: 0.5rem;
+    height: 2rem;
+    width: 20rem;
+    background-color: #bdbdbd;
+    margin: 0.5rem;
 }
 
 .guess-row-item {
@@ -21,5 +25,7 @@
     margin: auto;
 }
 
-.legend {
+.economy-diagram-container {
+    justify-content: center;
+    align-items: center;
 }

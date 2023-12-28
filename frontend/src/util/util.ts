@@ -2,9 +2,7 @@ import { red, blue, cyan, green, orange, grey } from "@mui/material/colors";
 
 import { StateRecord, PieChartRecord } from "../model/model";
 import UsStates from "../data/UsStates.json";
-import haversineDistance, { haversineBearing } from "../util/haversine";
-import { East, North, NorthEast, NorthWest, South, SouthEast, SouthWest, West } from "@mui/icons-material";
-import { Fragment } from "preact/jsx-runtime";
+import haversineDistance from "../util/haversine";
 
 const stateRecordList: Array<StateRecord> = UsStates;
 const topCategoriesNumber = 5;
@@ -38,12 +36,14 @@ export function getStateRecord(stateRecordName: string): StateRecord {
 
 export function getPieChartSeries(stateRecord: StateRecord): Array<PieChartRecord> {
   const rankedStateRecords: PieChartRecord[] = Object.entries(stateRecord.economy)
-    .map((entry) => {
-      return { label: entry.at(0), value: entry.at(1) };
+    .map((entry: [string, number]) => {
+      return { label: entry[0], value: entry[1] };
     })
     .sort((a, b) => a.value - b.value)
     .reverse();
+
   const topStateRecordCategory = rankedStateRecords.slice(0, topCategoriesNumber);
+
   const labels: string[] = topStateRecordCategory
     .map((entry) => convertStateEconomyLabel(entry.label))
     .concat("Others");
@@ -76,5 +76,9 @@ export const getDistanceLabel = (startStateRecord: StateRecord, endStateRecord: 
 };
 
 export function convertStateEconomyLabel(shortLabel: string): string {
+  if (!Object.keys(conversion).includes(shortLabel))
+    //TODO: Fix error states
+    throw new Error
+  // @ts-ignore
   return conversion[shortLabel] as string;
 }

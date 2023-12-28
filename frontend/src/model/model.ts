@@ -1,4 +1,3 @@
-import UsStates from "../data/UsStates.json";
 import { getUsStateRecord } from "../util/util";
 
 export interface StateEconomy {

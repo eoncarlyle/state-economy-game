@@ -1,9 +1,11 @@
-import EconomyPie from "./components/EconomyPie";
+import { Grid } from "@mui/material";
+
+import EconomyDiagram from "./components/EconomyDiagram";
 import GuessInputs from "./components/GuessInputs";
 import TargetStateRecord from "./util/TargetStateRecordContext";
+import { StateRecord } from "./model/model";
 
 import "./style/app.css";
-import { StateRecord } from "./model/model";
 
 export function App() {
   const targetStateRecord = StateRecord.of("Colorado");
@@ -12,7 +14,7 @@ export function App() {
     <>
       <h1>{targetStateRecord.name}</h1>
       <TargetStateRecord.Provider value={targetStateRecord}>
-        <EconomyPie /> 
+        <EconomyDiagram />
         <GuessInputs />
       </TargetStateRecord.Provider>
     </>
