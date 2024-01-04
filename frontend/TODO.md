@@ -1,2 +1,4 @@
-- Heading + direction
-- A better state class: prevent the type isses we've seen 
+- Game buisness logic (winning, losing) and guess animations
+- Collapsing legend at small screen sizes
+- Editing copy above the diagram and some background art
+- On-browser persistence

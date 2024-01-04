@@ -2,30 +2,52 @@
     font-family: "Roboto","Helvetica","Arial",sans-serif 
 }
 
+/* TODO: place only the minimum of things in CSS here, everything else to go in */
+
 .guess-input-container {
     flex-direction: column;
     display: flex;
-    margin: auto;
+    margin: 0.5rem auto;
     align-items: center;
     justify-content: center;
+    width: 20rem;
+}
+
+.guess-row {
+    border-radius: 0.5rem;
+    height: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 20rem;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .empty-guess-row {
-    border-radius: 0.5rem;
-    height: 2rem;
-    width: 20rem;
+    background-color: #e0e0e0;
+}
+
+.filled-guess-row {
+    display: flex;
     background-color: #bdbdbd;
-    margin: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .guess-row-item {
-    border-radius: 0.5rem;
-    background-color: #e0e0e0;
-    height: 2rem;
-    margin: auto;
+    width: 75%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .economy-diagram-container {
     justify-content: center;
     align-items: center;
+}
+
+.state-name {
+    width: 50%;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }

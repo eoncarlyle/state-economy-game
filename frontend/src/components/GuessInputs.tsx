@@ -14,7 +14,7 @@ interface GuessInputsState {
 
 export default function GuessInputs() {
   const [state, setState] = useState<GuessInputsState>({ guesses: [], currentGuessName: null });
-  const guessEnabled = state.currentGuessName && state.guesses.length < maxGuesses;
+  const guessEnabled = state.guesses.length < maxGuesses;
   const priorGuesses = state.guesses.map((guess: StateRecord) => <GuessRow guessStateName={guess.name} />);
   const futureGuesses = Array(maxGuesses - state.guesses.length)
     .fill(undefined)
@@ -31,7 +31,7 @@ export default function GuessInputs() {
     if (state.currentGuessName && guessableStateRecords.includes(StateRecord.of(state.currentGuessName)))
       setState({ guesses: state.guesses.concat(StateRecord.of(state.currentGuessName)), currentGuessName: null });
   };
-  console.log(futureGuesses);
+
   return (
     <div className="guess-input-container">
       <Grid container direction="column" alignItems="center">
@@ -44,9 +44,9 @@ export default function GuessInputs() {
         value={state.currentGuessName}
         id="us-state-autocomplete"
         options={guessableStateRecords.map((stateRecord: StateRecord) => stateRecord.name)}
-        className="guess-row"
         onInputChange={inputChangeHandler}
-        renderInput={(params) => (<TextField {...params} className="guess-row" />) as React.ReactNode}
+        className="guess-row-item"
+        renderInput={(params) => (<TextField {...params} />) as React.ReactNode}
       />
 
       <Button className="guess-row" disabled={!guessEnabled} onClick={submitHandler}>

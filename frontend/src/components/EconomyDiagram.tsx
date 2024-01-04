@@ -1,5 +1,5 @@
 import { useContext } from "preact/hooks";
-import { Table, TableBody, TableCell, TableRow, Grid } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, Grid, TableHead } from "@mui/material";
 
 import { getPieChartSeries, pieColours } from "../util/util";
 import TargetStateRecord from "../util/TargetStateRecordContext";
@@ -9,7 +9,7 @@ import SquareIcon from "@mui/icons-material/Square";
 export default function EconomyDiagram() {
   const pieChartSeries = getPieChartSeries(useContext(TargetStateRecord));
   const legendRows = [];
-  const size = 350;
+  const size = 400;
 
   //TODO: Understand, fix typing issues requiring the @ts-ignore comments
   //! Implicit assumption that you have as many colours as categories
@@ -47,6 +47,10 @@ export default function EconomyDiagram() {
       <Grid item s={6}>
         <Table className="guess-input-container">
           {/* @ts-ignore */}
+          <TableHead>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+          </TableHead>
           <TableBody>{legendRows}</TableBody>
         </Table>
       </Grid>
