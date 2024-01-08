@@ -1,6 +1,5 @@
 import { Coordinates } from "../model/model";
-// Adpated from njj/haversine package
-// https://www.movable-type.co.uk/scripts/latlong.html
+// Adpated from njj/haversine package and https://www.movable-type.co.uk/scripts/latlong.html
 
 const rMile = 3960;
 

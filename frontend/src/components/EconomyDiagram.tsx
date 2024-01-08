@@ -45,7 +45,7 @@ export default function EconomyDiagram() {
         />
       </Grid>
       <Grid item s={6}>
-        <Table className="guess-input-container">
+        <Table className="guesses">
           {/* @ts-ignore */}
           <TableHead>
             <TableCell></TableCell>

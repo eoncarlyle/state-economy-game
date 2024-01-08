@@ -50,3 +50,10 @@ export class StateRecord {
     return record
   }
 }
+
+export interface GuessInputsState {
+  guesses: Array<StateRecord>;
+  currentGuessName: string | null;
+  gameWin: boolean;
+  showAnswer: boolean;
+}

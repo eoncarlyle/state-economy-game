@@ -1,4 +1,6 @@
-- Game buisness logic (winning, losing) and guess animations
-- Collapsing legend at small screen sizes
 - Editing copy above the diagram and some background art
+- Message saying when to come back
+- Hashing/hiding the distance table
+- Fix the absolute mess that is your CSS
+- Collapsing legend at small screen sizes
 - On-browser persistence
