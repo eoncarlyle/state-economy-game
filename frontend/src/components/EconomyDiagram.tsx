@@ -27,8 +27,10 @@ export default function EconomyDiagram() {
   }
 
   return (
+    //@ts-ignore
     <Grid container className="economy-diagram-container">
       <Grid item s={6}>
+        {/* @ts-ignore */}
         <PieChart
           colors={pieColours}
           tooltip={{ trigger: "none" }}
@@ -45,12 +47,14 @@ export default function EconomyDiagram() {
         />
       </Grid>
       <Grid item s={6}>
+        {/* @ts-ignore */}
         <Table className="guesses">
           {/* @ts-ignore */}
           <TableHead>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableHead>
+          {/* @ts-ignore */}
           <TableBody>{legendRows}</TableBody>
         </Table>
       </Grid>

@@ -6,7 +6,6 @@ import TargetStateRecord from "./util/TargetStateRecordContext";
 import { StateRecord } from "./model/model";
 
 import "./style/app.css";
-import { ReactNode } from "preact/compat";
 
 export function App() {
   const targetStateRecord = StateRecord.of("Colorado");

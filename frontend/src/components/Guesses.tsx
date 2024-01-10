@@ -1,5 +1,5 @@
 import { useState, useContext } from "preact/hooks";
-import { Autocomplete, Button, TextField, Grid, Dialog, Snackbar, IconButton } from "@mui/material";
+import { Autocomplete, Button, TextField, Grid, Snackbar, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import TargetStateRecord from "../util/TargetStateRecordContext";
@@ -31,7 +31,7 @@ export default function Guesses() {
   );
 
   //
-  const inputChangeHandler = (event: any, newInputValue: string | null) => {
+  const inputChangeHandler = (_event: any, newInputValue: string | null) => {
     setState({ ...state, currentGuessName: newInputValue });
   };
 
@@ -69,6 +69,7 @@ export default function Guesses() {
   return (
     <>
       <div className="guesses">
+        {/* @ts-ignore */}
         <Grid container direction="column" alignItems="center">
           {closedGuesses}
           {openGuesses}
