@@ -1,95 +1,98 @@
 :root {
-    font-family: "Roboto","Helvetica","Arial",sans-serif 
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 /* TODO: place only the minimum of things in CSS here, everything else to go in */
 
 .landing-copy {
-    margin: auto;
-    max-width: 30rem;
+  margin: auto;
+  max-width: 30rem;
 }
 
 .guesses {
-    flex-direction: column;
-    display: flex;
-    margin: 0.5rem auto;
-    align-items: center;
-    justify-content: center;
-    width: 20rem;
+  flex-direction: column;
+  display: flex;
+  margin: 0.5rem auto;
+  align-items: center;
+  justify-content: center;
+  width: 20rem;
 }
 
 .guess-row {
-    border-radius: 0.5rem;
-    height: 2rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+  border-radius: 0.5rem;
+  height: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .us-state-autocomplete {
-    margin: 1rem;
-    width: 90% 
+  margin: 1rem;
+  width: 90%;
 }
 
 .empty-guess-row {
-    background-color: #bdbdbd;
+  background-color: #bdbdbd;
 }
 
 .incorrect-guess-color {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .filled-guess-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    animation: animate-pop .3s forwards;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  animation: animate-pop 0.3s forwards;
 }
 
 @keyframes animate-pop {
-    0% {
-        transform: scale(1);        
-    }
-    75% {
-        transform: scale(1.15);        
-    }
-    to {
-        transform: scale(1);        
-    }
+  0% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.15);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
-
 .economy-diagram-container {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .guess-button {
-    margin: 0.5rem;
-    width: 50%;
+  margin: 0.5rem;
+  width: 50%;
 }
 
 .state-name {
-    width: 50%;
+  width: 50%;
 }
 
 .end-guess-row-item {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .answer-dialog-content {
-    padding: 2rem;
+  padding: 2rem;
 }
 
 .correct-guess-row {
-    background-color: #ffc107;
+  background-color: #ffc107;
 }
 
 .gdple-heading {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+}
+
+.accordion-legend {
+  margin: auto auto 2rem auto;
 }

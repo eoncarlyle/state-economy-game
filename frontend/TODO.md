@@ -1,3 +1,3 @@
 - Editing copy above the diagram and some background art
 - Collapsing legend at small screen sizes
-- Look into plotly for treemap
+- Look into plotly/Google React charts for treemap
