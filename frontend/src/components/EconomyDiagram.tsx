@@ -8,11 +8,11 @@ import TargetStateRecord from "../util/TargetStateRecordContext";
 import TableLegend from "./TableLegend";
 import AccordionLegendWrap from "./AccordionLegendWrap";
 import React from "react";
+import { PIE_CHART_SIZE, LEGEND_AUTOHIDE_WIDTH } from "../config";
 
 export default function EconomyDiagram() {
   const pieChartSeries = getPieChartSeries(useContext(TargetStateRecord));
-  const pieChartSize = 400;
-  const isFullScreen = useMediaQuery("(min-width:740px)");
+  const isFullScreen = useMediaQuery(`(min-width:${LEGEND_AUTOHIDE_WIDTH}px)`);
 
   return (
     //@ts-ignore
@@ -25,12 +25,12 @@ export default function EconomyDiagram() {
           series={[
             {
               data: pieChartSeries,
-              cx: pieChartSize / 2,
-              cy: pieChartSize / 2
+              cx: PIE_CHART_SIZE / 2,
+              cy: PIE_CHART_SIZE / 2
             }
           ]}
-          width={pieChartSize}
-          height={pieChartSize}
+          width={PIE_CHART_SIZE}
+          height={PIE_CHART_SIZE}
           slotProps={{ legend: { hidden: true } }}
         />
       </Grid>
