@@ -8,7 +8,7 @@ import { StateRecord } from "./model/model";
 import "./style/app.css";
 
 export function App() {
-  const targetStateRecord = StateRecord.of("Colorado");
+  const targetStateRecord = StateRecord.of("Minnesota");
 
   return (
     <>
@@ -20,7 +20,6 @@ export function App() {
                 GDP<span style={{ color: "#ffc107" }}>LE</span>
               </h1>
               <p>Guess which US state has this GDP breakdown! A new puzzle created every 24 hours</p>
-              {/* <p>{targetStateRecord.name}</p> */}
             </>
           ) as React.ReactNode
         }

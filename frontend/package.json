@@ -18,11 +18,14 @@
     "@mui/x-charts": "^6.18.4",
     "@types/haversine": "^1.1.8",
     "@types/react": "^18.2.47",
+    "luxon": "^3.4.4",
     "preact": "^10.16.0",
+    "preact-render-to-string": "^6.3.1",
     "react-confetti-explosion": "^2.1.2"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
+    "@types/luxon": "^3.4.0",
     "@types/material-ui": "^0.21.16",
     "typescript": "^5.0.2"
   }
