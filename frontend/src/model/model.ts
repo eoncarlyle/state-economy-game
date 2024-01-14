@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { getUsStateRecord } from "../util/util";
 
 export interface StateEconomy {
@@ -51,9 +52,18 @@ export class StateRecord {
   }
 }
 
-export interface GuessInputsState {
+export interface GameState {
   guesses: Array<StateRecord>;
   currentGuessName: string | null;
-  gameWin: boolean;
+  isWin: boolean;
   showAnswer: boolean;
+}
+
+export interface GameEntry {
+  guesses: Array<StateRecord>;
+  isWin: boolean;
+}
+
+export interface GameHistory {
+  [key: string]: GameEntry
 }

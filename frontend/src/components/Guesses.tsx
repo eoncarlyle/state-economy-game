@@ -5,24 +5,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import TargetStateRecord from "../util/TargetStateRecordContext";
 import GuessRow from "./GuessRow";
 import { getStateRecords } from "../util/util";
-import { StateRecord, GuessInputsState } from "../model/model";
+import { StateRecord, GameState } from "../model/model";
 import React from "react";
-
-// I think this should be elsewhwere
-const maxGuesses = 5;
+import { getGameState, guessSubmitHandlerFactory } from "../util/guess";
+import { MAX_GUESSES } from "../config";
 
 export default function Guesses() {
-  const [state, setState] = useState<GuessInputsState>({
-    guesses: [],
-    currentGuessName: null,
-    gameWin: false,
-    showAnswer: false,
-  });
+  const [state, setState] = useState<GameState>(getGameState());
   const targetStateRecord = useContext(TargetStateRecord);
+  // TODO: Move this
 
-  const guessAllowed = state.guesses.length < maxGuesses && !state.gameWin;
+  const guessAllowed = state.guesses.length < MAX_GUESSES && !state.isWin;
   const closedGuesses = state.guesses.map((guess: StateRecord) => <GuessRow guessStateName={guess.name} />);
-  const openGuesses = Array(maxGuesses - state.guesses.length)
+  const openGuesses = Array(MAX_GUESSES - state.guesses.length)
     .fill(undefined)
     .map(() => <GuessRow />);
 
@@ -37,33 +32,6 @@ export default function Guesses() {
 
   const closeAnswerHandler = () => {
     setState({ ...state, showAnswer: false });
-  };
-
-  const guessSubmitHandler = () => {
-    if (state.currentGuessName && guessableStateRecords.includes(StateRecord.of(state.currentGuessName))) {
-      const guessedStateRecord = StateRecord.of(state.currentGuessName);
-      if (targetStateRecord === guessedStateRecord) {
-        setState({
-          ...state,
-          guesses: state.guesses.concat(guessedStateRecord),
-          currentGuessName: null,
-          gameWin: true,
-        });
-      } else if (targetStateRecord !== guessedStateRecord && state.guesses.length + 1 === maxGuesses) {
-        setState({
-          ...state,
-          guesses: state.guesses.concat(guessedStateRecord),
-          currentGuessName: null,
-          showAnswer: true,
-        });
-      } else {
-        setState({
-          ...state,
-          guesses: state.guesses.concat(guessedStateRecord),
-          currentGuessName: null,
-        });
-      }
-    }
   };
 
   return (
@@ -84,7 +52,12 @@ export default function Guesses() {
             disabled={!guessAllowed}
           />
         </Grid>
-        <Button className="guess-button" variant="contained" disabled={!guessAllowed} onClick={guessSubmitHandler}>
+        <Button
+          className="guess-button"
+          variant="contained"
+          disabled={!guessAllowed}
+          onClick={guessSubmitHandlerFactory(MAX_GUESSES, guessableStateRecords, state, setState)}
+        >
           Guess
         </Button>
       </div>
