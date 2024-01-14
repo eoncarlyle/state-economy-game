@@ -1,7 +1,7 @@
 import { StateUpdater, useContext } from "preact/hooks";
 import { DateTime } from "luxon";
 
-import { StateRecord, GameState, GameEntry, GameHistory } from "../model/model";
+import { StateRecord, GameState, GameHistory } from "../model/model";
 import TargetStateRecord from "./TargetStateRecordContext";
 import { MAX_GUESSES } from "../config";
 

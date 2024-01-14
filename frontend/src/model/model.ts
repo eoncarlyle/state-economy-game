@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { getUsStateRecord } from "../util/util";
 
 export interface StateEconomy {
