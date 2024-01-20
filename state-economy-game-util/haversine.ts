@@ -1,4 +1,4 @@
-import { Coordinates } from "../model/model";
+import { Coordinates } from "./model";
 // Adpated from njj/haversine package and https://www.movable-type.co.uk/scripts/latlong.html
 
 const rMile = 3960;

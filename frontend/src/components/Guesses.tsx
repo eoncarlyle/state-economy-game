@@ -1,38 +1,38 @@
-import { useState, useContext } from "preact/hooks";
-import { Autocomplete, Button, TextField, Grid, Snackbar, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-
-import TargetStateRecord from "../util/TargetStateRecordContext";
-import GuessRow from "./GuessRow";
-import { getStateRecords } from "../util/util";
-import { StateRecord, GameState } from "../model/model";
+import { useState } from "preact/hooks";
+import { Autocomplete, Button, TextField, Grid } from "@mui/material";
 import React from "react";
+
+import GuessRow from "./GuessRow";
+import { getUsStateRecords } from "state-economy-game-util/util"
+import { StateRecord, GameState, Guess } from "state-economy-game-util/model"
 import { getGameState, guessSubmitHandlerFactory } from "../util/guess";
-import { MAX_GUESSES } from "../config";
+import { MAX_GUESSES } from "state-economy-game-util/constants";
+import TargetStateSnackbar from "./TargetStateSnackbar";
 
 export default function Guesses() {
-  const [state, setState] = useState<GameState>(getGameState());
-  const targetStateRecord = useContext(TargetStateRecord);
-  // TODO: Move this
+  const [gameState, setGameState] = useState<GameState | null>(null);
+  getGameState(setGameState)
 
-  const guessAllowed = state.guesses.length < MAX_GUESSES && !state.isWin;
-  const closedGuesses = state.guesses.map((guess: StateRecord) => <GuessRow guessStateName={guess.name} />);
-  const openGuesses = Array(MAX_GUESSES - state.guesses.length)
+  //TODO Not proud of this 
+  if (!gameState) return <></>
+
+  const guessAllowed = gameState.guesses.length < MAX_GUESSES && !gameState.isWin;
+  const closedGuesses = gameState.guesses.map((guess: Guess) => <GuessRow guess={guess}/>);
+  const openGuesses = Array(MAX_GUESSES - gameState.guesses.length)
     .fill(undefined)
-    .map(() => <GuessRow />);
+    .map(() => <GuessRow/>);
 
-  const guessableStateRecords = getStateRecords().filter(
-    (stateRecord: StateRecord) => !state.guesses.includes(stateRecord)
+  const guessableStateRecords = getUsStateRecords().filter(
+    (stateRecord: StateRecord) => !gameState.guesses.map((guess: Guess) => guess.stateRecord.name).includes(stateRecord.name)
   );
-
+  
   //
   const inputChangeHandler = (_event: any, newInputValue: string | null) => {
-    setState({ ...state, currentGuessName: newInputValue });
+    setGameState({ ...gameState, currentGuessName: newInputValue });
   };
 
-  const closeAnswerHandler = () => {
-    setState({ ...state, showAnswer: false });
-  };
+
+  //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now 
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function Guesses() {
           {openGuesses}
           <Autocomplete
             disablePortal
-            value={state.currentGuessName}
+            value={gameState.currentGuessName}
             id="us-state-autocomplete"
             className="us-state-autocomplete"
             options={guessableStateRecords.map((stateRecord: StateRecord) => stateRecord.name)}
@@ -56,26 +56,12 @@ export default function Guesses() {
           className="guess-button"
           variant="contained"
           disabled={!guessAllowed}
-          onClick={guessSubmitHandlerFactory(MAX_GUESSES, guessableStateRecords, state, setState)}
+          onClick={guessSubmitHandlerFactory(MAX_GUESSES, guessableStateRecords, gameState, setGameState)}
         >
           Guess
         </Button>
       </div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={state.showAnswer}
-        onClick={closeAnswerHandler}
-        message={`Correct answer: ${targetStateRecord.name}`}
-        action={
-          (
-            <>
-              <IconButton onClick={closeAnswerHandler} color="inherit">
-                {(<CloseIcon />) as React.ReactNode}
-              </IconButton>
-            </>
-          ) as React.ReactNode
-        }
-      />
+      {(<TargetStateSnackbar gameState={gameState} setGameState={setGameState} />) as React.ReactNode}
     </>
   );
 }

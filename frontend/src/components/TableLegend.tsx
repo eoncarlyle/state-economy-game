@@ -1,8 +1,8 @@
 import { Table, TableCell, TableRow, TableHead, TableBody } from "@mui/material";
 import SquareIcon from "@mui/icons-material/Square";
 
-import { PieChartRecord } from "../model/model";
-import { pieColours } from "../util/util";
+import { PieChartRecord } from "state-economy-game-util/model"  
+import { pieColours } from "state-economy-game-util/util"
 
 export default function TableLegend({ pieChartSeries, showHeader = true }: { pieChartSeries: Array<PieChartRecord>, showHeader?: boolean }) {
   const legendRows = [];
