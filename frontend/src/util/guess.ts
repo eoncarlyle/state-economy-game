@@ -1,46 +1,53 @@
-import { StateUpdater, useContext } from "preact/hooks";
+import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
-import { StateRecord, GameState, GameHistory } from "../model/model";
-import TargetStateRecord from "./TargetStateRecordContext";
-import { MAX_GUESSES } from "../config";
+import { StateRecord, GameState, GameHistory, GameId, Guess } from "state-economy-game-util/model";
+import { MAX_GUESSES } from "state-economy-game-util/constants";
+import { postGuessSubmission, postGameId } from "./rest";
+import { useEffect } from "react";
 
 const GAME_HISTORY = "gameHistory";
 
 export function guessSubmitHandlerFactory(
   maxGuesses: number,
   guessableStateRecords: Array<StateRecord>,
-  state: GameState,
-  setState: StateUpdater<GameState>
+  gameState: GameState,
+  setGameState: StateUpdater<GameState | null>
 ) {
-  const targetStateRecord = useContext(TargetStateRecord);
-  return () => {
-    if (state.currentGuessName && guessableStateRecords.includes(StateRecord.of(state.currentGuessName))) {
-      const guessedStateRecord = StateRecord.of(state.currentGuessName);
-      let updatedState;
-      if (targetStateRecord === guessedStateRecord) {
-        updatedState = {
-          ...state,
-          guesses: state.guesses.concat(guessedStateRecord),
+  return async () => {
+    //TODO: reflect on if the 'don't update anything if you hit an error' makes sense
+    if (gameState.currentGuessName && guessableStateRecords.includes(StateRecord.of(gameState.currentGuessName))) {
+      const guessedStateRecord = StateRecord.of(gameState.currentGuessName);
+      const guessSubmissionResponse = await postGuessSubmission({
+        id: gameState.id,
+        guessStateName: gameState.currentGuessName,
+      });
+
+      if (guessSubmissionResponse) {
+        const submittedGuess: Guess = {
+          stateRecord: guessedStateRecord,
+          distance: guessSubmissionResponse.distance,
+          bearing: guessSubmissionResponse.bearing,
+        };
+        let updatedState: GameState = {
+          ...gameState,
+          guesses: gameState.guesses.concat(submittedGuess),
           currentGuessName: null,
-          isWin: true
+        } 
+        if (guessSubmissionResponse.distance === 0) {
+          updatedState = {
+            ...updatedState,
+            isWin: true,
+          };
+        } else if (gameState.guesses.length + 1 >= maxGuesses) {
+          updatedState = {
+            ...updatedState,
+            showAnswer: true,
+          };
         };
-      } else if (targetStateRecord !== guessedStateRecord && state.guesses.length + 1 === maxGuesses) {
-        updatedState = {
-          ...state,
-          guesses: state.guesses.concat(guessedStateRecord),
-          currentGuessName: null,
-          showAnswer: true
-        };
-      } else {
-        updatedState = {
-          ...state,
-          guesses: state.guesses.concat(guessedStateRecord),
-          currentGuessName: null
-        };
+        updateGameHistory(updatedState);
+        setGameState(updatedState);
       }
-      updateGameHistory(updatedState);
-      setState(updatedState);
     }
   };
 }
@@ -64,28 +71,38 @@ function getGameHistory(): GameHistory {
 //? ...day and pick it up on the next reference day?
 export function updateGameHistory(updatedState: GameState) {
   const gameHistory = getGameHistory();
+
   gameHistory[getReferenceDateString()] = {
+    id: updatedState.id,
     guesses: updatedState.guesses,
-    isWin: updatedState.isWin
+    isWin: updatedState.isWin,
   };
   localStorage.setItem(GAME_HISTORY, JSON.stringify(gameHistory));
 }
 
-export function getGameState(): GameState {
-  if (getReferenceDateString() in getGameHistory()) {
-    const gameEntry = getGameHistory()[getReferenceDateString()];
-    return {
-      guesses: gameEntry.guesses,
-      currentGuessName: null,
-      isWin: gameEntry.isWin,
-      showAnswer: !gameEntry.isWin && gameEntry.guesses.length >= MAX_GUESSES
-    };
-  } else {
-    return {
-      guesses: [],
-      currentGuessName: null,
-      isWin: false,
-      showAnswer: false
-    };
-  }
+export function getGameState(setGameState: StateUpdater<GameState | null>) {
+  useEffect(() => {
+    if (getReferenceDateString() in getGameHistory()) {
+      const gameEntry = getGameHistory()[getReferenceDateString()];
+      setGameState({
+        id: gameEntry.id,
+        guesses: gameEntry.guesses,
+        currentGuessName: null,
+        isWin: gameEntry.isWin,
+        showAnswer: !gameEntry.isWin && gameEntry.guesses.length >= MAX_GUESSES,
+      });
+    } else {
+      postGameId().then((gameId: GameId | null) => {
+        if (gameId)
+          setGameState({
+            id: gameId.id,
+            guesses: [],
+            currentGuessName: null,
+            isWin: false,
+            showAnswer: false,
+          });
+        else setGameState(null);
+      });
+    }
+  }, [setGameState]);
 }

@@ -1,10 +1,9 @@
 import { red, blue, cyan, green, orange, grey } from "@mui/material/colors";
 
-import { StateRecord, PieChartRecord } from "../model/model";
-import UsStates from "../data/UsStates.json";
-import haversineDistance from "../util/haversine";
+import { StateRecord, PieChartRecord, StateEconomy } from "./model";
+import stateRecordList from "./UsStates";
+import haversineDistance, { haversineBearing } from "./haversine";
 
-const stateRecordList: Array<StateRecord> = UsStates;
 const topCategoriesNumber = 5;
 //TODO Implicit dependency on colours.size > topCategoriesNumber, there is a better way to do this
 export const pieColours = [red[500], blue[500], cyan[500], green[500], orange[500], grey[500]];
@@ -29,13 +28,8 @@ const conversion = {
   govStateLocal: "State and Local",
 };
 
-//TODO fix the minor typing issue here
-export function getStateRecord(stateRecordName: string): StateRecord {
-  return stateRecordList.filter((stateRecord: StateRecord) => stateRecord.name === stateRecordName)[0];
-}
-
-export function getPieChartSeries(stateRecord: StateRecord): Array<PieChartRecord> {
-  const rankedStateRecords: PieChartRecord[] = Object.entries(stateRecord.economy)
+export function getPieChartSeries(economy: StateEconomy): Array<PieChartRecord> {
+  const rankedStateRecords: PieChartRecord[] = Object.entries(economy)
     .map((entry: [string, number]) => {
       return { label: entry[0], value: entry[1] };
     })
@@ -58,27 +52,35 @@ export function getPieChartSeries(stateRecord: StateRecord): Array<PieChartRecor
   return pieChartSeries;
 }
 
-export const getStateRecords = () => {
-  return UsStates;
-};
+export const getUsStateRecords = () => stateRecordList
 
 export const getUsStateRecord = (stateName: string) =>
-  UsStates.find((stateRecord: StateRecord) => stateRecord.name === stateName);
+  stateRecordList.find((stateRecord: StateRecord) => stateRecord.name === stateName);
+
+export const isStateNameValid = (stateName: string) => {
+  return (getUsStateRecord(stateName) && true) 
+}
 
 export const getHaversineFormat = (stateRecord: StateRecord) => {
   return { latitude: stateRecord.latitudeN, longitude: -1 * stateRecord.longitudeW };
 };
 
-export const getDistanceLabel = (startStateRecord: StateRecord, endStateRecord: StateRecord) => {
-  return `${Math.round(
-    haversineDistance(getHaversineFormat(startStateRecord), getHaversineFormat(endStateRecord))
-  )} mi`;
+export const getDistanceLabel = (distance: number) => {
+  return `${Math.round(distance)} mi`;
+};
+
+export const getHaversineDistance = (startStateRecord: StateRecord, endStateRecord: StateRecord) => {
+  return Math.round(haversineDistance(getHaversineFormat(startStateRecord), getHaversineFormat(endStateRecord)));
+};
+
+export const getHaversineBearing = (startStateRecord: StateRecord, endStateRecord: StateRecord) => {
+  return Math.round(haversineBearing(getHaversineFormat(startStateRecord), getHaversineFormat(endStateRecord)));
 };
 
 export function convertStateEconomyLabel(shortLabel: string): string {
   if (!Object.keys(conversion).includes(shortLabel))
     //TODO: Fix error states
-    throw new Error
+    throw new Error();
   // @ts-ignore
   return conversion[shortLabel] as string;
 }

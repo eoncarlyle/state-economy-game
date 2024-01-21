@@ -2,14 +2,10 @@ import { Paper } from "@mui/material";
 
 import EconomyDiagram from "./components/EconomyDiagram";
 import Guesses from "./components/Guesses";
-import TargetStateRecord from "./util/TargetStateRecordContext";
-import { StateRecord } from "./model/model";
 
 import "./style/app.css";
 
 export function App() {
-  const targetStateRecord = StateRecord.of("Minnesota");
-
   return (
     <>
       <Paper elevation={0} className="landing-copy">
@@ -24,10 +20,8 @@ export function App() {
           ) as React.ReactNode
         }
       </Paper>
-      <TargetStateRecord.Provider value={targetStateRecord}>
-        <EconomyDiagram />
-        <Guesses />
-      </TargetStateRecord.Provider>
+      <EconomyDiagram />
+      <Guesses />
     </>
   );
 }

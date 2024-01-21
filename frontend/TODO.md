@@ -1,3 +1,5 @@
+- Automatic puzzle refresh
+- 
 - Editing copy above the diagram and some background art
-- Collapsing legend at small screen sizes
-- Look into plotly/Google React charts for treemap
+- D3 for treemap 
+- Copy-and-paste results to clipboard

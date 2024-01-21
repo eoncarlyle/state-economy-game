@@ -1,32 +1,29 @@
-import { useContext } from "preact/hooks";
 import ConfettiExplosion from "react-confetti-explosion";
 
-import TargetStateRecord from "../util/TargetStateRecordContext";
-import { getDistanceLabel } from "../util/util";
-import { StateRecord } from "../model/model";
+import { getDistanceLabel } from "state-economy-game-util/util" 
+import { Guess } from "state-economy-game-util/model";
 import BearingIcon from "./BearingIcon";
 
-export default function GuessRow({ guessStateName }: { guessStateName?: string }) {
-  const targetStateRecord = useContext(TargetStateRecord);
-  if (guessStateName && targetStateRecord.name !== guessStateName)
-    return (
-      <div className="filled-guess-row guess-row animate-pop incorrect-guess-color">
-        <div className="state-name end-guess-row-item">{guessStateName}</div>
-        {getDistanceLabel(StateRecord.of(guessStateName), targetStateRecord)}
-        <div className="end-guess-row-item">
-          <BearingIcon startStateRecord={StateRecord.of(guessStateName)} endStateRecord={targetStateRecord} />
-        </div>
-      </div>
-    );
-  else if (guessStateName && targetStateRecord.name === guessStateName)
-    return (
+export default function GuessRow({ guess }: { guess?: Guess }) {
+  // TODO: write distances into state to be read here
+  if (guess) {
+    if (guess.distance === 0)
+      return (
       <>
         <ConfettiExplosion />
         <div className="filled-guess-row guess-row animate-pop correct-guess-row">
-          <div className="state-name end-guess-row-item">{guessStateName}</div>
+          <div className="state-name end-guess-row-item">{guess.stateRecord.name}</div>
           <div className="end-guess-row-item">🎉</div>
         </div>
-      </>
-    );
-  else return <div className="guess-row empty-guess-row"> </div>;
+        </>)
+    else return (
+      <div className="filled-guess-row guess-row animate-pop incorrect-guess-color">
+        <div className="state-name end-guess-row-item">{guess.stateRecord.name}</div>
+        {getDistanceLabel(guess.distance)}
+        <div className="end-guess-row-item">
+          <BearingIcon bearing={guess.bearing}/> 
+        </div>
+      </div> 
+    )
+  } else return <div className="guess-row empty-guess-row"> </div>;
 }

@@ -13,15 +13,16 @@
     "@emotion/react": "^11.11.3",
     "@emotion/style": "^0.8.0",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.2",
+    "@mui/icons-material": "^5.15.4",
     "@mui/material": "^5.15.1",
-    "@mui/x-charts": "^6.18.4",
+    "@mui/x-charts": "^6.18.7",
     "@types/haversine": "^1.1.8",
     "@types/react": "^18.2.47",
     "luxon": "^3.4.4",
     "preact": "^10.16.0",
     "preact-render-to-string": "^6.3.1",
-    "react-confetti-explosion": "^2.1.2"
+    "react-confetti-explosion": "^2.1.2",
+    "state-economy-game-util": "file:../state-economy-game-util"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
