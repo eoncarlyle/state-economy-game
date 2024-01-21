@@ -93,7 +93,6 @@ const handleUnhandledRoute = (req, res) => {
     res.status(404).json({ message: "HTTP response code 404: route not handled" });
 };
 exports.handleUnhandledRoute = handleUnhandledRoute;
-//TODO add rotating targetStateRecord
 const getTargetStateName = () => __awaiter(void 0, void 0, void 0, function* () {
     const targetStateModel = yield persistentModel_1.TargetStateModel.findOne();
     if (!targetStateModel)
@@ -101,24 +100,26 @@ const getTargetStateName = () => __awaiter(void 0, void 0, void 0, function* () 
     return targetStateModel.targetStateName;
 });
 exports.getTargetStateName = getTargetStateName;
-//TODO remove day + old timestamps
-//TODO add rotating targetStateRecord
 const runDailyTasks = () => __awaiter(void 0, void 0, void 0, function* () {
     const obsoleteDate = new Date();
     obsoleteDate.setDate(obsoleteDate.getDate() - 1);
-    yield persistentModel_1.GameIdModel.destroy({
+    const obsoleteIdCount = yield persistentModel_1.GameIdModel.destroy({
         where: {
             createdAt: {
                 [sequelize_1.Op.lt]: obsoleteDate,
             },
         },
     });
+    console.log(`Obsolete GameIds removed: ${obsoleteIdCount}}`);
     yield persistentModel_1.TargetStateModel.destroy({ truncate: true });
     const newTargetState = (0, util_1.getUsStateRecords)().at(getRandomInt((0, util_1.getUsStateRecords)().length));
+    if (!newTargetState)
+        return new Error("Failure to create new target state");
     yield persistentModel_1.TargetStateModel.create({
         id: 1,
         targetStateName: newTargetState === null || newTargetState === void 0 ? void 0 : newTargetState.name,
     });
+    console.log(`New target state: ${newTargetState === null || newTargetState === void 0 ? void 0 : newTargetState.name}`);
 });
 exports.runDailyTasks = runDailyTasks;
 function getRandomInt(max) {
