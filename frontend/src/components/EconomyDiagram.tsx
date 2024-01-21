@@ -1,9 +1,9 @@
 import { useEffect, useState } from "preact/hooks";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { PieChart } from "@mui/x-charts/PieChart";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { getPieChartSeries, pieColours } from "state-economy-game-util/util"
+import { getPieChartSeries, pieColours } from "state-economy-game-util/util";
 
 import TableLegend from "./TableLegend";
 import AccordionLegendWrap from "./AccordionLegendWrap";
@@ -18,17 +18,15 @@ export default function EconomyDiagram() {
   const isFullScreen = useMediaQuery(`(min-width:${legendAutohideWidth}px)`);
   const [pieChartSeries, setPieChartSeries] = useState<Array<PieChartRecord> | null>(null);
 
-  useEffect(() => { 
-    getTargetStateEconomy()
-      .then((economy: StateEconomy | null) => {
-        if (economy)
-          setPieChartSeries(getPieChartSeries(economy))
-        else {
-          console.log("Failure to fetch state economy")
-          setPieChartSeries(economy)
-        }
-      })
-  }, [setPieChartSeries])
+  useEffect(() => {
+    getTargetStateEconomy().then((economy: StateEconomy | null) => {
+      if (economy) setPieChartSeries(getPieChartSeries(economy));
+      else {
+        console.log("Failure to fetch state economy");
+        setPieChartSeries(economy);
+      }
+    });
+  }, [setPieChartSeries]);
 
   if (pieChartSeries)
     return (
@@ -43,8 +41,8 @@ export default function EconomyDiagram() {
               {
                 data: pieChartSeries,
                 cx: pieChartSize / 2,
-                cy: pieChartSize / 2
-              }
+                cy: pieChartSize / 2,
+              },
             ]}
             width={pieChartSize}
             height={pieChartSize}

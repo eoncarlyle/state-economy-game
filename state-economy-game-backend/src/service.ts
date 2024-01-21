@@ -48,11 +48,21 @@ export const postGuessSubmission = async (req: Request, res: Response, next: Nex
   } else if (gameId.attempts >= MAX_GUESSES) {
     return next(CheckedHttpError.of("Too many request have been made for this game", 422));
   }
+  const targetStateRecord = await getTargetStateRecord();
+  const distance = getHaversineDistance(StateRecord.of(guessStateName), targetStateRecord)
+
+  //TODO: save this to the target state table, no need to recalculate this every time 
+  const maxDistance = getUsStateRecords().map((stateRecord: StateRecord) => getHaversineDistance(stateRecord, targetStateRecord))
+    .reduce((acc, cur) => {
+      if (cur > acc) return cur;
+      else return acc;
+    }, 0)
 
   const responseBody: GuessSubmissionResponse = {
     id: id,
-    distance: getHaversineDistance(StateRecord.of(guessStateName), await getTargetStateRecord()),
-    bearing: getHaversineBearing(StateRecord.of(guessStateName), await getTargetStateRecord()),
+    distance: distance,
+    bearing: getHaversineBearing(StateRecord.of(guessStateName), targetStateRecord),
+    percentileScore: Math.round((1 - (distance / maxDistance)) * 100)
   };
 
   //@ts-ignore
@@ -114,7 +124,7 @@ export const runDailyTasks = async () => {
     },
   });
   console.log(`Obsolete GameIds removed: ${obsoleteIdCount}}`)
-  
+
   await TargetStateModel.destroy({ truncate: true });
   const newTargetState = getUsStateRecords().at(getRandomInt(getUsStateRecords().length));
   if (!newTargetState) return new Error("Failure to create new target state")

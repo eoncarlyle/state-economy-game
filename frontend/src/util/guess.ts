@@ -28,12 +28,13 @@ export function guessSubmitHandlerFactory(
           stateRecord: guessedStateRecord,
           distance: guessSubmissionResponse.distance,
           bearing: guessSubmissionResponse.bearing,
+          percentileScore: guessSubmissionResponse.percentileScore
         };
         let updatedState: GameState = {
           ...gameState,
           guesses: gameState.guesses.concat(submittedGuess),
           currentGuessName: null,
-        } 
+        }
         if (guessSubmissionResponse.distance === 0) {
           updatedState = {
             ...updatedState,
@@ -90,6 +91,7 @@ export function getGameState(setGameState: StateUpdater<GameState | null>) {
         currentGuessName: null,
         isWin: gameEntry.isWin,
         showAnswer: !gameEntry.isWin && gameEntry.guesses.length >= MAX_GUESSES,
+        showShareableResultMessage: false
       });
     } else {
       postGameId().then((gameId: GameId | null) => {
@@ -100,9 +102,32 @@ export function getGameState(setGameState: StateUpdater<GameState | null>) {
             currentGuessName: null,
             isWin: false,
             showAnswer: false,
+            showShareableResultMessage: false
           });
         else setGameState(null);
       });
     }
   }, [setGameState]);
+}
+
+export function getShareableResult(gameState: GameState) {
+  const emojiResult = gameState.guesses.map(
+    (guess: Guess) => {
+      const greenCount = Math.floor(guess.percentileScore / 20)
+      return Array(greenCount).fill("🟩").concat(Array(5 - greenCount).fill("🟨")).join("")
+    }
+  ).join()
+  const numericResult = gameState.isWin ? String(gameState.guesses.length) : 'X'
+  return `#gdple,${numericResult}/5,${emojiResult}`
+}
+
+export function shareableResultClickHandler(gameState: GameState, setGameState: StateUpdater<GameState | null>) {
+  return async () => {
+    if (gameState) {
+      const type = "text/plain";
+      const data = [new ClipboardItem({ [type]: new Blob([getShareableResult(gameState)], { type }) })];
+      await navigator.clipboard.write(data);
+      setGameState({ ...gameState, showShareableResultMessage: true });
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 import EconomyDiagram from "./components/EconomyDiagram";
 import Guesses from "./components/Guesses";
