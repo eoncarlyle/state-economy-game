@@ -13,16 +13,15 @@ type TargetStateSnackbarProps = {
 
 export default function TargetStateSnackbar(props: TargetStateSnackbarProps): React.ReactNode {
   const { gameState, setGameState } = props;
-  if (!gameState.showAnswer) return <></> 
+  if (!gameState.showAnswer) return <></>;
   const [targetStateName, setTargetStateName] = useState<String | null>(null);
 
   //TODO: Retry logic
   useEffect(() => {
     getPuzzleAnswer(gameState.id).then((response: PuzzleAnswerResponse | null) => {
-      if (response) setTargetStateName(response.targetStateName)
-      else setTargetStateName(null)
-    }
-    );
+      if (response) setTargetStateName(response.targetStateName);
+      else setTargetStateName(null);
+    });
   }, [setTargetStateName]);
 
   const closeAnswerHandler = () => {
@@ -32,7 +31,7 @@ export default function TargetStateSnackbar(props: TargetStateSnackbarProps): Re
   if (targetStateName) {
     return (
       <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={gameState.showAnswer}
         onClick={closeAnswerHandler}
         message={`Correct answer: ${targetStateName}`}
@@ -43,5 +42,5 @@ export default function TargetStateSnackbar(props: TargetStateSnackbarProps): Re
         }
       />
     ) as React.ReactNode;
-  } else return <></>
+  } else return <></>;
 }

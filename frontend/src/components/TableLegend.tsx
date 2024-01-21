@@ -1,10 +1,21 @@
-import { Table, TableCell, TableRow, TableHead, TableBody } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+
 import SquareIcon from "@mui/icons-material/Square";
 
-import { PieChartRecord } from "state-economy-game-util/model"  
-import { pieColours } from "state-economy-game-util/util"
+import { PieChartRecord } from "state-economy-game-util/model";
+import { pieColours } from "state-economy-game-util/util";
 
-export default function TableLegend({ pieChartSeries, showHeader = true }: { pieChartSeries: Array<PieChartRecord>, showHeader?: boolean }) {
+export default function TableLegend({
+  pieChartSeries,
+  showHeader = true,
+}: {
+  pieChartSeries: Array<PieChartRecord>;
+  showHeader?: boolean;
+}) {
   const legendRows = [];
 
   //TODO: Understand, fix typing issues requiring the @ts-ignore comments
@@ -26,7 +37,7 @@ export default function TableLegend({ pieChartSeries, showHeader = true }: { pie
     //@ts-ignore
     <Table className="guesses">
       {/* @ts-ignore */}
-      { showHeader &&
+      {showHeader && (
         <TableHead>
           {/* @ts-ignore */}
           <TableRow>
@@ -35,7 +46,7 @@ export default function TableLegend({ pieChartSeries, showHeader = true }: { pie
           </TableRow>
           {/* @ts-ignore */}
         </TableHead>
-      }
+      )}
       {/* @ts-ignore */}
       <TableBody>{legendRows}</TableBody>
       {/* @ts-ignore */}

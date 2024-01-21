@@ -72,12 +72,16 @@
 }
 
 .state-name {
-  width: 50%;
+  width: 45%;
+}
+
+.distance-label {
+  width: 20%
 }
 
 .end-guess-row-item {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .answer-dialog-content {
