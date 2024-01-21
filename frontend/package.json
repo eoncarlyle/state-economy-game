@@ -20,12 +20,12 @@
     "@types/react": "^18.2.47",
     "luxon": "^3.4.4",
     "preact": "^10.16.0",
-    "preact-render-to-string": "^6.3.1",
     "react-confetti-explosion": "^2.1.2",
     "state-economy-game-util": "file:../state-economy-game-util"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
+    "@size-limit/preset-app": "^11.0.2",
     "@types/luxon": "^3.4.0",
     "@types/material-ui": "^0.21.16",
     "typescript": "^5.0.2"
