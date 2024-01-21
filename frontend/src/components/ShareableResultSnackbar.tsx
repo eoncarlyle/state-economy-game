@@ -16,11 +16,11 @@ export default function ShareableResultSnackbar(props: ShareableResultSnackbar):
     setGameState({ ...gameState, showShareableResultMessage: false });
   };
   if (!gameState.showShareableResultMessage) return <></>;
-  else
+  else {
     return (
       <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={gameState.showAnswer}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={gameState.showShareableResultMessage}
         onClick={closeAnswerHandler}
         message={"Result copied to clipboard"}
         action={
@@ -30,4 +30,5 @@ export default function ShareableResultSnackbar(props: ShareableResultSnackbar):
         }
       />
     );
+  }
 }

@@ -37,11 +37,9 @@ export default function Guesses() {
       !gameState.guesses.map((guess: Guess) => guess.stateRecord.name).includes(stateRecord.name)
   );
 
-  //
   const inputChangeHandler = (_event: any, newInputValue: string | null) => {
     setGameState({ ...gameState, currentGuessName: newInputValue });
   };
-
   const MainButton = () => {
     if (gameOngoing)
       return (
