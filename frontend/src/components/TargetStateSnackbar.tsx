@@ -31,7 +31,7 @@ export default function TargetStateSnackbar(props: TargetStateSnackbarProps): Re
   if (targetStateName) {
     return (
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={gameState.showAnswer}
         onClick={closeAnswerHandler}
         message={`Correct answer: ${targetStateName}`}

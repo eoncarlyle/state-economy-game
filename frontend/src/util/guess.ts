@@ -114,11 +114,11 @@ export function getShareableResult(gameState: GameState) {
   const emojiResult = gameState.guesses.map(
     (guess: Guess) => {
       const greenCount = Math.floor(guess.percentileScore / 20)
-      return Array(greenCount).fill("🟩").concat(Array(5 - greenCount).fill("🟨")).join("")
+      return Array(greenCount).fill("🟩").concat(Array(5 - greenCount).fill("🟨")).join()
     }
-  ).join()
+  ).join("\n")
   const numericResult = gameState.isWin ? String(gameState.guesses.length) : 'X'
-  return `#gdple,${numericResult}/5,${emojiResult}`
+  return `#gdple,${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`
 }
 
 export function shareableResultClickHandler(gameState: GameState, setGameState: StateUpdater<GameState | null>) {

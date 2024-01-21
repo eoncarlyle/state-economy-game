@@ -19,7 +19,7 @@ export default function ShareableResultSnackbar(props: ShareableResultSnackbar):
   else
     return (
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={gameState.showAnswer}
         onClick={closeAnswerHandler}
         message={"Result copied to clipboard"}
