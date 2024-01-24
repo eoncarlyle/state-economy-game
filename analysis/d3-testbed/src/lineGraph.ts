@@ -1,55 +1,58 @@
-import * as d3 from "d3";
+import { select, treemap, hierarchy, scaleOrdinal, schemeSet3, treemapBinary } from "d3";
 import data from "./data";
 import { EconomyNode } from "./model";
 
 export function lineGraph() {
   // Specify the color scale.
- 
 
-  const color = d3.scaleOrdinal(
+  const color = scaleOrdinal(
     data.children.map((d) => d.gdpCategory),
-    d3.schemeSet3
+    schemeSet3
   );
 
-
-  const width = 1500;
-  const height = 1000;
+  const width = 500;
+  const height = 400;
+  const defaultFontSize = 10;
+  //! This is hardcoded here and in the stylesheet, this should be fixed
+  const maxTooltipWidth = 200;
 
   // Compute the layout.
-  const root = d3
-    .treemap()
-    .tile(d3.treemapBinary) // e.g., d3.treemapSquarify
+  const root = treemap()
+    .tile(treemapBinary) // e.g., d3.treemapSquarify
     .size([width, height])
     .padding(1)
     .round(true)(
-    d3
-      .hierarchy(data)
+    hierarchy(data)
       .sum((d) => d.gdp)
       .sort((a, b) => b.gdp - a.gdp)
   );
 
-  const svg = d3
-    .select("#container")
+  const svg = select("#container")
     .append("svg")
     .attr("viewBox", [0, 0, width, height])
     .attr("width", width)
     .attr("height", height)
-    .attr("style", "max-width: 100%; height: auto; font: 20px sans-serif;");
+    .attr("style", "max-width: 100%; height: auto;");
 
-  // Add a cell for each leaf of the hierarchy.
   const leaf = svg
     .selectAll("g")
     .data(root.leaves())
     .join("g")
     .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
 
-  // Append a tooltip.
-  const format = d3.format(",d");
-  leaf.append("title").text((d) => d.gdpCategory);
+  const tooltipContainer = select("#tooltip-container");
+  const tooltipCategory = select("#tooltip-category");
+  const tooltipParent = select("#tooltip-parent");
+  const tooltipQuantity = select("#tooltip-quantity");
 
-  // Append a color rectangle.
+  const rectLabel = (count: number) => `rect-${count}`;
+  const textLabel = (count: number) => `text-${count}`;
+
+  // Credit https://observablehq.com/@giorgiofighera/histogram-with-tooltips-and-bars-highlighted-on-mouse-over
+  let count = 0;
   leaf
     .append("rect")
+    .attr("id", (d) => rectLabel(count++))
     .attr("fill", (d) => {
       while (d.depth > 1) d = d.parent;
       return color(d.data.gdpCategory);
@@ -57,28 +60,64 @@ export function lineGraph() {
     .attr("fill-opacity", 1)
     .attr("width", (d) => d.x1 - d.x0)
     .attr("height", (d) => d.y1 - d.y0)
-    .attr("inline-size", (d) => d.x1 - d.x0)
-  
-  let count = 0;
-  // Append a clipPath to ensure text does not overflow.
-  
+    .attr("inline-size", (d) => d.x1 - d.x0);
+
+  // Painting text
+  count = 0;
   leaf
     .append("text")
-    .text((d) => d.data.gdpCategory.split(/(?=[A-Z][a-z])/g).concat(format(d.data.gdp)))
-    .attr("x", d => 0.5*(d.x1 - d.x0))
-    .attr("y", d => 0.5*(d.y1 - d.y0))
+    .attr("id", (d) => textLabel(count++))
+    .text((d) => d.data.gdpCategory)
+    .attr("x", (d) => 0.5 * (d.x1 - d.x0))
+    .attr("y", (d) => 0.5 * (d.y1 - d.y0))
     .attr("dominant-baseline", "middle")
     .attr("text-anchor", "middle")
-  
-  // Append multiline text. The last line shows the value and has a specific formatting.
-  //leaf
-  //  .append("text")
-  //    .attr("clip-path", d => d.clipUid)
-  //  .selectAll("tspan")
-  //  .data((d) => d.data.gdpCategory.split(/(?=[A-Z][a-z])/g).concat(format(d.data.gdp)))
-  //  .join("tspan")
-  //  .attr("x", 3)
-  //  .attr("y", (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`)
-  //  .attr("fill-opacity", (d, i, nodes) => (i === nodes.length - 1 ? 0.7 : null))
-  //  .text((d) => d);
+    .attr("font-size", defaultFontSize)
+    .attr("font-family", "sans-serif")
+    .attr("fill", "#f2f2f2")
+    .attr("class", "treemapRectangle");
+
+  const positionTooltip = (leafData, event) => {
+    tooltipCategory.text(`Category: ${leafData?.data.gdpCategory}`);
+    tooltipParent.text(`Parent Category: ${leafData?.parent?.data.gdpCategory}`);
+    tooltipQuantity.text(`Value: \$${leafData?.data.gdp}M`);
+    tooltipContainer.style("visibility", "visible");
+    tooltipContainer.style("top", `${event.pageY - 10}px`).style("left", `${event.pageX + 10}px`);
+  };
+
+  // Adjusting text size according to rectangle size
+  for (let leafIndex = 0; leafIndex < root.leaves().length; leafIndex++) {
+    const text = select(`#text-${leafIndex}`);
+    const rect = select(`#rect-${leafIndex}`);
+    const leafData = root.leaves().at(leafIndex);
+
+    if (text.node().getComputedTextLength() > rect.node().width.baseVal.value) {
+      text.attr("display", "none");
+    } else {
+      let size = defaultFontSize;
+      while (text.node().getComputedTextLength() <= rect.node().width.baseVal.value) {
+        text.attr("font-size", size++);
+      }
+      text.attr("font-size", size - 2);
+    }
+
+    rect
+      .on("mouseover", function (event) {
+        select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
+        positionTooltip(leafData, event);
+      })
+      .on("mousemove", function (event) {
+        positionTooltip(leafData, event);
+        const overflow = event.pageX + maxTooltipWidth - window.outerWidth;
+        if (overflow > 0) {
+          positionTooltip(leafData, event);
+        } else {
+          positionTooltip(leafData, event);
+        }
+      })
+      .on("mouseout", function () {
+        select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
+        tooltipContainer.style("visibility", "hidden");
+      });
+  }
 }
