@@ -26,13 +26,23 @@ export class StateRecord {
 }
 
 export interface StateEconomies {
-  [key: string]: EconomyNode
+  [key: string]: NonLeafEconomyNode
 }
 
-export interface EconomyNode {
+export interface NonLeafEconomyNode {
   gdpCategory: string; 
+  children: Array<NonLeafEconomyNode | LeafEconomyNode>;
+}
+
+export interface LeafEconomyNode {
+  gdpCategory: string;
   gdp: number;
-  children?: Array<EconomyNode>;
+}
+
+export interface InternalEconomyNode {
+  gdpCategory: string; 
+  gdp?: number;
+  children?: Array<InternalEconomyNode>;
 }
 
 export interface Guess {

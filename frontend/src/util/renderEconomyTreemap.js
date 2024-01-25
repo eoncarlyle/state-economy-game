@@ -1,22 +1,16 @@
-import { select, treemap, hierarchy, scaleOrdinal, schemeSet3, treemapBinary } from "d3";
+import { select, treemap, hierarchy, scaleOrdinal, schemeSet3, treemapBinary, format } from "d3";
 
 export default function renderTreemap(data) {
-  const color = scaleOrdinal(
-    data.children.map((d) => d.gdpCategory),
-    schemeSet3
-  );
+  const color = scaleOrdinal(data.children.map((d) => d.gdpCategory), schemeSet3);
 
   const width = 500;
   const height = 400;
   const defaultFontSize = 10;
 
-  //! This is hardcoded here and in the stylesheet, this should be fixed
-  const maxTooltipWidth = 200;
-
   const root = treemap().tile(treemapBinary).size([width, height]).padding(1).round(true)(
     hierarchy(data)
       .sum((d) => d.gdp)
-      .sort((a, b) => b.gdp - a.gdp)
+      .sort((a, b) => b - a)
   );
 
   const svg = select("#container")
@@ -29,8 +23,9 @@ export default function renderTreemap(data) {
   const leaf = svg
     .selectAll("g")
     .data(root.leaves())
-    .join("g")
-    .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+    .join("g").attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+    
+  root.leaves().filter((d) => d.parent.data.gdpCategory === "Administrative and support and waste management and remediation services" )
 
   const tooltipContainer = select("#tooltip-container");
   const tooltipCategory = select("#tooltip-category");
@@ -39,8 +34,8 @@ export default function renderTreemap(data) {
 
   const rectLabel = (count) => `rect-${count}`;
   const textLabel = (count) => `text-${count}`;
+  const gdpFormat = format(",d")
 
-  // Credit https://observablehq.com/@giorgiofighera/histogram-with-tooltips-and-bars-highlighted-on-mouse-over
   let count = 0;
   leaf
     .append("rect")
@@ -54,7 +49,6 @@ export default function renderTreemap(data) {
     .attr("height", (d) => d.y1 - d.y0)
     .attr("inline-size", (d) => d.x1 - d.x0);
 
-  // Painting text
   count = 0;
   leaf
     .append("text")
@@ -72,7 +66,7 @@ export default function renderTreemap(data) {
   const positionTooltip = (leafData, event) => {
     tooltipCategory.text(`Category: ${leafData?.data.gdpCategory}`);
     tooltipParent.text(`Parent Category: ${leafData?.parent?.data.gdpCategory}`);
-    tooltipQuantity.text(`Value: \$${leafData?.data.gdp}M`);
+    tooltipQuantity.text(`Value: \$${gdpFormat(Math.round(leafData?.data.gdp))} M`);
     tooltipContainer.style("visibility", "visible");
     tooltipContainer.style("top", `${event.pageY - 10}px`).style("left", `${event.pageX + 10}px`);
   };
@@ -98,7 +92,6 @@ export default function renderTreemap(data) {
         positionTooltip(leafData, event);
       })
       .on("mousemove", function (event) {
-        //const overflow = event.pageX + maxTooltipWidth - window.outerWidth;
         positionTooltip(leafData, event);
       })
       .on("mouseout", function () {

@@ -1,6 +1,6 @@
 import csv
 import json
-from typing import Any
+from typing import Any, Union
 
 
 class Row:
@@ -53,12 +53,14 @@ class Conversion:
                 root = self.createTree(state_row_list)
                 # result[state] = buildMap(root)
                 prelim_result = buildMap(root)
+
+                # Combining the state and local hiearcies into total industry
                 result[state] = {
                     "gdpCategory": prelim_result["gdpCategory"],
-                    "gdp": prelim_result["gdp"],
                     "children": prelim_result["children"][0]["children"]
                     + prelim_result["children"][1]["children"],
                 }
+
 
         with open("stateEconomies2022.json", "w") as json_file_obj:
             json.dump(result, json_file_obj)
@@ -88,6 +90,7 @@ class Conversion:
                 parent_node.children = parent_node.children + [sorted_node]
 
         return list(filter(lambda node: node.value.level == 0, state_node_list))[0]
+
 
     # removes header row, anddenda and below rows
     def row_filter(self, row: list[str]) -> bool:
@@ -127,7 +130,7 @@ def buildMap(root: TreeNode):
     if len(children) > 0:
         return {
             "gdpCategory": value.clean_description,
-            "gdp": float(value.gdp) if value.gdp != "(L)" else 0,
+            #"gdp": float(value.gdp) if value.gdp != "(L)" else 0,
             "children": children,
         }
     else:
