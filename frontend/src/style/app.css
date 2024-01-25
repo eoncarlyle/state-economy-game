@@ -12,7 +12,7 @@
 .guesses {
   flex-direction: column;
   display: flex;
-  margin: 0.5rem auto;
+  margin: 1.5rem auto;
   align-items: center;
   justify-content: center;
   width: 20rem;
