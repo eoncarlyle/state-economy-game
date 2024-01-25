@@ -1,0 +1,4 @@
+- njj/haversine npm package
+- https://www.movable-type.co.uk/scripts/latlong.html
+- https://observablehq.com/@giorgiofighera/histogram-with-tooltips-and-bars-highlighted-on-mouse-over
+- https://observablehq.com/@d3/treemap-stratify?intent=fork

@@ -1,6 +1,4 @@
-import { StateRecord } from "./model";
-
-const stateRecords: Array<StateRecord> = [
+[
   {
     "name": "Alabama",
     "latitudeN": 32.7794,
@@ -257,5 +255,3 @@ const stateRecords: Array<StateRecord> = [
     "longitudeW": 107.5512
   }
 ]
-
-export default stateRecords

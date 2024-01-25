@@ -11,7 +11,6 @@ import { getUsStateRecords } from "state-economy-game-util/util";
 import { StateRecord, GameState, Guess } from "state-economy-game-util/model";
 import {
   getGameState,
-  getShareableResult,
   guessSubmitHandlerFactory,
   shareableResultClickHandler,
 } from "../util/guess";

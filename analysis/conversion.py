@@ -39,10 +39,11 @@ class Conversion:
             state_names = set([row[1] for row in global_clean_row_data])
             result = {}
             for state in state_names:
-                clean_row_data = [row for row in global_clean_row_data if row[1] == state]
+                clean_row_data = [
+                    row for row in global_clean_row_data if row[1] == state
+                ]
                 state_row_list: list[Row] = []
-           
-            
+
                 for row in clean_row_data:
                     _, geo_name, _, raw_description, gdp = row
                     clean_description = self.clean_description(raw_description)
@@ -50,10 +51,17 @@ class Conversion:
                     state_row_list.append(Row(geo_name, clean_description, gdp, level))
 
                 root = self.createTree(state_row_list)
-                result[state] = buildMap(root)
+                # result[state] = buildMap(root)
+                prelim_result = buildMap(root)
+                result[state] = {
+                    "gdpCategory": prelim_result["gdpCategory"],
+                    "gdp": prelim_result["gdp"],
+                    "children": prelim_result["children"][0]["children"]
+                    + prelim_result["children"][1]["children"],
+                }
 
         with open("stateEconomies2022.json", "w") as json_file_obj:
-            json.dump(result, json_file_obj) 
+            json.dump(result, json_file_obj)
 
     def create_node_list(self, state_row_list: list[Row]):
         state_node_list: list[TreeNode] = []
@@ -119,11 +127,11 @@ def buildMap(root: TreeNode):
     if len(children) > 0:
         return {
             "gdpCategory": value.clean_description,
-            "gdp": float(value.gdp) if value.gdp != '(L)' else 0,
+            "gdp": float(value.gdp) if value.gdp != "(L)" else 0,
             "children": children,
         }
     else:
         return {
             "gdpCategory": value.clean_description,
-            "gdp": float(value.gdp) if value.gdp != '(L)' else 0,
+            "gdp": float(value.gdp) if value.gdp != "(L)" else 0,
         }
