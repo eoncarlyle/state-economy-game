@@ -17,7 +17,7 @@ export function App() {
               </h1>
               <p>Guess which US state has this GDP breakdown! A new puzzle created every 24 hours.
                 Puzzle data is from Bureau of Economic Analaysis, collected for 2022.
-                Email <a href="mailto:gdple@iainschmitt.com">Iain</a> to report any issues.
+                Email <a href="mailto:gdple@iainschmitt.com">Iain</a> to report any issues!
               </p>
             </>
           ) as React.ReactNode
