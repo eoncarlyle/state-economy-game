@@ -1,29 +1,5 @@
 import { getUsStateRecord } from "./util";
 
-export interface StateEconomy {
-  naics11: number;
-  naics21: number;
-  naics22: number;
-  naics23: number;
-  naics31: number;
-  naics42: number;
-  naics44: number;
-  naics48: number;
-  naics51: number;
-  naics52: number;
-  naics54: number;
-  naics61: number;
-  naics71: number;
-  naics81: number;
-  govCivil: number;
-  govMil: number;
-  govStateLocal: number;
-}
-
-export interface PieChartRecord {
-  label: string;
-  value: number;
-}
 
 export interface Coordinates {
   latitude: number;
@@ -32,13 +8,11 @@ export interface Coordinates {
 
 export class StateRecord {
   name: string;
-  economy: StateEconomy;
   latitudeN: number;
   longitudeW: number;
 
-  constructor(name: string, economy: StateEconomy, latitudeN: number, longitudeW: number) {
+  constructor(name: string, latitudeN: number, longitudeW: number) {
     this.name = name;
-    this.economy = economy;
     this.latitudeN = latitudeN;
     this.longitudeW = longitudeW;
   }
@@ -49,6 +23,26 @@ export class StateRecord {
       throw new Error("Invalid state")
     return record
   }
+}
+
+export interface StateEconomies {
+  [key: string]: NonLeafEconomyNode
+}
+
+export interface NonLeafEconomyNode {
+  gdpCategory: string; 
+  children: Array<NonLeafEconomyNode | LeafEconomyNode>;
+}
+
+export interface LeafEconomyNode {
+  gdpCategory: string;
+  gdp: number;
+}
+
+export interface InternalEconomyNode {
+  gdpCategory: string; 
+  gdp?: number;
+  children?: Array<InternalEconomyNode>;
 }
 
 export interface Guess {
@@ -80,6 +74,11 @@ export interface GameHistory {
 export interface GameId {
   id: string;
   attempts: number;
+}
+
+export interface EconomyResponse {
+  economy: NonLeafEconomyNode;
+  totalGdp: number;
 }
 
 export interface GuessSubmissionRequest {

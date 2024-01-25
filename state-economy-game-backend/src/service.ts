@@ -8,6 +8,9 @@ import {
   GuessSubmissionResponse,
   GuessSubmissionRequest,
   PuzzleAnswerResponse,
+  EconomyResponse,
+  NonLeafEconomyNode,
+  LeafEconomyNode,
 } from "state-economy-game-util/model";
 import { GameIdModel, TargetStateModel } from "./persistentModel";
 import {
@@ -18,6 +21,7 @@ import {
 } from "state-economy-game-util/util";
 import { CheckedHttpError } from "state-economy-game-util/model";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
+import stateEconomies from "./stateEconomies";
 
 
 export const getTargetStateRecord = async () => StateRecord.of(await getTargetStateName());
@@ -31,10 +35,16 @@ export const postGameId = async (_req: Request, res: Response) => {
   res.status(201).json(gameId);
 };
 
-//TODO: determine which state-economy-game-util methods/data should no longer be there for security/cheating purposes
-export const getTargetStateEconomy = async (_req: Request, res: Response) => {
-  const record = await getTargetStateRecord();
-  res.status(200).json(record.economy);
+export const getTargetStateEconomy = async (_req: Request, res: Response, next: NextFunction) => {
+  const targetEconomy = getEconomyNode(await getTargetStateName());
+  if (targetEconomy) {
+    const responseBody: EconomyResponse = {
+      economy: targetEconomy,
+      totalGdp: getTotalGdp(targetEconomy) 
+    }
+    res.status(200).json(responseBody)
+  }
+  else return next(CheckedHttpError.of(`Economy of requested state "${await getTargetStateName()}" not found`, 404))
 };
 
 export const postGuessSubmission = async (req: Request, res: Response, next: NextFunction) => {
@@ -137,4 +147,18 @@ export const runDailyTasks = async () => {
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
+}
+
+function getEconomyNode(stateName: string) {
+  if (stateName in stateEconomies)
+    return stateEconomies[stateName]
+  else return null
+}
+
+function getTotalGdp(economy: NonLeafEconomyNode|LeafEconomyNode): number {
+  if ('children' in economy) {
+    return economy.children.map((node) => getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0)
+  } else {
+    return economy.gdp
+  }
 }

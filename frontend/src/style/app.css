@@ -12,7 +12,7 @@
 .guesses {
   flex-direction: column;
   display: flex;
-  margin: 0.5rem auto;
+  margin: 1.5rem auto;
   align-items: center;
   justify-content: center;
   width: 20rem;
@@ -64,6 +64,7 @@
 .economy-diagram-container {
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .guess-button {
@@ -99,4 +100,35 @@
 
 .accordion-legend {
   margin: auto auto 2rem auto;
+}
+
+.tooltip-container {
+  background-color: #ffffff;
+  font-family: sans-serif; 
+  font-size: 14px;
+  padding: 4px;
+  border: none;
+  box-shadow: 0px 0px 3px 0px #E6E6E6;
+  list-style-type: none;
+  max-width: 200px;
+  position: absolute;
+  visibility: hidden;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.tooltip-item {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.treemapRectangle {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

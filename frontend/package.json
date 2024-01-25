@@ -18,6 +18,7 @@
     "@mui/x-charts": "^6.18.7",
     "@types/haversine": "^1.1.8",
     "@types/react": "^18.2.47",
+    "d3": "^7.8.5",
     "luxon": "^3.4.4",
     "preact": "^10.16.0",
     "preact-render-to-string": "^6.3.1",
