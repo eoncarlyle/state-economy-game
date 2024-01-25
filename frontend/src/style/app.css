@@ -64,6 +64,7 @@
 .economy-diagram-container {
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .guess-button {

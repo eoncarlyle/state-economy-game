@@ -8,6 +8,9 @@ import {
   GuessSubmissionResponse,
   GuessSubmissionRequest,
   PuzzleAnswerResponse,
+  EconomyResponse,
+  NonLeafEconomyNode,
+  LeafEconomyNode,
 } from "state-economy-game-util/model";
 import { GameIdModel, TargetStateModel } from "./persistentModel";
 import {
@@ -34,7 +37,13 @@ export const postGameId = async (_req: Request, res: Response) => {
 
 export const getTargetStateEconomy = async (_req: Request, res: Response, next: NextFunction) => {
   const targetEconomy = getEconomyNode(await getTargetStateName());
-  if (targetEconomy) res.status(200).json(targetEconomy)
+  if (targetEconomy) {
+    const responseBody: EconomyResponse = {
+      economy: targetEconomy,
+      totalGdp: getTotalGdp(targetEconomy) 
+    }
+    res.status(200).json(responseBody)
+  }
   else return next(CheckedHttpError.of(`Economy of requested state "${await getTargetStateName()}" not found`, 404))
 };
 
@@ -144,4 +153,12 @@ function getEconomyNode(stateName: string) {
   if (stateName in stateEconomies)
     return stateEconomies[stateName]
   else return null
+}
+
+function getTotalGdp(economy: NonLeafEconomyNode|LeafEconomyNode): number {
+  if ('children' in economy) {
+    return economy.children.map((node) => getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0)
+  } else {
+    return economy.gdp
+  }
 }

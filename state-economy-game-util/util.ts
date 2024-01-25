@@ -1,5 +1,3 @@
-import { red, blue, cyan, green, orange, grey } from "@mui/material/colors";
-
 import { StateRecord } from "./model";
 import stateRecordList from "./UsStates";
 import haversineDistance, { haversineBearing } from "./haversine";

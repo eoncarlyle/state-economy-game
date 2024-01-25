@@ -1,9 +1,9 @@
 import { PureComponent } from "preact/compat";
 import renderTreemap from "../util/renderEconomyTreemap"
-import { EconomyNode } from "state-economy-game-util/model";
+import { NonLeafEconomyNode } from "state-economy-game-util/model";
 
 interface EconomyTreemapProps {
-  data: EconomyNode;
+  data: NonLeafEconomyNode;
 }
 
 export class EconomyTreemap extends PureComponent<EconomyTreemapProps> {

@@ -1,32 +1,31 @@
 import { useEffect, useState } from "preact/hooks";
 import Grid from "@mui/material/Grid";
 
-import { EconomyNode } from "state-economy-game-util/model";
+import { EconomyResponse } from "state-economy-game-util/model";
 import { getTargetStateEconomy } from "../util/rest";
+import { priceNumberFormat } from "../util/format";
 import { EconomyTreemap } from "./EconomyTreemap";
 
 export default function EconomyDiagram() {
-  const [economyNode, setEconomyNode] = useState<EconomyNode | null>(null);
+  const [economyResponse, setEconomyResponse] = useState<EconomyResponse | null>(null);
 
   useEffect(() => {
-    getTargetStateEconomy().then((economy: EconomyNode | null) => {
-      if (economy) setEconomyNode(economy);
+    getTargetStateEconomy().then((response: EconomyResponse | null) => {
+      if (response) setEconomyResponse(response);
       else {
         console.log("Failure to fetch state economy");
-        setEconomyNode(economy);
       }
     });
-  }, [setEconomyNode]);
+  }, [setEconomyResponse]);
 
-  if (economyNode)
+
+  if (economyResponse)
     return (
       //@ts-ignore
-      <Grid container className="economy-diagram-container">
-        {/* @ts-ignore */}
-        <Grid item s={6}>
+      <Grid container className="economy-diagram-container" direction="column">
+        <h4>Total GDP: { priceNumberFormat(economyResponse.totalGdp) }</h4>
           {/* @ts-ignore */}
-          <EconomyTreemap data={economyNode} />
-        </Grid>
+        <EconomyTreemap data={economyResponse.economy} />
       </Grid>
     );
   else return <></>;

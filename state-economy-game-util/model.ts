@@ -76,6 +76,11 @@ export interface GameId {
   attempts: number;
 }
 
+export interface EconomyResponse {
+  economy: NonLeafEconomyNode;
+  totalGdp: number;
+}
+
 export interface GuessSubmissionRequest {
   id: string;
   guessStateName: string;

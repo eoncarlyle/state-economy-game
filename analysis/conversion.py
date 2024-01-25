@@ -53,7 +53,7 @@ class Conversion:
                 root = self.createTree(state_row_list)
                 # result[state] = buildMap(root)
                 prelim_result = buildMap(root)
-
+                print(state, gdpSum(root))
                 # Combining the state and local hiearcies into total industry
                 result[state] = {
                     "gdpCategory": prelim_result["gdpCategory"],
@@ -138,3 +138,12 @@ def buildMap(root: TreeNode):
             "gdpCategory": value.clean_description,
             "gdp": float(value.gdp) if value.gdp != "(L)" else 0,
         }
+
+def gdpSum(root: TreeNode):
+    if len(root.children) > 0:
+        children = 0
+        for child in root.children:
+            children += gdpSum(child)
+        return children
+    else:
+        return float(float(root.value.gdp) if root.value.gdp != "(L)" else 0)
