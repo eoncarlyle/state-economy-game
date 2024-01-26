@@ -1,7 +1,7 @@
-import { select, treemap, hierarchy, scaleOrdinal, schemeSet3, treemapBinary, format } from "d3";
+import { select, treemap, hierarchy, scaleOrdinal, schemeTableau10, treemapBinary, format } from "d3";
 
 export default function renderTreemap(data) {
-  const color = scaleOrdinal(data.children.map((d) => d.gdpCategory), schemeSet3);
+  const color = scaleOrdinal(data.children.map((d) => d.gdpCategory), schemeTableau10);
 
   const width = 500;
   const height = 400;

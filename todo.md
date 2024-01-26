@@ -1,3 +1,4 @@
 - Clean up references
 - Clean up right side clipping issue
+- Convert mui grids to flexboxes 
 - Add some art to the page
