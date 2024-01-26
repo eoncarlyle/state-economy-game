@@ -2,7 +2,6 @@ import { useState } from "preact/hooks";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
 
 import React from "react";
 
@@ -70,7 +69,6 @@ export default function Guesses() {
     <>
       <div className="guesses">
         {/* @ts-ignore */}
-        <Grid container direction="column" alignItems="center">
           {closedGuesses}
           {openGuesses}
           <Autocomplete
@@ -83,7 +81,6 @@ export default function Guesses() {
             renderInput={(params) => (<TextField {...params} label="Guess a state" />) as React.ReactNode}
             disabled={!gameOngoing}
           />
-        </Grid>
         <MainButton />
       </div>
       {(<TargetStateSnackbar gameState={gameState} setGameState={setGameState} />) as React.ReactNode}
