@@ -1,4 +1,4 @@
-import { EconomyNode, GameId, GuessSubmissionResponse, PuzzleAnswerResponse } from "state-economy-game-util/model";
+import { GameId, GuessSubmissionResponse, PuzzleAnswerResponse, EconomyResponse } from "state-economy-game-util/model";
 import { GuessSubmissionRequest } from "state-economy-game-util/model";
 
 export function getBaseUrl() {
@@ -8,7 +8,7 @@ export function getBaseUrl() {
 //TODO: Implement a sane retry policy (3x?) for these rest functions
 export async function getTargetStateEconomy() {
   const response = await getResponse("/economy", "GET")
-  return await handleResponse<EconomyNode>(response)
+  return await handleResponse<EconomyResponse>(response)
 }
 
 export async function postGameId() {
