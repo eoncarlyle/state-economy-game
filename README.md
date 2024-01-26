@@ -1,5 +1,5 @@
 # GDPLE
-State guessing game hosted on gdple.iainschmitt.com. Inspired by [Tradle](https://games.oec.world/en/tradle/) and [Statele](https://statele.teuteuf.fr).
+State guessing game hosted on [gdple.iainschmitt.com](https://gdple.iainschmitt.com). Inspired by [Tradle](https://games.oec.world/en/tradle/) and [Statele](https://statele.teuteuf.fr).
 
 
 ## References
