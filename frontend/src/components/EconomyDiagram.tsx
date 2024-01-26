@@ -1,6 +1,4 @@
 import { useEffect, useState } from "preact/hooks";
-import Grid from "@mui/material/Grid";
-
 import { EconomyResponse } from "state-economy-game-util/model";
 import { getTargetStateEconomy } from "../util/rest";
 import { priceNumberFormat } from "../util/format";
@@ -18,15 +16,14 @@ export default function EconomyDiagram() {
     });
   }, [setEconomyResponse]);
 
-
   if (economyResponse)
     return (
       //@ts-ignore
-      <Grid container className="economy-diagram-container" direction="column">
-        <h4>Total GDP: { priceNumberFormat(economyResponse.totalGdp) }</h4>
-          {/* @ts-ignore */}
+      <div className="economy-diagram-container">
+        <h4>Total GDP: {priceNumberFormat(economyResponse.totalGdp)}</h4>
+        {/* @ts-ignore */}
         <EconomyTreemap data={economyResponse.economy} />
-      </Grid>
+      </div>
     );
   else return <></>;
 }

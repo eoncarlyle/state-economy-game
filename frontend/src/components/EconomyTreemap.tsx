@@ -1,4 +1,5 @@
 import { PureComponent } from "preact/compat";
+
 import renderTreemap from "../util/renderEconomyTreemap"
 import { NonLeafEconomyNode } from "state-economy-game-util/model";
 

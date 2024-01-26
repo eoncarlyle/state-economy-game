@@ -37,7 +37,7 @@ export default function TargetStateSnackbar(props: TargetStateSnackbarProps): Re
         message={`Correct answer: ${targetStateName}`}
         action={
           <IconButton onClick={closeAnswerHandler} color="inherit">
-            {(<CloseIcon />) as React.ReactNode}
+            <CloseIcon />
           </IconButton>
         }
       />
