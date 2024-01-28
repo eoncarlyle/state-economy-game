@@ -1,9 +1,9 @@
 import express, { Express } from "express";
 import cors from "cors";
 import cron from "node-cron";
+import { Sequelize } from "sequelize";
 
-import { Sequelize, DataTypes } from "sequelize";
-import { initPersistentModels} from "./persistentModel";
+import { initPersistentModels } from "./persistentModel";
 
 import {
   postGameId,
