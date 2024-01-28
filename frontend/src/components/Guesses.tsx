@@ -2,17 +2,12 @@ import { useState } from "preact/hooks";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-
-import React from "react";
+import { useMediaQuery } from "@mui/material";
 
 import GuessRow from "./GuessRow";
 import { getUsStateRecords } from "state-economy-game-util/util";
 import { StateRecord, GameState, Guess } from "state-economy-game-util/model";
-import {
-  getGameState,
-  guessSubmitHandlerFactory,
-  shareableResultClickHandler,
-} from "../util/guess";
+import { getGameState, guessSubmitHandlerFactory, shareableResultClickHandler } from "../util/guess";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
 import TargetStateSnackbar from "./TargetStateSnackbar";
 import ShareableResultSnackbar from "./ShareableResultSnackbar";
@@ -63,33 +58,34 @@ export default function Guesses() {
       );
   };
 
-  //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now
+  const autocompoleteComponentProps = useMediaQuery('(min-width:600px)') ? {} : {
+    popper: {
+      placement: 'top'
+    }
+  } 
 
+  //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now
   return (
     <>
       <div className="guesses">
         {/* @ts-ignore */}
-          {closedGuesses}
-          {openGuesses}
-          <Autocomplete
-            disablePortal
-            value={gameState.currentGuessName}
-            id="us-state-autocomplete"
-            className="us-state-autocomplete"
-            options={guessableStateRecords.map((stateRecord: StateRecord) => stateRecord.name)}
-            onInputChange={inputChangeHandler}
-            renderInput={(params) => (<TextField {...params} label="Guess a state" />) as React.ReactNode}
-            disabled={!gameOngoing}
-          />
+        {closedGuesses}
+        {openGuesses}
+        <Autocomplete
+          disablePortal
+          value={gameState.currentGuessName}
+          id="us-state-autocomplete"
+          className="us-state-autocomplete"
+          options={guessableStateRecords.map((stateRecord: StateRecord) => stateRecord.name)}
+          onInputChange={inputChangeHandler}
+          renderInput={(params) => (<TextField {...params} label="Guess a state" />)}
+          disabled={!gameOngoing}
+          componentsProps={autocompoleteComponentProps}
+        />
         <MainButton />
       </div>
-      {(<TargetStateSnackbar gameState={gameState} setGameState={setGameState} />) as React.ReactNode}
-      {(<ShareableResultSnackbar gameState={gameState} setGameState={setGameState} />) as React.ReactNode}
+      <TargetStateSnackbar gameState={gameState} setGameState={setGameState} />
+      <ShareableResultSnackbar gameState={gameState} setGameState={setGameState} />
     </>
   );
 }
-
-/*
-- Replace existing button with different color button for sharing
-#gdple X/6 blocks
-*/
