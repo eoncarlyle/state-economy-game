@@ -1,9 +1,6 @@
 import { GameId } from "state-economy-game-util/model";
 import { Sequelize, Model, DataTypes } from "sequelize";
 
-// CREATE TABLE TargetStateName (id integer primary key, targetStateName varchar(60), createdAt datetime, updatedAt datetime);
-// CREATE TABLE GameIds (id varchar(36) PRIMARY KEY, attempts tinyint, createdAt datetime, updatedAt datetime);
- 
 
 export class GameIdModel extends Model implements GameId {
   declare id: string;
@@ -13,6 +10,7 @@ export class GameIdModel extends Model implements GameId {
 export class TargetStateModel extends Model {
   declare id: number;
   declare targetStateName: string;
+  declare targetStateGdp: number;
 }
 
 export function initPersistentModels(sequelize: Sequelize) {
@@ -32,6 +30,7 @@ export function initPersistentModels(sequelize: Sequelize) {
     {
       id: { type: DataTypes.INTEGER, primaryKey: true },
       targetStateName: DataTypes.STRING,
+      targetStateGdp: DataTypes.INTEGER
     },
     {
       tableName: "TargetStateName",

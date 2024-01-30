@@ -24,7 +24,7 @@ import { MAX_GUESSES } from "state-economy-game-util/constants";
 import stateEconomies from "./stateEconomies";
 
 
-export const getTargetStateRecord = async () => StateRecord.of(await getTargetStateName());
+const getTargetStateRecord = async () => StateRecord.of(await getTargetStateName());
 
 export const postGameId = async (_req: Request, res: Response) => {
   const newUUID = randomUUID();
@@ -36,15 +36,17 @@ export const postGameId = async (_req: Request, res: Response) => {
 };
 
 export const getTargetStateEconomy = async (_req: Request, res: Response, next: NextFunction) => {
-  const targetEconomy = getEconomyNode(await getTargetStateName());
-  if (targetEconomy) {
-    const responseBody: EconomyResponse = {
-      economy: targetEconomy,
-      totalGdp: getTotalGdp(targetEconomy) 
-    }
-    res.status(200).json(responseBody)
+  const targetStateModel = await TargetStateModel.findOne();
+  if (!targetStateModel) throw new Error("Target state not found");
+
+  const targetStateEconomy = getEconomyNode(targetStateModel.targetStateName)
+  if (!targetStateEconomy) throw new Error("Target economy state not found");
+
+  const responseBody: EconomyResponse = {
+    economy: targetStateEconomy,
+    totalGdp: targetStateModel.targetStateGdp
   }
-  else return next(CheckedHttpError.of(`Economy of requested state "${await getTargetStateName()}" not found`, 404))
+  res.status(200).json(responseBody)
 };
 
 export const postGuessSubmission = async (req: Request, res: Response, next: NextFunction) => {
@@ -116,9 +118,9 @@ export const handleUnhandledRoute = (req: Request, res: Response) => {
   res.status(404).json({ message: "HTTP response code 404: route not handled" });
 };
 
-export const getTargetStateName = async () => {
+const getTargetStateName = async () => {
   const targetStateModel = await TargetStateModel.findOne();
-  if (!targetStateModel) throw new Error("TargetState not found");
+  if (!targetStateModel) throw new Error("Target state not found");
   return targetStateModel.targetStateName;
 };
 
@@ -138,9 +140,13 @@ export const runDailyTasks = async () => {
   await TargetStateModel.destroy({ truncate: true });
   const newTargetState = getUsStateRecords().at(getRandomInt(getUsStateRecords().length));
   if (!newTargetState) return new Error("Failure to create new target state")
+  const newEconomyNode = getEconomyNode(newTargetState.name)
+  if (!newEconomyNode) return new Error(`Failure to find economy records for new target state '${newTargetState.name}'`)
+
   await TargetStateModel.create({
     id: 1,
     targetStateName: newTargetState?.name,
+    targetStateGdp: getRoundedTotalGdp(newEconomyNode)
   });
   console.log(`New target state: ${newTargetState?.name}`)
 };
@@ -153,6 +159,10 @@ function getEconomyNode(stateName: string) {
   if (stateName in stateEconomies)
     return stateEconomies[stateName]
   else return null
+}
+
+function getRoundedTotalGdp(economy: NonLeafEconomyNode): number {
+  return Math.round(getTotalGdp(economy));
 }
 
 function getTotalGdp(economy: NonLeafEconomyNode|LeafEconomyNode): number {
