@@ -58,14 +58,15 @@ export class Backend {
   static launch() {
     const dbPath = process.argv.at(2);
     const logPath = process.argv.at(3);
+    const port = Number(process.argv.at(4)) || 3001;
 
     if (process.argv.length < 4 || process.argv.length > 6 || !dbPath || !logPath) {
       throw Error(`Illegal arguments ${process.argv}, correct form node index [dbPath] [logPath] [port]`)
     }
 
     console.log(`Assumed database path from command-line arguments: ${dbPath}`);
-    console.log(`Assumed port number from ccommand-line arguments: ${process.argv.at(3)}`);
-    const port = Number(process.argv.at(4)) || 3001;
+    console.log(`Assumed port number from command-line arguments: ${logPath}`);
+    console.log(`Assumed port number from command-line arguments: ${port}`);
     new Backend(port, dbPath, logPath).launch();
   }
 }
