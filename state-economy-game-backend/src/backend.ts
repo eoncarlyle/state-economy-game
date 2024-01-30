@@ -2,6 +2,9 @@ import express, { Express } from "express";
 import cors from "cors";
 import cron from "node-cron";
 import { Sequelize } from "sequelize";
+import morgan from "morgan";
+import { createStream } from "rotating-file-stream";
+import path from "path";
 
 import { initPersistentModels } from "./persistentModel";
 
@@ -19,19 +22,21 @@ import {
 export class Backend {
   port: number;
   app: Express;
-  constructor(port: number, dbPath: string) {
+  constructor(port: number, dbPath: string, logPath: string) {
     this.app = express();
     this.port = port;
 
     const sequelize = new Sequelize({
       dialect: "sqlite",
       storage: dbPath,
+      logging: false
     });
 
     initPersistentModels(sequelize)
-
     this.app.use(express.json());
     this.app.use(cors());
+    this.app.use(morgan('combined', { stream: createStream(path.basename(logPath), { interval: "1d", path: path.dirname(logPath) }) }))
+
     this.app.post("/gameId", postGameId);
     this.app.post("/guess", postGuessSubmission);
     this.app.get("/answer/:id", getPuzzleAnswer);
@@ -52,11 +57,15 @@ export class Backend {
 
   static launch() {
     const dbPath = process.argv.at(2);
-    if (!dbPath) throw Error("No dbPath provided");
+    const logPath = process.argv.at(3);
 
-    console.log(`Assumed database path from cliargs: ${dbPath}`);
-    console.log(`Assumed port number from cliargs: ${process.argv.at(3)}`);
-    const port = Number(process.argv.at(3)) || 3001;
-    new Backend(port, dbPath).launch();
+    if (process.argv.length < 4 || process.argv.length > 6 || !dbPath || !logPath) {
+      throw Error(`Illegal arguments ${process.argv}, correct form node index [dbPath] [logPath] [port]`)
+    }
+
+    console.log(`Assumed database path from command-line arguments: ${dbPath}`);
+    console.log(`Assumed port number from ccommand-line arguments: ${process.argv.at(3)}`);
+    const port = Number(process.argv.at(4)) || 3001;
+    new Backend(port, dbPath, logPath).launch();
   }
 }
