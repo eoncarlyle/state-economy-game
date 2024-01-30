@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc && npm i",
+    "build": "tsc && npm i && cp -rL node_modules dist/node_modules",
     "start": "node dist/backend/index.js"
   },
   "dependencies": {
