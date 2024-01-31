@@ -84,7 +84,7 @@ export function updateGameHistory(updatedState: GameState) {
   localStorage.setItem(GAME_HISTORY, JSON.stringify(gameHistory));
 }
 
-export function getGameState(setGameState: StateUpdater<GameState | null>) {
+export function getStoredGameState(setGameState: StateUpdater<GameState | null>) {
   useEffect(() => {
     if (getReferenceDateString() in getGameHistory()) {
       const gameEntry = getGameHistory()[getReferenceDateString()];
@@ -138,6 +138,7 @@ export function shareableResultClickHandler(gameState: GameState, setGameState: 
   };
 }
 
+//TODO Change this for game state overhaul
 export function isGameOngoing(gameState: GameState) {
   return gameState.guesses.length < MAX_GUESSES && !gameState.isWin;
 }
