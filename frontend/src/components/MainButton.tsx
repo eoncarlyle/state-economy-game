@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { StateUpdater } from "preact/hooks";
 
-import { guessSubmitHandlerFactory, guessableStateRecords, isGameOngoing, shareableResultClickHandler } from "../util/guess";
+import { guessSubmitHandlerFactory, isGameOngoing, shareableResultClickHandler } from "../util/guess";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
 import { GameState } from "state-economy-game-util/model";
 
@@ -19,7 +19,7 @@ export default function MainButton({
         className="guess-button"
         variant="contained"
         disabled={!gameOngoing}
-        onClick={guessSubmitHandlerFactory(MAX_GUESSES, guessableStateRecords(gameState), gameState, setGameState)}
+        onClick={guessSubmitHandlerFactory(MAX_GUESSES, gameState, setGameState)}
       >
         Guess
       </Button>
