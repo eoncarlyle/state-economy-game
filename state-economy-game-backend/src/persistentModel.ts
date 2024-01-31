@@ -5,6 +5,7 @@ import { Sequelize, Model, DataTypes } from "sequelize";
 export class GameIdModel extends Model implements GameId {
   declare id: string;
   declare attempts: number;
+  declare lastRequestTimestamp: number;
 }
 
 export class TargetStateModel extends Model {
@@ -17,7 +18,7 @@ export function initPersistentModels(sequelize: Sequelize) {
   GameIdModel.init(
     {
       id: { type: DataTypes.STRING, primaryKey: true },
-      attempts: DataTypes.INTEGER,
+      attempts: DataTypes.INTEGER, lastRequestTimestamp: DataTypes.INTEGER
     },
     {
       tableName: "GameIds",

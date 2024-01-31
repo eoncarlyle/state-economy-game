@@ -2,6 +2,7 @@ import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
 import { StateRecord, GameState, GameHistory, GameId, Guess } from "state-economy-game-util/model";
+import { getUsStateRecords } from "state-economy-game-util/util";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
 import { postGuessSubmission, postGameId } from "./rest";
 import { useEffect } from "react";
@@ -10,17 +11,20 @@ const GAME_HISTORY = "gameHistory";
 
 export function guessSubmitHandlerFactory(
   maxGuesses: number,
-  guessableStateRecords: Array<StateRecord>,
   gameState: GameState,
   setGameState: StateUpdater<GameState | null>
 ) {
   return async () => {
     //TODO: reflect on if the 'don't update anything if you hit an error' makes sense
-    if (gameState.currentGuessName && guessableStateRecords.includes(StateRecord.of(gameState.currentGuessName))) {
+    if (
+      gameState.currentGuessName &&
+      guessableStateRecords(gameState).includes(StateRecord.of(gameState.currentGuessName))
+    ) {
       const guessedStateRecord = StateRecord.of(gameState.currentGuessName);
       const guessSubmissionResponse = await postGuessSubmission({
         id: gameState.id,
         guessStateName: gameState.currentGuessName,
+        requestTimestamp: Date.now()
       });
 
       if (guessSubmissionResponse) {
@@ -28,13 +32,13 @@ export function guessSubmitHandlerFactory(
           stateRecord: guessedStateRecord,
           distance: guessSubmissionResponse.distance,
           bearing: guessSubmissionResponse.bearing,
-          percentileScore: guessSubmissionResponse.percentileScore
+          percentileScore: guessSubmissionResponse.percentileScore,
         };
         let updatedState: GameState = {
           ...gameState,
           guesses: gameState.guesses.concat(submittedGuess),
           currentGuessName: null,
-        }
+        };
         if (guessSubmissionResponse.distance === 0) {
           updatedState = {
             ...updatedState,
@@ -45,7 +49,7 @@ export function guessSubmitHandlerFactory(
             ...updatedState,
             showAnswer: true,
           };
-        };
+        }
         updateGameHistory(updatedState);
         setGameState(updatedState);
       }
@@ -81,7 +85,7 @@ export function updateGameHistory(updatedState: GameState) {
   localStorage.setItem(GAME_HISTORY, JSON.stringify(gameHistory));
 }
 
-export function getGameState(setGameState: StateUpdater<GameState | null>) {
+export function getStoredGameState(setGameState: StateUpdater<GameState | null>) {
   useEffect(() => {
     if (getReferenceDateString() in getGameHistory()) {
       const gameEntry = getGameHistory()[getReferenceDateString()];
@@ -91,7 +95,7 @@ export function getGameState(setGameState: StateUpdater<GameState | null>) {
         currentGuessName: null,
         isWin: gameEntry.isWin,
         showAnswer: !gameEntry.isWin && gameEntry.guesses.length >= MAX_GUESSES,
-        showShareableResultMessage: false
+        showShareableResultMessage: false,
       });
     } else {
       postGameId().then((gameId: GameId | null) => {
@@ -102,7 +106,7 @@ export function getGameState(setGameState: StateUpdater<GameState | null>) {
             currentGuessName: null,
             isWin: false,
             showAnswer: false,
-            showShareableResultMessage: false
+            showShareableResultMessage: false,
           });
         else setGameState(null);
       });
@@ -111,14 +115,17 @@ export function getGameState(setGameState: StateUpdater<GameState | null>) {
 }
 
 export function getShareableResult(gameState: GameState) {
-  const emojiResult = gameState.guesses.map(
-    (guess: Guess) => {
-      const greenCount = Math.floor(guess.percentileScore / 20)
-      return Array(greenCount).fill("🟩").concat(Array(5 - greenCount).fill("🟨")).join("")
-    }
-  ).join("\n")
-  const numericResult = gameState.isWin ? String(gameState.guesses.length) : 'X'
-  return `#gdple,${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`
+  const emojiResult = gameState.guesses
+    .map((guess: Guess) => {
+      const greenCount = Math.floor(guess.percentileScore / 20);
+      return Array(greenCount)
+        .fill("🟩")
+        .concat(Array(5 - greenCount).fill("🟨"))
+        .join("");
+    })
+    .join("\n");
+  const numericResult = gameState.isWin ? String(gameState.guesses.length) : "X";
+  return `#gdple,${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`;
 }
 
 export function shareableResultClickHandler(gameState: GameState, setGameState: StateUpdater<GameState | null>) {
@@ -129,5 +136,17 @@ export function shareableResultClickHandler(gameState: GameState, setGameState: 
       await navigator.clipboard.write(data);
       setGameState({ ...gameState, showShareableResultMessage: true });
     }
-  }
+  };
+}
+
+//TODO Change this for game state overhaul
+export function isGameOngoing(gameState: GameState) {
+  return gameState.guesses.length < MAX_GUESSES && !gameState.isWin;
+}
+
+export function guessableStateRecords(gameState: GameState) {
+  return getUsStateRecords().filter(
+    (stateRecord: StateRecord) =>
+      !gameState.guesses.map((guess: Guess) => guess.stateRecord.name).includes(stateRecord.name)
+  );
 }
