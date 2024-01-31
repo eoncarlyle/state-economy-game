@@ -65,7 +65,7 @@ export class Backend {
     }
 
     console.log(`Assumed database path from command-line arguments: ${dbPath}`);
-    console.log(`Assumed port number from command-line arguments: ${logPath}`);
+    console.log(`Assumed log path from command-line arguments: ${logPath}`);
     console.log(`Assumed port number from command-line arguments: ${port}`);
     new Backend(port, dbPath, logPath).launch();
   }
