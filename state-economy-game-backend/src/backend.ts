@@ -3,11 +3,9 @@ import cors from "cors";
 import cron from "node-cron";
 import { Sequelize } from "sequelize";
 import morgan from "morgan";
-import { createStream } from "rotating-file-stream";
 import path from "path";
 
 import { initPersistentModels } from "./persistentModel";
-
 import {
   postGameId,
   postGuessSubmission,
@@ -18,6 +16,7 @@ import {
   handleErrors,
   handleUnhandledRoute,
 } from "./service";
+import { getLoggerFileStream, mainLogger, requestBodyToken, unprocessableContentLogger } from "./logging";
 
 export class Backend {
   port: number;
@@ -29,13 +28,17 @@ export class Backend {
     const sequelize = new Sequelize({
       dialect: "sqlite",
       storage: dbPath,
-      logging: false
+      logging: false,
     });
+    initPersistentModels(sequelize);
 
-    initPersistentModels(sequelize)
     this.app.use(express.json());
     this.app.use(cors());
-    this.app.use(morgan('combined', { stream: createStream(path.basename(logPath), { interval: "1d", path: path.dirname(logPath) }) }))
+    morgan.token("reqBody", requestBodyToken);
+    //TODO: Dependency injection for this object
+    const loggerFileStream = getLoggerFileStream(logPath);
+    this.app.use(mainLogger(loggerFileStream));
+    this.app.use(unprocessableContentLogger(loggerFileStream));
 
     this.app.post("/gameId", postGameId);
     this.app.post("/guess", postGuessSubmission);
@@ -61,7 +64,7 @@ export class Backend {
     const port = Number(process.argv.at(4)) || 3001;
 
     if (process.argv.length < 4 || process.argv.length > 6 || !dbPath || !logPath) {
-      throw Error(`Illegal arguments ${process.argv}, correct form node index [dbPath] [logPath] [port]`)
+      throw Error(`Illegal arguments ${process.argv}, correct form node index [dbPath] [logPath] [port]`);
     }
 
     console.log(`Assumed database path from command-line arguments: ${dbPath}`);

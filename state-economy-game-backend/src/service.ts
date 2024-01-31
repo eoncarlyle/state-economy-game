@@ -23,7 +23,6 @@ import { CheckedHttpError } from "state-economy-game-util/model";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
 import stateEconomies from "./stateEconomies";
 
-
 const getTargetStateRecord = async () => StateRecord.of(await getTargetStateName());
 
 export const postGameId = async (_req: Request, res: Response) => {
@@ -39,46 +38,52 @@ export const getTargetStateEconomy = async (_req: Request, res: Response, next: 
   const targetStateModel = await TargetStateModel.findOne();
   if (!targetStateModel) throw new Error("Target state not found");
 
-  const targetStateEconomy = getEconomyNode(targetStateModel.targetStateName)
+  const targetStateEconomy = getEconomyNode(targetStateModel.targetStateName);
   if (!targetStateEconomy) throw new Error("Target economy state not found");
 
   const responseBody: EconomyResponse = {
     economy: targetStateEconomy,
-    totalGdp: targetStateModel.targetStateGdp
-  }
-  res.status(200).json(responseBody)
+    totalGdp: targetStateModel.targetStateGdp,
+  };
+  res.status(200).json(responseBody);
 };
 
 export const postGuessSubmission = async (req: Request, res: Response, next: NextFunction) => {
-  const { id, guessStateName } = req.body as GuessSubmissionRequest;
-  if (!id || !guessStateName) {
-    return next(CheckedHttpError.of("Request must contain both a game id and a guess state name", 400));
+  const { id, guessStateName, requestTimestamp } = req.body as GuessSubmissionRequest;
+  if (!id || !guessStateName || !requestTimestamp) {
+    return next(CheckedHttpError.of("Request must contain and id, a state name, and a request timestamp ", 400));
   }
+
   const gameId = await GameIdModel.findOne({ where: { id: id } });
   if (!isStateNameValid(guessStateName) || !gameId) {
     return next(CheckedHttpError.of("Game id and a guess state name must both be valid", 422));
   } else if (gameId.attempts >= MAX_GUESSES) {
     return next(CheckedHttpError.of("Too many request have been made for this game", 422));
+  } else if ( requestTimestamp === gameId.lastRequestTimestamp) {
+    return next(CheckedHttpError.of("Duplicate of successful request", 422));
   }
-  const targetStateRecord = await getTargetStateRecord();
-  const distance = getHaversineDistance(StateRecord.of(guessStateName), targetStateRecord)
 
-  //TODO: save this to the target state table, no need to recalculate this every time 
-  const maxDistance = getUsStateRecords().map((stateRecord: StateRecord) => getHaversineDistance(stateRecord, targetStateRecord))
+  const targetStateRecord = await getTargetStateRecord();
+  const distance = getHaversineDistance(StateRecord.of(guessStateName), targetStateRecord);
+
+  const maxDistance = getUsStateRecords()
+    .map((stateRecord: StateRecord) => getHaversineDistance(stateRecord, targetStateRecord))
     .reduce((acc, cur) => {
       if (cur > acc) return cur;
       else return acc;
-    }, 0)
+    }, 0);
 
   const responseBody: GuessSubmissionResponse = {
     id: id,
     distance: distance,
     bearing: getHaversineBearing(StateRecord.of(guessStateName), targetStateRecord),
-    percentileScore: Math.round((1 - (distance / maxDistance)) * 100)
+    percentileScore: Math.round((1 - distance / maxDistance) * 100),
   };
 
-  //@ts-ignore
-  await GameIdModel.update({ attempts: gameId.attempts + 1 }, { where: { id: id } });
+  await GameIdModel.update(
+    { attempts: gameId.attempts + 1, lastRequestTimestamp: requestTimestamp },
+    { where: { id: id } }
+  );
   res.status(201).json(responseBody);
 };
 
@@ -135,20 +140,21 @@ export const runDailyTasks = async () => {
       },
     },
   });
-  console.log(`Obsolete GameIds removed: ${obsoleteIdCount}}`)
+  console.log(`Obsolete GameIds removed: ${obsoleteIdCount}}`);
 
   await TargetStateModel.destroy({ truncate: true });
   const newTargetState = getUsStateRecords().at(getRandomInt(getUsStateRecords().length));
-  if (!newTargetState) return new Error("Failure to create new target state")
-  const newEconomyNode = getEconomyNode(newTargetState.name)
-  if (!newEconomyNode) return new Error(`Failure to find economy records for new target state '${newTargetState.name}'`)
+  if (!newTargetState) return new Error("Failure to create new target state");
+  const newEconomyNode = getEconomyNode(newTargetState.name);
+  if (!newEconomyNode)
+    return new Error(`Failure to find economy records for new target state '${newTargetState.name}'`);
 
   await TargetStateModel.create({
     id: 1,
     targetStateName: newTargetState?.name,
-    targetStateGdp: getRoundedTotalGdp(newEconomyNode)
+    targetStateGdp: getRoundedTotalGdp(newEconomyNode),
   });
-  console.log(`New target state: ${newTargetState?.name}`)
+  console.log(`New target state: ${newTargetState?.name}`);
 };
 
 function getRandomInt(max: number) {
@@ -156,19 +162,18 @@ function getRandomInt(max: number) {
 }
 
 function getEconomyNode(stateName: string) {
-  if (stateName in stateEconomies)
-    return stateEconomies[stateName]
-  else return null
+  if (stateName in stateEconomies) return stateEconomies[stateName];
+  else return null;
 }
 
 function getRoundedTotalGdp(economy: NonLeafEconomyNode): number {
   return Math.round(getTotalGdp(economy));
 }
 
-function getTotalGdp(economy: NonLeafEconomyNode|LeafEconomyNode): number {
-  if ('children' in economy) {
-    return economy.children.map((node) => getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0)
+function getTotalGdp(economy: NonLeafEconomyNode | LeafEconomyNode): number {
+  if ("children" in economy) {
+    return economy.children.map((node) => getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0);
   } else {
-    return economy.gdp
+    return economy.gdp;
   }
 }

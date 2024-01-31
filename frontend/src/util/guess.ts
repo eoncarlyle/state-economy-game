@@ -24,6 +24,7 @@ export function guessSubmitHandlerFactory(
       const guessSubmissionResponse = await postGuessSubmission({
         id: gameState.id,
         guessStateName: gameState.currentGuessName,
+        requestTimestamp: Date.now()
       });
 
       if (guessSubmissionResponse) {
