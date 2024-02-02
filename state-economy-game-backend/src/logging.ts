@@ -13,16 +13,18 @@ export function requestBodyToken(req: Request, _res: Response) {
 }
 
 export function mainLogger(loggerFileStream: RotatingFileStream) {
+  //@ts-ignore
   return morgan('[:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]', {
-    skip: (_req, res) => res.statusCode === 422,
-    stream: loggerFileStream 
+    skip: (req: Request, _res: Response) => req.path === "/guess",
+    stream: loggerFileStream
   });
 }
 
-export function unprocessableContentLogger(loggerFileStream: RotatingFileStream) {
+export function guessLogger(loggerFileStream: RotatingFileStream) {
+  //@ts-ignore
   return morgan('[:date[clf]] ":method :url HTTP/:http-version" :status :reqBody :res[content-length] ', {
-    skip: (_req, res) => res.statusCode !== 422,
-    stream: loggerFileStream 
+    skip: (req: Request, _res: Response) => req.path !== "/guess",
+    stream: loggerFileStream
   });
 }
 

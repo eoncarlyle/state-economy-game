@@ -59,7 +59,7 @@ export const postGuessSubmission = async (req: Request, res: Response, next: Nex
     return next(CheckedHttpError.of("Game id and a guess state name must both be valid", 422));
   } else if (gameId.attempts >= MAX_GUESSES) {
     return next(CheckedHttpError.of("Too many request have been made for this game", 422));
-  } else if ( requestTimestamp === gameId.lastRequestTimestamp) {
+  } else if (requestTimestamp === gameId.lastRequestTimestamp) {
     return next(CheckedHttpError.of("Duplicate of successful request", 422));
   }
 
