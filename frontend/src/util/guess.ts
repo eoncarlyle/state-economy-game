@@ -8,6 +8,8 @@ import { postGuessSubmission, postGameId } from "./rest";
 import { useEffect } from "react";
 
 const GAME_HISTORY = "gameHistory";
+const GREEN_SQUARE_VALUE = 20;
+const YELLOW_SQUARE_VALUE = 10;
 
 export function guessSubmitHandlerFactory(
   maxGuesses: number,
@@ -24,7 +26,7 @@ export function guessSubmitHandlerFactory(
       const guessSubmissionResponse = await postGuessSubmission({
         id: gameState.id,
         guessStateName: gameState.currentGuessName,
-        requestTimestamp: Date.now()
+        requestTimestamp: Date.now(),
       });
 
       if (guessSubmissionResponse) {
@@ -117,10 +119,12 @@ export function getStoredGameState(setGameState: StateUpdater<GameState | null>)
 export function getShareableResult(gameState: GameState) {
   const emojiResult = gameState.guesses
     .map((guess: Guess) => {
-      const greenCount = Math.floor(guess.percentileScore / 20);
+      const greenCount = Math.floor(guess.percentileScore / GREEN_SQUARE_VALUE);
+      const yellowCount = Math.floor((guess.percentileScore - GREEN_SQUARE_VALUE * greenCount) / YELLOW_SQUARE_VALUE);
       return Array(greenCount)
         .fill("🟩")
-        .concat(Array(5 - greenCount).fill("🟨"))
+        .concat(Array(yellowCount).fill("🟨"))
+        .concat(Array(MAX_GUESSES - greenCount - yellowCount).fill("⬜"))
         .join("");
     })
     .join("\n");
