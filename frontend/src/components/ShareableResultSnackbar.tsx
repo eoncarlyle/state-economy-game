@@ -1,7 +1,7 @@
 import { StateUpdater } from "preact/hooks";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import Close from "../assets/close.svg"
 
 import { GameState } from "state-economy-game-util/model";
 
@@ -25,7 +25,7 @@ export default function ShareableResultSnackbar(props: ShareableResultSnackbar):
         message={"Result copied to clipboard"}
         action={
           <IconButton onClick={closeAnswerHandler} color="inherit">
-            {(<CloseIcon />) as React.ReactNode}
+            <img src={Close} alt="Close"/>
           </IconButton>
         }
       />
