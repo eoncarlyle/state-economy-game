@@ -1,10 +1,10 @@
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import { StateUpdater, useEffect, useState } from "preact/hooks";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { GameState, PuzzleAnswerResponse } from "state-economy-game-util/model";
 import { getPuzzleAnswer } from "../util/rest";
-import Close from "../assets/close.svg"
 
 type TargetStateSnackbarProps = {
   gameState: GameState;
@@ -37,7 +37,7 @@ export default function TargetStateSnackbar(props: TargetStateSnackbarProps): Re
         message={`Correct answer: ${targetStateName}`}
         action={
           <IconButton onClick={closeAnswerHandler} color="inherit">
-            <img src={Close} alt="Close"/>
+            <CloseIcon />
           </IconButton>
         }
       />
