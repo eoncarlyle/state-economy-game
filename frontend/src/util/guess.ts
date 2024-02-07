@@ -129,7 +129,8 @@ export function getShareableResult(gameState: GameState) {
     })
     .join("\n");
   const numericResult = gameState.isWin ? String(gameState.guesses.length) : "X";
-  return `#gdple,${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`;
+  const referenceDate = getReferenceDate().toLocaleString(DateTime.DATE_MED) 
+  return `#gdple ${referenceDate}\n\n${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`;
 }
 
 export function shareableResultClickHandler(gameState: GameState, setGameState: StateUpdater<GameState | null>) {

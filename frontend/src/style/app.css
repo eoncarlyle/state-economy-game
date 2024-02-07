@@ -12,7 +12,7 @@
 .guesses {
   flex-direction: column;
   display: flex;
-  margin: 1.5rem auto;
+  margin: 1.5rem auto 2.5rem auto; 
   align-items: center;
   justify-content: center;
   width: 20rem;
@@ -70,7 +70,6 @@
 }
 
 .guess-button {
-  margin: 0.5rem;
   width: 50%;
 }
 
