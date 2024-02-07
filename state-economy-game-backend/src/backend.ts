@@ -47,7 +47,6 @@ export class Backend {
     this.app.get("/health", getHealthCheck);
 
     cron.schedule("0 0 * * *", runDailyTasks, { scheduled: true, timezone: "America/Chicago" });
-
     this.app.use(handleErrors);
     this.app.use(handleUnhandledRoute);
   }
