@@ -16,7 +16,7 @@ import {
   handleErrors,
   handleUnhandledRoute,
 } from "./service";
-import { getLoggerFileStream, mainLogger, requestBodyToken, unprocessableContentLogger } from "./logging";
+import { getLoggerFileStream, mainLogger, requestBodyToken, guessLogger } from "./logging";
 
 export class Backend {
   port: number;
@@ -37,8 +37,8 @@ export class Backend {
     morgan.token("reqBody", requestBodyToken);
     //TODO: Dependency injection for this object
     const loggerFileStream = getLoggerFileStream(logPath);
+    this.app.use("/guess", guessLogger(loggerFileStream));
     this.app.use(mainLogger(loggerFileStream));
-    this.app.use(unprocessableContentLogger(loggerFileStream));
 
     this.app.post("/gameId", postGameId);
     this.app.post("/guess", postGuessSubmission);
