@@ -1,4 +1,5 @@
 import {
+  Inject,
   BadRequestException,
   Injectable,
   NotFoundException,
@@ -6,6 +7,8 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Cron } from '@nestjs/schedule';
+
 import { randomUUID } from 'crypto';
 import { Op, Sequelize } from 'sequelize';
 
@@ -30,8 +33,8 @@ import {
   MAX_GUESSES,
   TARGET_STATE_RETENTION,
 } from './state-economy-game-util/constants';
-import TargetState from './targetState.model';
-import GameId from './GameId.model';
+import TargetState from './data/targetState.model';
+import GameId from './data/gameId.model';
 import stateEconomies from './stateEconomies';
 
 @Injectable()
@@ -162,6 +165,7 @@ export class AppService {
     else return null;
   }
 
+  @Cron("0 0 * * *", {timeZone: "America/Chicago"})
   async runDailyTasks(): Promise<void> {
     this.deleteObsoleteGameIds();
     this.deleteObsoleteTargetStates();
