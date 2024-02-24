@@ -1,4 +1,4 @@
-import { StateEconomies } from "state-economy-game-util/model";
+import { StateEconomies } from "./state-economy-game-util/model";
 
 const stateEconomies: StateEconomies = {
   Indiana: {

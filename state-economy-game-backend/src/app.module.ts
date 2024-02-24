@@ -9,7 +9,7 @@ import GameId from './GameId.model';
   imports: [
     SequelizeModule.forRoot({
       dialect: "sqlite",
-      storage: "/Users/iainschmitt/code/state-economy-game/state-economy-game-backend/opt/app.db",
+      storage: "/Users/iain/code/state-economy-game/state-economy-game-backend/opt/app.db",
       logging: false,
       models: [TargetState, GameId]
     }),

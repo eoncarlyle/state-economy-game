@@ -28,7 +28,7 @@
     "rxjs": "^7.8.1",
     "sequelize": "^6.37.0",
     "sequelize-typescript": "^2.1.6",
-    "state-economy-game-util": "file:../state-economy-game-util"
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

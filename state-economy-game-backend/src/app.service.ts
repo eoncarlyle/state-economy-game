@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { randomUUID } from 'crypto';
+import { Op, Sequelize } from 'sequelize';
 
 import {
   StateRecord,
@@ -14,19 +15,21 @@ import {
   PuzzleAnswerResponse,
   GuessSubmissionRequest,
   GuessSubmissionResponse,
-} from 'state-economy-game-util/model';
+  NonLeafEconomyNode,
+  LeafEconomyNode
+} from './state-economy-game-util/model';
 
 import {
   getHaversineDistance,
   getHaversineBearing,
   isStateNameValid,
   getUsStateRecords,
-} from 'state-economy-game-util/util';
+} from './state-economy-game-util/util';
 
 import {
   MAX_GUESSES,
   TARGET_STATE_RETENTION,
-} from 'state-economy-game-util/constants';
+} from './state-economy-game-util/constants';
 import TargetState from './targetState.model';
 import GameId from './GameId.model';
 import stateEconomies from './stateEconomies';
@@ -158,4 +161,93 @@ export class AppService {
     if (stateName in stateEconomies) return stateEconomies[stateName];
     else return null;
   }
+
+  async runDailyTasks(): Promise<void> {
+    this.deleteObsoleteGameIds();
+    this.deleteObsoleteTargetStates();
+    this.updateTargetState();
+  }
+
+  async deleteObsoleteGameIds(): Promise<void> {
+    const obsoleteDate = new Date();
+    obsoleteDate.setDate(obsoleteDate.getDate() - 1);
+
+    const deletedGameIdCount = await this.gameId.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: obsoleteDate,
+        },
+      },
+    });
+    //TODO log count of deleted gameIds
+  }
+
+  async deleteObsoleteTargetStates(): Promise<void> {
+    const targetStateCount = await this.targetState.count();
+    const obsoleteStateModelCount =
+      targetStateCount - TARGET_STATE_RETENTION + 1;
+
+    if (obsoleteStateModelCount > 0) {
+      const deletedTargetStateCount = await this.targetState.destroy({
+        where: {
+          id: {
+            [Op.lte]: obsoleteStateModelCount,
+          },
+        },
+      });
+    }
+    //TODO log count of deleted target states
+
+    const updatedStateModelCount = await this.targetState.update(
+      { id: Sequelize.literal(`id - ${obsoleteStateModelCount}`) },
+      { where: {} },
+    );
+    //TODO log count of deleted target state rows
+  }
+
+  async updateTargetState(): Promise<void> {
+    const unselectableTargetStateNames = (
+      await this.targetState.findAll({ attributes: ['targetStateName'] })
+    ).map((targetState: TargetState) => targetState.targetStateName);
+
+    const selectableTargetStates = getUsStateRecords().filter(
+      (stateRecord: StateRecord) =>
+        !unselectableTargetStateNames.includes(stateRecord.name),
+    );
+
+    const newTargetState = selectableTargetStates.at(
+      this.getRandomInt(selectableTargetStates.length),
+    );
+    if (!newTargetState) throw new Error('Failure to create new target state');
+
+    const newEconomyNode = this.getEconomyNode(newTargetState.name);
+    if (!newEconomyNode)
+      throw new Error(
+        `Failure to find economy records for new target state '${newTargetState.name}'`,
+      );
+
+    await this.targetState.create({
+      id: (await this.targetState.count()) + 1,
+      targetStateName: newTargetState.name,
+      targetStateGdp: this.getRoundedTotalGdp(newEconomyNode)
+    });
+    //TODO: Log new state name
+  }
+
+  getRandomInt(max: number) {
+    return Math.floor(Math.random() * max);
+  }
+
+  getRoundedTotalGdp(economy: NonLeafEconomyNode): number {
+    return Math.round(this.getTotalGdp(economy));
+  }
+
+  getTotalGdp(economy: NonLeafEconomyNode | LeafEconomyNode): number {
+    if ("children" in economy) {
+      return economy.children.map((node) => this.getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0);
+    } else {
+      return economy.gdp;
+    }
+  }
+
 }
