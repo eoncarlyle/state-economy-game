@@ -35,6 +35,8 @@ export class Backend {
     this.app.use(express.json());
     this.app.use(cors());
     morgan.token("reqBody", requestBodyToken);
+    
+    
     //TODO: Dependency injection for this object
     const loggerFileStream = getLoggerFileStream(logPath);
     this.app.use("/guess", guessLogger(loggerFileStream));
