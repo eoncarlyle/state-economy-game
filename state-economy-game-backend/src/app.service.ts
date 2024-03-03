@@ -5,12 +5,12 @@ import {
   NotFoundException,
   Req,
   UnprocessableEntityException,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Cron } from '@nestjs/schedule';
+} from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { Cron } from "@nestjs/schedule";
 
-import { randomUUID } from 'crypto';
-import { Op, Sequelize } from 'sequelize';
+import { randomUUID } from "crypto";
+import { Op, Sequelize } from "sequelize";
 
 import {
   StateRecord,
@@ -19,23 +19,23 @@ import {
   GuessSubmissionRequest,
   GuessSubmissionResponse,
   NonLeafEconomyNode,
-  LeafEconomyNode
-} from './state-economy-game-util/model';
+  LeafEconomyNode,
+} from "./state-economy-game-util/model";
 
 import {
   getHaversineDistance,
   getHaversineBearing,
   isStateNameValid,
   getUsStateRecords,
-} from './state-economy-game-util/util';
+} from "./state-economy-game-util/util";
 
 import {
   MAX_GUESSES,
   TARGET_STATE_RETENTION,
-} from './state-economy-game-util/constants';
-import TargetState from './data/targetState.model';
-import GameId from './data/gameId.model';
-import stateEconomies from './stateEconomies';
+} from "./state-economy-game-util/constants";
+import TargetState from "./data/targetState.model";
+import GameId from "./data/gameId.model";
+import stateEconomies from "./stateEconomies";
 
 @Injectable()
 export class AppService {
@@ -49,13 +49,13 @@ export class AppService {
   async getTargetStateEconomy(): Promise<EconomyResponse> {
     const targetStateModel = await this.getTargetState();
     if (!targetStateModel)
-      throw new NotFoundException('Target state not found');
+      throw new NotFoundException("Target state not found");
 
     const targetStateEconomy = this.getEconomyNode(
       targetStateModel.targetStateName,
     );
     if (!targetStateEconomy)
-      throw new NotFoundException('Target economy state not found');
+      throw new NotFoundException("Target economy state not found");
 
     return {
       economy: targetStateEconomy,
@@ -65,12 +65,12 @@ export class AppService {
 
   async getPuzzleAnswer(id: string): Promise<PuzzleAnswerResponse> {
     if (!id) {
-      throw new BadRequestException('Request must contain a game id');
+      throw new BadRequestException("Request must contain a game id");
     }
 
     const gameId = await GameId.findOne({ where: { id: id } });
     if (!gameId)
-      throw new UnprocessableEntityException('Game id must be valid');
+      throw new UnprocessableEntityException("Game id must be valid");
     else if (gameId?.attempts < MAX_GUESSES)
       throw new UnprocessableEntityException(
         `${MAX_GUESSES} guesses must be made before answer can be requested`,
@@ -98,20 +98,20 @@ export class AppService {
 
     if (!id || !guessStateName || !requestTimestamp)
       throw new BadRequestException(
-        'Request must contain and id, a state name, and a request timestamp',
+        "Request must contain and id, a state name, and a request timestamp",
       );
 
     const gameId = await GameId.findOne({ where: { id: id } });
     if (!isStateNameValid(guessStateName) || !gameId)
       throw new UnprocessableEntityException(
-        'Game id and a guess state name must both be valid',
+        "Game id and a guess state name must both be valid",
       );
     else if (gameId.attempts >= MAX_GUESSES)
       throw new UnprocessableEntityException(
-        'Too many request have been made for this game',
+        "Too many request have been made for this game",
       );
     else if (requestTimestamp === gameId.lastRequestTimestamp)
-      throw new UnprocessableEntityException('Duplicate of successful request');
+      throw new UnprocessableEntityException("Duplicate of successful request");
 
     const targetStateRecord = await this.getTargetStateRecord();
     const distance = getHaversineDistance(
@@ -145,7 +145,7 @@ export class AppService {
   }
 
   getHealthCheck(): Object {
-    return { status: 'UP' };
+    return { status: "UP" };
   }
 
   async getTargetStateRecord(): Promise<StateRecord> {
@@ -154,9 +154,9 @@ export class AppService {
 
   async getTargetState(): Promise<TargetState> {
     const targetStateModel = await this.targetState.findOne({
-      order: [['id', 'DESC']],
+      order: [["id", "DESC"]],
     });
-    if (!targetStateModel) throw new Error('Target state not found');
+    if (!targetStateModel) throw new Error("Target state not found");
     return targetStateModel;
   }
 
@@ -165,7 +165,7 @@ export class AppService {
     else return null;
   }
 
-  @Cron("0 0 * * *", {timeZone: "America/Chicago"})
+  @Cron("0 0 * * *", { timeZone: "America/Chicago" })
   async runDailyTasks(): Promise<void> {
     this.deleteObsoleteGameIds();
     this.deleteObsoleteTargetStates();
@@ -211,7 +211,7 @@ export class AppService {
 
   async updateTargetState(): Promise<void> {
     const unselectableTargetStateNames = (
-      await this.targetState.findAll({ attributes: ['targetStateName'] })
+      await this.targetState.findAll({ attributes: ["targetStateName"] })
     ).map((targetState: TargetState) => targetState.targetStateName);
 
     const selectableTargetStates = getUsStateRecords().filter(
@@ -222,7 +222,7 @@ export class AppService {
     const newTargetState = selectableTargetStates.at(
       this.getRandomInt(selectableTargetStates.length),
     );
-    if (!newTargetState) throw new Error('Failure to create new target state');
+    if (!newTargetState) throw new Error("Failure to create new target state");
 
     const newEconomyNode = this.getEconomyNode(newTargetState.name);
     if (!newEconomyNode)
@@ -233,7 +233,7 @@ export class AppService {
     await this.targetState.create({
       id: (await this.targetState.count()) + 1,
       targetStateName: newTargetState.name,
-      targetStateGdp: this.getRoundedTotalGdp(newEconomyNode)
+      targetStateGdp: this.getRoundedTotalGdp(newEconomyNode),
     });
     //TODO: Log new state name
   }
@@ -248,10 +248,11 @@ export class AppService {
 
   getTotalGdp(economy: NonLeafEconomyNode | LeafEconomyNode): number {
     if ("children" in economy) {
-      return economy.children.map((node) => this.getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0);
+      return economy.children
+        .map((node) => this.getTotalGdp(node))
+        .reduce((prev, cur) => prev + cur, 0);
     } else {
       return economy.gdp;
     }
   }
-
 }

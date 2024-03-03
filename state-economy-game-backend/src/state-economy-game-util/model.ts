@@ -1,6 +1,5 @@
 import { getUsStateRecord } from "./util";
 
-
 export interface Coordinates {
   latitude: number;
   longitude: number;
@@ -19,18 +18,17 @@ export class StateRecord {
 
   static of(name: string) {
     const record = getUsStateRecord(name);
-    if (record === undefined)
-      throw new Error("Invalid state")
-    return record
+    if (record === undefined) throw new Error("Invalid state");
+    return record;
   }
 }
 
 export interface StateEconomies {
-  [key: string]: NonLeafEconomyNode
+  [key: string]: NonLeafEconomyNode;
 }
 
 export interface NonLeafEconomyNode {
-  gdpCategory: string; 
+  gdpCategory: string;
   children: Array<NonLeafEconomyNode | LeafEconomyNode>;
 }
 
@@ -40,7 +38,7 @@ export interface LeafEconomyNode {
 }
 
 export interface InternalEconomyNode {
-  gdpCategory: string; 
+  gdpCategory: string;
   gdp?: number;
   children?: Array<InternalEconomyNode>;
 }
@@ -68,7 +66,7 @@ export interface GameEntry {
 }
 
 export interface GameHistory {
-  [key: string]: GameEntry
+  [key: string]: GameEntry;
 }
 
 export interface GameId {
@@ -106,11 +104,11 @@ export interface PuzzleAnswerResponse {
 export class CheckedHttpError extends Error {
   httpCode: number;
   constructor(message: string, httpCode: number) {
-    super(message)
-    this.httpCode = httpCode
+    super(message);
+    this.httpCode = httpCode;
   }
   static of(message: string, httpCode: number) {
-    return new CheckedHttpError(message, httpCode)
+    return new CheckedHttpError(message, httpCode);
   }
 }
 
@@ -118,11 +116,11 @@ export class CheckedHttpErrorResponse {
   message: string;
   httpCode: number;
   constructor(message: string, httpCode: number) {
-    this.message = message
-    this.httpCode = httpCode
+    this.message = message;
+    this.httpCode = httpCode;
   }
   static of(message: string, httpCode: number) {
-    return new CheckedHttpErrorResponse(message, httpCode)
+    return new CheckedHttpErrorResponse(message, httpCode);
   }
 }
 
