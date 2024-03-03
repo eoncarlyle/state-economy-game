@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { randomUUID } from "crypto";
 import { Op, DataTypes, Sequelize } from "sequelize";
+import fs from "node:fs"
 
 import {
   StateRecord,
@@ -129,41 +130,49 @@ const getTargetStateModel = async () => {
   return targetStateModel;
 };
 
-export const runDailyTasks = async () => {
-  const obsoleteDate = new Date();
-  obsoleteDate.setDate(obsoleteDate.getDate() - 1);
+export const runDailyTasks = (appLogPath: string) => {
+  return async () => {
+    const obsoleteDate = new Date();
+    obsoleteDate.setDate(obsoleteDate.getDate() - 1);
 
-  const deletedGameIdCount = await GameIdModel.destroy({
-    where: {
-      createdAt: {
-        [Op.lt]: obsoleteDate,
+    const deletedGameIdCount = await GameIdModel.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: obsoleteDate,
+        },
       },
-    },
-  });
-  console.log(`Obsolete GameIds deleted: ${deletedGameIdCount}`);
+    });
+    //console.log(`Obsolete GameIds deleted: ${deletedGameIdCount}`);
+    logToAppLog(`Obsolete GameIds deleted: ${deletedGameIdCount}`, appLogPath);
 
-  deleteObsoleteTargetStates();
+    deleteObsoleteTargetStates(appLogPath);
 
-  const unselectableTargetStateNames = (await TargetStateModel.findAll({ attributes: ["targetStateName"] })).map(
-    (targetStateModel: TargetStateModel) => targetStateModel.targetStateName
-  );
-  const selectableTargetStates = getUsStateRecords().filter((stateRecord: StateRecord) => !unselectableTargetStateNames.includes(stateRecord.name));
-  const newTargetState = selectableTargetStates.at(getRandomInt(selectableTargetStates.length)); 
-  if (!newTargetState) return new Error("Failure to create new target state");
+    const unselectableTargetStateNames = (await TargetStateModel.findAll({ attributes: ["targetStateName"] })).map(
+      (targetStateModel: TargetStateModel) => targetStateModel.targetStateName
+    );
+    const selectableTargetStates = getUsStateRecords().filter((stateRecord: StateRecord) => !unselectableTargetStateNames.includes(stateRecord.name));
+    const newTargetState = selectableTargetStates.at(getRandomInt(selectableTargetStates.length));
+    if (!newTargetState) return new Error("Failure to create new target state");
 
-  const newEconomyNode = getEconomyNode(newTargetState.name);
-  if (!newEconomyNode)
-    return new Error(`Failure to find economy records for new target state '${newTargetState.name}'`);
+    const newEconomyNode = getEconomyNode(newTargetState.name);
+    if (!newEconomyNode)
+      return new Error(`Failure to find economy records for new target state '${newTargetState.name}'`);
 
-  await TargetStateModel.create({
-    id: (await TargetStateModel.count()) + 1,
-    targetStateName: newTargetState?.name,
-    targetStateGdp: getRoundedTotalGdp(newEconomyNode),
-  });
-  console.log(`New target state: ${newTargetState?.name}`);
+    await TargetStateModel.create({
+      id: (await TargetStateModel.count()) + 1,
+      targetStateName: newTargetState?.name,
+      targetStateGdp: getRoundedTotalGdp(newEconomyNode),
+    });
+    //console.log(`New target state: ${newTargetState?.name}`);
+    logToAppLog(`New target state: ${newTargetState?.name}`, appLogPath);
+  }
 };
 
-async function deleteObsoleteTargetStates(): Promise<void> {
+function logToAppLog(appLogPath: string,  record: string) {
+  fs.writeFileSync(`${appLogPath}\n`, record, {flag: "a+"})
+}
+
+async function deleteObsoleteTargetStates(appLogPath: string): Promise<void> {
   const targetStateCount = await TargetStateModel.count();
   // This makes an assumption that `id` values descend with row age
   const obsoleteStateModelCount = targetStateCount - TARGET_STATE_RETENTION + 1;
@@ -175,12 +184,14 @@ async function deleteObsoleteTargetStates(): Promise<void> {
         },
       },
     });
-    console.log(`Obsolete target states deleted: ${deletedTargetStateCount}`);
+    //console.log(`Obsolete target states deleted: ${deletedTargetStateCount}`);
+    logToAppLog(`Obsolete target states deleted: ${deletedTargetStateCount}`, appLogPath);
   
     const updatedStateModelCount = await TargetStateModel.update(
       { id: Sequelize.literal(`id - ${obsoleteStateModelCount}`) }, { where: {} }
     )
-    console.log(`Updated target state rows: ${updatedStateModelCount}`)
+    //console.log(`Updated target state rows: ${updatedStateModelCount}`)
+    logToAppLog(`Updated target state rows: ${updatedStateModelCount}`, appLogPath)
   }
 }
 

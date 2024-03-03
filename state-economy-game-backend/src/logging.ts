@@ -4,8 +4,8 @@ import path from "path";
 import { Request, Response } from "express"
 
 //TODO: Do depenency injection for this object
-export function getLoggerFileStream(logPath: string) {
-  return createStream(path.basename(logPath), { interval: "1d", path: path.dirname(logPath) })
+export function getLoggerFileStream(accessLogPath: string) {
+  return createStream(path.basename(accessLogPath), { interval: "1d", path: path.dirname(accessLogPath) })
 }
 
 export function requestBodyToken(req: Request, _res: Response) {

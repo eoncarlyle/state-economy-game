@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsc && npm i && cp -rL node_modules dist/node_modules",
-    "dev": "ts-node src/index.ts ${PWD}/opt/app.db ${PWD}/opt/access.log"
+    "dev": "ts-node src/index.ts ${PWD}/opt/app.db ${PWD}/opt/access.log ${PWD}/opt/app.log"
   },
   "dependencies": {
     "cors": "^2.8.5",
