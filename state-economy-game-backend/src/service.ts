@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { randomUUID } from "crypto";
 import { Op, DataTypes, Sequelize } from "sequelize";
-import fs from "node:fs"
+import { Logger } from "winston"
 
 import {
   StateRecord,
@@ -130,7 +130,7 @@ const getTargetStateModel = async () => {
   return targetStateModel;
 };
 
-export const runDailyTasks = (appLogPath: string) => {
+export const runDailyTasks = (logger: Logger) => {
   return async () => {
     const obsoleteDate = new Date();
     obsoleteDate.setDate(obsoleteDate.getDate() - 1);
@@ -142,10 +142,9 @@ export const runDailyTasks = (appLogPath: string) => {
         },
       },
     });
-    //console.log(`Obsolete GameIds deleted: ${deletedGameIdCount}`);
-    logToAppLog(`Obsolete GameIds deleted: ${deletedGameIdCount}`, appLogPath);
+    logger.info(`Obsolete GameIds deleted: ${deletedGameIdCount}`)
 
-    deleteObsoleteTargetStates(appLogPath);
+    deleteObsoleteTargetStates(logger);
 
     const unselectableTargetStateNames = (await TargetStateModel.findAll({ attributes: ["targetStateName"] })).map(
       (targetStateModel: TargetStateModel) => targetStateModel.targetStateName
@@ -163,16 +162,12 @@ export const runDailyTasks = (appLogPath: string) => {
       targetStateName: newTargetState?.name,
       targetStateGdp: getRoundedTotalGdp(newEconomyNode),
     });
-    //console.log(`New target state: ${newTargetState?.name}`);
-    logToAppLog(`New target state: ${newTargetState?.name}`, appLogPath);
+    logger.info(`New target state: ${newTargetState?.name}`);
+
   }
 };
 
-function logToAppLog(appLogPath: string,  record: string) {
-  fs.writeFileSync(`${appLogPath}\n`, record, {flag: "a+"})
-}
-
-async function deleteObsoleteTargetStates(appLogPath: string): Promise<void> {
+async function deleteObsoleteTargetStates(logger: Logger): Promise<void> {
   const targetStateCount = await TargetStateModel.count();
   // This makes an assumption that `id` values descend with row age
   const obsoleteStateModelCount = targetStateCount - TARGET_STATE_RETENTION + 1;
@@ -184,14 +179,12 @@ async function deleteObsoleteTargetStates(appLogPath: string): Promise<void> {
         },
       },
     });
-    //console.log(`Obsolete target states deleted: ${deletedTargetStateCount}`);
-    logToAppLog(`Obsolete target states deleted: ${deletedTargetStateCount}`, appLogPath);
+    logger.info(`Obsolete target states deleted: ${deletedTargetStateCount}`);
   
     const updatedStateModelCount = await TargetStateModel.update(
       { id: Sequelize.literal(`id - ${obsoleteStateModelCount}`) }, { where: {} }
     )
-    //console.log(`Updated target state rows: ${updatedStateModelCount}`)
-    logToAppLog(`Updated target state rows: ${updatedStateModelCount}`, appLogPath)
+    logger.info(`Updated target state rows: ${updatedStateModelCount}`)
   }
 }
 
