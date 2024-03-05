@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start -- /opt/app.db /opt/app.log",
+    "start": "nest start -- /opt/gdple-backend/app.db /opt/gdple-backend/app.log",
     "start:dev": "nest start --watch -- ${PWD}/opt/app.db ${PWD}/opt/app.log"
   },
   "dependencies": {
