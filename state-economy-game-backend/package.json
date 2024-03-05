@@ -13,7 +13,8 @@
     "rotating-file-stream": "^3.2.1",
     "sequelize": "^6.35.2",
     "sqlite3": "^5.1.7",
-    "state-economy-game-util": "file:../state-economy-game-util"
+    "state-economy-game-util": "file:../state-economy-game-util",
+    "winston": "^3.12.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

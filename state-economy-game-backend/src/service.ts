@@ -144,7 +144,7 @@ export const runDailyTasks = (logger: Logger) => {
     });
     logger.info(`Obsolete GameIds deleted: ${deletedGameIdCount}`)
 
-    deleteObsoleteTargetStates(logger);
+    await deleteObsoleteTargetStates(logger);
 
     const unselectableTargetStateNames = (await TargetStateModel.findAll({ attributes: ["targetStateName"] })).map(
       (targetStateModel: TargetStateModel) => targetStateModel.targetStateName
