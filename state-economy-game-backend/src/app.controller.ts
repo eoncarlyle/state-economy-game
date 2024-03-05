@@ -7,7 +7,7 @@ import {
   GameId,
   GuessSubmissionResponse,
   PuzzleAnswerRequest,
-  GuessSubmissionRequest,
+  GuessSubmissionRequest
 } from "./state-economy-game-util/model";
 
 //! Fix the Nest symlink issues!
@@ -31,9 +31,7 @@ export class AppController {
   }
 
   @Get("/answer/:id")
-  async getPuzzleAnswer(
-    @Param() params: PuzzleAnswerRequest,
-  ): Promise<PuzzleAnswerResponse> {
+  async getPuzzleAnswer(@Param() params: PuzzleAnswerRequest): Promise<PuzzleAnswerResponse> {
     return this.appService.getPuzzleAnswer(params.id);
   }
 
@@ -43,9 +41,7 @@ export class AppController {
   }
 
   @Post("/guess")
-  async postGuess(
-    @Body() body: GuessSubmissionRequest,
-  ): Promise<GuessSubmissionResponse> {
+  async postGuess(@Body() body: GuessSubmissionRequest): Promise<GuessSubmissionResponse> {
     return this.appService.postGuess(body);
   }
 

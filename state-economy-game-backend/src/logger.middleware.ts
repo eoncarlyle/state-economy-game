@@ -1,25 +1,30 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
-import { Logger, transports, createLogger } from "winston"
+import { Logger, transports, createLogger } from "winston";
 
 @Injectable()
-export class LoggerMiddleware implements NestMiddleware {
-  logger: Logger 
+export class ModuleLogger implements NestMiddleware {
+  logger: Logger;
   constructor() {
-    this.logger = createLogger(
-      {
-        level: "info",
-        transports: [
-          new transports.File({ filename: process.argv.at(3) }),
-        ]
-      } 
-    ) 
+    this.logger = createLogger({
+      level: "info",
+      transports: [new transports.File({ filename: process.argv.at(3) })]
+    });
   }
-  
+
+  info(message: string) {
+    this.logger.info(message);
+  }
+
+  error(message: string) {
+    this.logger.error(message);
+  }
+
   use(req: Request, res: Response, next: NextFunction) {
-    //TODO: Compare against relevant Morgan functions to fill out this method
-    //this.logger.log(req.body)
-    this.logger.info("here")
+    const [method, url, statusCode] = [req.method, req.originalUrl || req.url, req.statusCode];
+    this.info(
+      `${new Date()} "${method} ${url}" ${statusCode} ${JSON.stringify(req.body)} ${req.headers["user-agent"]}`
+    );
     next();
   }
 }
