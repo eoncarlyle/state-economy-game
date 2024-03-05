@@ -141,7 +141,8 @@ export class AppService {
     else return null;
   }
 
-  @Cron("0 0 * * *", { timeZone: "America/Chicago" })
+  //@Cron("0 0 * * *", { timeZone: "America/Chicago" })
+  @Cron("* * * * *", { timeZone: "America/Chicago" })
   async runDailyTasks(): Promise<void> {
     await this.deleteObsoleteGameIds();
     await this.deleteObsoleteTargetStates();
@@ -164,6 +165,7 @@ export class AppService {
 
   async deleteObsoleteTargetStates(): Promise<void> {
     const targetStateCount = await this.targetState.count();
+    this.moduleLogger.info(`Current target state count: ${targetStateCount}`);
     const obsoleteStateModelCount = targetStateCount - TARGET_STATE_RETENTION + 1;
 
     if (obsoleteStateModelCount > 0) {
@@ -175,13 +177,13 @@ export class AppService {
         }
       });
       this.moduleLogger.info(`Obsolete target states deleted: ${deletedTargetStateCount}`);
-    }
 
-    const updatedStateModelCount = await this.targetState.update(
-      { id: Sequelize.literal(`id - ${obsoleteStateModelCount}`) },
-      { where: {} }
-    );
-    this.moduleLogger.info(`Updated target state rows: ${updatedStateModelCount}`);
+      const updatedStateModelCount = await this.targetState.update(
+        { id: Sequelize.literal(`id - ${obsoleteStateModelCount}`) },
+        { where: {} }
+      );
+      this.moduleLogger.info(`Updated target state rows: ${updatedStateModelCount}`);
+    }
   }
 
   async updateTargetState(): Promise<void> {

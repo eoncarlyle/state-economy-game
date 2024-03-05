@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch -- /Users/iain/code/state-economy-game/state-economy-game-backend/opt/app.db /Users/iain/code/state-economy-game/state-economy-game-backend/opt/access.log"
+    "start:dev": "nest start --watch -- ${PWD}/opt/app.db ${PWD}/opt/app.log"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

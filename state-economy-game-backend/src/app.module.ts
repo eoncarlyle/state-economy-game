@@ -5,6 +5,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import TargetState from "./data/targetState.model";
 import GameId from "./data/gameId.model";
 import { ModuleLogger } from "./logger.middleware";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
   imports: [
@@ -14,11 +15,11 @@ import { ModuleLogger } from "./logger.middleware";
       logging: false,
       models: [TargetState, GameId]
     }),
+    ScheduleModule.forRoot(),
     SequelizeModule.forFeature([TargetState, GameId]),
-    ModuleLogger
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, ModuleLogger]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
