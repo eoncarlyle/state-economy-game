@@ -141,8 +141,7 @@ export class AppService {
     else return null;
   }
 
-  //@Cron("0 0 * * *", { timeZone: "America/Chicago" })
-  @Cron("* * * * *", { timeZone: "America/Chicago" })
+  @Cron("0 0 * * *", { timeZone: "America/Chicago" })
   async runDailyTasks(): Promise<void> {
     await this.deleteObsoleteGameIds();
     await this.deleteObsoleteTargetStates();
