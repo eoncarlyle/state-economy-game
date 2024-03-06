@@ -15,15 +15,6 @@ import {
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
-  //TODO:
-  // this.app.use(express.json());
-  // this.app.use(cors());
-  // morgan.token("reqBody", requestBodyToken);
-
-  //TODO: Dependency injection for this object
-  //const loggerFileStream = getLoggerFileStream(logPath);
-  //this.app.use("/guess", guessLogger(loggerFileStream));
-  //this.app.use(mainLogger(loggerFileStream));
 
   @Get("/economy")
   async getTargetStateEconomy(): Promise<EconomyResponse> {
