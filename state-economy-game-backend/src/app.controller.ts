@@ -10,8 +10,6 @@ import {
   GuessSubmissionRequest
 } from "./state-economy-game-util/model";
 
-//! Fix the Nest symlink issues!
-
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

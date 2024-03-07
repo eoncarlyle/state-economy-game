@@ -1,14 +1,6 @@
-import {
-  Inject,
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  Req,
-  UnprocessableEntityException
-} from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { Cron } from "@nestjs/schedule";
-
 import { randomUUID } from "crypto";
 import { Op, Sequelize } from "sequelize";
 

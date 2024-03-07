@@ -16,7 +16,7 @@ import { ScheduleModule } from "@nestjs/schedule";
       models: [TargetState, GameId]
     }),
     ScheduleModule.forRoot(),
-    SequelizeModule.forFeature([TargetState, GameId]),
+    SequelizeModule.forFeature([TargetState, GameId])
   ],
   controllers: [AppController],
   providers: [AppService, ModuleLogger]
