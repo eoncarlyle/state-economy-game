@@ -1,11 +1,16 @@
 import { select, treemap, hierarchy, scaleOrdinal, schemeTableau10, treemapBinary, format } from "d3";
 
 export default function renderTreemap(data) {
-  const color = scaleOrdinal(data.children.map((d) => d.gdpCategory), schemeTableau10);
+  const color = scaleOrdinal(
+    data.children.map((d) => d.gdpCategory),
+    schemeTableau10
+  );
 
   const width = 500;
   const height = 400;
   const defaultFontSize = 10;
+  const clippingCutoffWidth = 100;
+  const unclippedTooltipWidth = 150;
 
   const root = treemap().tile(treemapBinary).size([width, height]).padding(1).round(true)(
     hierarchy(data)
@@ -23,9 +28,14 @@ export default function renderTreemap(data) {
   const leaf = svg
     .selectAll("g")
     .data(root.leaves())
-    .join("g").attr("transform", (d) => `translate(${d.x0},${d.y0})`);
-    
-  root.leaves().filter((d) => d.parent.data.gdpCategory === "Administrative and support and waste management and remediation services" )
+    .join("g")
+    .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+
+  root
+    .leaves()
+    .filter(
+      (d) => d.parent.data.gdpCategory === "Administrative and support and waste management and remediation services"
+    );
 
   const tooltipContainer = select("#tooltip-container");
   const tooltipCategory = select("#tooltip-category");
@@ -34,12 +44,12 @@ export default function renderTreemap(data) {
 
   const rectLabel = (count) => `rect-${count}`;
   const textLabel = (count) => `text-${count}`;
-  const gdpFormat = format(",d")
+  const gdpFormat = format(",d");
 
   let count = 0;
   leaf
     .append("rect")
-    .attr("id", (d) => rectLabel(count++))
+    .attr("id", (_d) => rectLabel(count++))
     .attr("fill", (d) => {
       while (d.depth > 1) d = d.parent;
       return color(d.data.gdpCategory);
@@ -52,7 +62,7 @@ export default function renderTreemap(data) {
   count = 0;
   leaf
     .append("text")
-    .attr("id", (d) => textLabel(count++))
+    .attr("id", (_d) => textLabel(count++))
     .text((d) => d.data.gdpCategory)
     .attr("x", (d) => 0.5 * (d.x1 - d.x0))
     .attr("y", (d) => 0.5 * (d.y1 - d.y0))
@@ -63,25 +73,9 @@ export default function renderTreemap(data) {
     .attr("fill", "#ffffff")
     .attr("class", "treemapRectangle");
 
-  const getTooltipWidth = () => new Number(tooltipContainer.style("width").slice(0, -2))
-  
-  const getOverflow = (pageX) => {
-    return Math.max(getTooltipWidth() + pageX - window.innerWidth)
-  }
-  
-  const positionTooltip = (leafData, event, rectBounds) => {
-    //TODO `topPoint` should be the bottom edge's y-axis position on the screen 
-    let leftPoint, topPoint;
-    if (getOverflow(event.pageX) > 0) {
-      leftPoint = rectBounds.left - getTooltipWidth()
-      topPoint = rectBounds.bottom + 10 
-      tooltipContainer.style("max-width", "100px")
-    } else {
-      leftPoint = event.pageX + 10
-      topPoint = event.pageY - 10
-      tooltipContainer.style("max-width", "150px")
-    }
-    
+  const getTooltipWidth = () => new Number(tooltipContainer.style("width").slice(0, -2));
+
+  const styleVisibleTooltip = (leafData, topPoint, leftPoint) => {
     tooltipCategory.text(`Category: ${leafData?.data.gdpCategory}`);
     tooltipParent.text(`Parent Category: ${leafData?.parent?.data.gdpCategory}`);
     tooltipQuantity.text(`Value: \$${gdpFormat(Math.round(leafData?.data.gdp))} M`);
@@ -89,11 +83,23 @@ export default function renderTreemap(data) {
     tooltipContainer.style("top", `${topPoint}px`).style("left", `${leftPoint}px`);
   };
 
+  const positionClippedTooltip = (leafData, rectBounds) => {
+    tooltipContainer.style("max-width", `${clippingCutoffWidth}px`);
+    const leftPoint = rectBounds.left - getTooltipWidth() - 10
+    const topPoint = (rectBounds.bottom + rectBounds.top)/2
+    styleVisibleTooltip(leafData, topPoint, leftPoint);
+  }
+
+  const positionUnclippedTooltip = (leafData, event) => {
+    tooltipContainer.style("max-width", `${unclippedTooltipWidth}px`);
+    styleVisibleTooltip(leafData, event.pageY - 10, event.pageX + 10);
+  };
+
   for (let leafIndex = 0; leafIndex < root.leaves().length; leafIndex++) {
     const text = select(`#text-${leafIndex}`);
     const rect = select(`#rect-${leafIndex}`);
     const leafData = root.leaves().at(leafIndex);
-    
+
     if (text.node().getComputedTextLength() > rect.node().width.baseVal.value) {
       text.attr("display", "none");
     } else {
@@ -104,25 +110,31 @@ export default function renderTreemap(data) {
       text.attr("font-size", size - 2);
     }
 
-    // TODO: We know at treemap construction time which rectangles will...
-    // TODO ...have clipping issues and which ones should not, so different
-    // TODO ...functions should be passed to non clipping and clipping...
-    // TODO ...rectangles
-    
-    // TODO: Calculate bottom edge of rectangle position using dom/quasi dom APIs
+    const rectBounds = rect.node().getBoundingClientRect();
 
-    const rectBounds = rect.node().getBoundingClientRect()
-    rect
-      .on("mouseover", function (event) {
-        select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
-        positionTooltip(leafData, event, rectBounds);
-      })
-      .on("mousemove", function (event) {
-        positionTooltip(leafData, event, rectBounds);
-      })
-      .on("mouseout", function () {
-        select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
-        tooltipContainer.style("visibility", "hidden");
-      });
+    if (rectBounds.right + clippingCutoffWidth > window.innerWidth) {
+      rect
+        .on("mouseover", function (_event) {
+          select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
+          positionClippedTooltip(leafData, rectBounds);
+        })
+        .on("mousemove", function (_event) {
+          positionClippedTooltip(leafData, rectBounds);
+        });
+    } else {
+      rect
+        .on("mouseover", function (event) {
+          select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
+          positionUnclippedTooltip(leafData, event);
+        })
+        .on("mousemove", function (event) {
+          positionUnclippedTooltip(leafData, event);
+        });
+    }
+
+    rect.on("mouseout", function () {
+      select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
+      tooltipContainer.style("visibility", "hidden");
+    });
   }
 }
