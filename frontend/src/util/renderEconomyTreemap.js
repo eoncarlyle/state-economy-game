@@ -63,19 +63,37 @@ export default function renderTreemap(data) {
     .attr("fill", "#ffffff")
     .attr("class", "treemapRectangle");
 
-  const positionTooltip = (leafData, event) => {
+  const getTooltipWidth = () => new Number(tooltipContainer.style("width").slice(0, -2))
+  
+  const getOverflow = (pageX) => {
+    return Math.max(getTooltipWidth() + pageX - window.innerWidth)
+  }
+  
+  const positionTooltip = (leafData, event, rectBounds) => {
+    //TODO `topPoint` should be the bottom edge's y-axis position on the screen 
+    let leftPoint, topPoint;
+    if (getOverflow(event.pageX) > 0) {
+      leftPoint = rectBounds.left - getTooltipWidth()
+      topPoint = rectBounds.bottom + 10 
+      tooltipContainer.style("max-width", "100px")
+    } else {
+      leftPoint = event.pageX + 10
+      topPoint = event.pageY - 10
+      tooltipContainer.style("max-width", "150px")
+    }
+    
     tooltipCategory.text(`Category: ${leafData?.data.gdpCategory}`);
     tooltipParent.text(`Parent Category: ${leafData?.parent?.data.gdpCategory}`);
     tooltipQuantity.text(`Value: \$${gdpFormat(Math.round(leafData?.data.gdp))} M`);
     tooltipContainer.style("visibility", "visible");
-    tooltipContainer.style("top", `${event.pageY - 10}px`).style("left", `${event.pageX + 10}px`);
+    tooltipContainer.style("top", `${topPoint}px`).style("left", `${leftPoint}px`);
   };
 
   for (let leafIndex = 0; leafIndex < root.leaves().length; leafIndex++) {
     const text = select(`#text-${leafIndex}`);
     const rect = select(`#rect-${leafIndex}`);
     const leafData = root.leaves().at(leafIndex);
-
+    
     if (text.node().getComputedTextLength() > rect.node().width.baseVal.value) {
       text.attr("display", "none");
     } else {
@@ -86,13 +104,21 @@ export default function renderTreemap(data) {
       text.attr("font-size", size - 2);
     }
 
+    // TODO: We know at treemap construction time which rectangles will...
+    // TODO ...have clipping issues and which ones should not, so different
+    // TODO ...functions should be passed to non clipping and clipping...
+    // TODO ...rectangles
+    
+    // TODO: Calculate bottom edge of rectangle position using dom/quasi dom APIs
+
+    const rectBounds = rect.node().getBoundingClientRect()
     rect
       .on("mouseover", function (event) {
         select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
-        positionTooltip(leafData, event);
+        positionTooltip(leafData, event, rectBounds);
       })
       .on("mousemove", function (event) {
-        positionTooltip(leafData, event);
+        positionTooltip(leafData, event, rectBounds);
       })
       .on("mouseout", function () {
         select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
