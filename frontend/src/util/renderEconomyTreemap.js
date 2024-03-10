@@ -9,7 +9,7 @@ export default function renderTreemap(data) {
   const width = 500;
   const height = 400;
   const defaultFontSize = 10;
-  const clippingCutoffWidth = 100;
+  const clippingCutoffWidth = 125;
   const unclippedTooltipWidth = 150;
 
   const root = treemap().tile(treemapBinary).size([width, height]).padding(1).round(true)(
@@ -85,10 +85,10 @@ export default function renderTreemap(data) {
 
   const positionClippedTooltip = (leafData, rectBounds) => {
     tooltipContainer.style("max-width", `${clippingCutoffWidth}px`);
-    const leftPoint = rectBounds.left - getTooltipWidth() - 10
-    const topPoint = (rectBounds.bottom + rectBounds.top)/2
+    const leftPoint = rectBounds.left - getTooltipWidth() - 10;
+    const topPoint = (rectBounds.bottom + rectBounds.top) / 2;
     styleVisibleTooltip(leafData, topPoint, leftPoint);
-  }
+  };
 
   const positionUnclippedTooltip = (leafData, event) => {
     tooltipContainer.style("max-width", `${unclippedTooltipWidth}px`);
@@ -111,30 +111,28 @@ export default function renderTreemap(data) {
     }
 
     const rectBounds = rect.node().getBoundingClientRect();
+    let mouseOverHandler, mouseMoveHandler;
 
     if (rectBounds.right + clippingCutoffWidth > window.innerWidth) {
-      rect
-        .on("mouseover", function (_event) {
-          select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
-          positionClippedTooltip(leafData, rectBounds);
-        })
-        .on("mousemove", function (_event) {
-          positionClippedTooltip(leafData, rectBounds);
-        });
+      mouseOverHandler = (_event) => {
+        select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
+        positionClippedTooltip(leafData, rectBounds);
+      };
+      mouseMoveHandler = (_event) => positionClippedTooltip(leafData, rectBounds);
     } else {
-      rect
-        .on("mouseover", function (event) {
-          select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
-          positionUnclippedTooltip(leafData, event);
-        })
-        .on("mousemove", function (event) {
-          positionUnclippedTooltip(leafData, event);
-        });
+      mouseOverHandler = (event) => {
+        select(this).attr("stroke-width", "2").attr("stroke", "black").attr("fill-opacity", 0.5);
+        positionUnclippedTooltip(leafData, event);
+      };
+      mouseMoveHandler = (event) => positionUnclippedTooltip(leafData, event);
     }
 
-    rect.on("mouseout", function () {
-      select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
-      tooltipContainer.style("visibility", "hidden");
-    });
+    rect
+      .on("mouseover", mouseOverHandler)
+      .on("mousemove", mouseMoveHandler)
+      .on("mouseout", function () {
+        select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
+        tooltipContainer.style("visibility", "hidden");
+      });
   }
 }
