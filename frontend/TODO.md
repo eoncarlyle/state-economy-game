@@ -1,3 +1,0 @@
-- Clean up the usage of z-index
-- Convert useState to signal invocation
-- Editing copy above the diagram and some background art
