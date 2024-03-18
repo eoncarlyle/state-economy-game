@@ -3,7 +3,7 @@ import { Column, Model, Table } from "sequelize-typescript";
 
 import GameId from "./gameId.model";
 
-// TODO fix name conflict between Guess interface and this interface name
+// TODO fix name conflict between Guess interface and this interface name, issue #19
 @Table({ tableName: "Guess" })
 export default class Guess extends Model {
   @Column({ type: DataTypes.STRING, primaryKey: true })

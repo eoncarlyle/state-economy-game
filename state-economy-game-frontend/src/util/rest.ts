@@ -5,7 +5,7 @@ export function getBaseUrl() {
   return import.meta.env.VITE_API_DOMAIN;
 }
 
-//TODO: Implement a sane retry policy (3x?) for these rest functions
+//TODO: Implement a sane retry policy (3x?) for these rest functions, Issue #20
 export async function getTargetStateEconomy() {
   const response = await getResponse("/economy", "GET")
   return await handleResponse<EconomyResponse>(response)

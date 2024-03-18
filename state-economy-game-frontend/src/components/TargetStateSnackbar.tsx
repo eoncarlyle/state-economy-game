@@ -16,7 +16,7 @@ export default function TargetStateSnackbar(props: TargetStateSnackbarProps): Re
   if (!gameState.showAnswer) return <></>;
   const [targetStateName, setTargetStateName] = useState<String | null>(null);
 
-  //TODO: Retry logic
+  //TODO: Retry logic, Issue #21
   useEffect(() => {
     getPuzzleAnswer(gameState.id).then((response: PuzzleAnswerResponse | null) => {
       if (response) setTargetStateName(response.targetStateName);

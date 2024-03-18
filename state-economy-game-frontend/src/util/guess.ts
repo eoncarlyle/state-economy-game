@@ -11,14 +11,13 @@ const GAME_HISTORY = "gameHistory";
 const GREEN_SQUARE_VALUE = 20;
 const YELLOW_SQUARE_VALUE = 10;
 
-//TODO Please make a better name for this
-export function guessSubmitHandlerFactory(
+export function getGuessSubmitHandler(
   maxGuesses: number,
   gameState: GameState,
   setGameState: StateUpdater<GameState | null>
 ) {
   return async () => {
-    //TODO: reflect on if the 'don't update anything if you hit an error' makes sense
+    //TODO: reflect on if the 'don't update anything if you hit an error' makes sense, Issue #20
     if (
       gameState.currentGuessName &&
       guessableStateRecords(gameState).includes(StateRecord.of(gameState.currentGuessName))
@@ -130,7 +129,7 @@ export function getShareableResult(gameState: GameState) {
     })
     .join("\n");
   const numericResult = gameState.isWin ? String(gameState.guesses.length) : "X";
-  const referenceDate = getReferenceDate().toLocaleString(DateTime.DATE_MED) 
+  const referenceDate = getReferenceDate().toLocaleString(DateTime.DATE_MED);
   return `#gdple ${referenceDate}\n\n${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`;
 }
 
@@ -145,7 +144,7 @@ export function shareableResultClickHandler(gameState: GameState, setGameState: 
   };
 }
 
-//TODO Change this for game state overhaul
+//TODO Change this for game state overhaul, Issue #21
 export function isGameOngoing(gameState: GameState) {
   return gameState.guesses.length < MAX_GUESSES && !gameState.isWin;
 }
