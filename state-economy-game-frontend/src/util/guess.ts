@@ -11,6 +11,7 @@ const GAME_HISTORY = "gameHistory";
 const GREEN_SQUARE_VALUE = 20;
 const YELLOW_SQUARE_VALUE = 10;
 
+//TODO Please make a better name for this
 export function guessSubmitHandlerFactory(
   maxGuesses: number,
   gameState: GameState,

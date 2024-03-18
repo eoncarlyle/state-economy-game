@@ -23,6 +23,7 @@ import {
 
 import { MAX_GUESSES, TARGET_STATE_RETENTION } from "./state-economy-game-util/constants";
 import TargetState from "./data/targetState.model";
+import Guess from "./data/guess.model";
 import GameId from "./data/gameId.model";
 import stateEconomies from "./stateEconomies";
 import { ModuleLogger } from "./logger.middleware";
@@ -56,8 +57,10 @@ export class AppService {
     }
 
     const gameId = await GameId.findOne({ where: { id: id } });
+    const guesses = await Guess.findAll({ where: { gameId: id } });
+ 
     if (!gameId) throw new UnprocessableEntityException("Game id must be valid");
-    else if (gameId?.attempts < MAX_GUESSES)
+    else if (guesses.length < MAX_GUESSES)
       throw new UnprocessableEntityException(`${MAX_GUESSES} guesses must be made before answer can be requested`);
 
     const record = await this.getTargetStateRecord();
@@ -71,7 +74,6 @@ export class AppService {
     const newUUID = randomUUID();
     return await GameId.create({
       id: newUUID,
-      attempts: 0
     });
   }
 
@@ -82,13 +84,7 @@ export class AppService {
       throw new BadRequestException("Request must contain and id, a state name, and a request timestamp");
 
     const gameId = await GameId.findOne({ where: { id: id } });
-    if (!isStateNameValid(guessStateName) || !gameId)
-      throw new UnprocessableEntityException("Game id and a guess state name must both be valid");
-    else if (gameId.attempts >= MAX_GUESSES)
-      throw new UnprocessableEntityException("Too many request have been made for this game");
-    else if (requestTimestamp === gameId.lastRequestTimestamp)
-      throw new UnprocessableEntityException("Duplicate of successful request");
-
+    await this.validateGuess(id, guessStateName, gameId);
     const targetStateRecord = await this.getTargetStateRecord();
     const distance = getHaversineDistance(StateRecord.of(guessStateName), targetStateRecord);
 
@@ -100,9 +96,16 @@ export class AppService {
       }, 0);
 
     await GameId.update(
-      { attempts: gameId.attempts + 1, lastRequestTimestamp: requestTimestamp },
+      { lastRequestTimestamp: requestTimestamp },
       { where: { id: id } }
     );
+    //! While guessStateName is accuate at this point,
+    //! it is not being written to the database
+    await Guess.create({
+      id: randomUUID(),
+      gameId: gameId.id,
+      stateName: guessStateName
+    });
 
     return {
       id: id,
@@ -110,6 +113,17 @@ export class AppService {
       bearing: getHaversineBearing(StateRecord.of(guessStateName), targetStateRecord),
       percentileScore: Math.round((1 - distance / maxDistance) * 100)
     };
+  }
+
+  private async validateGuess(id: string, guessStateName: string, gameId: GameId) {
+    const guesses = await Guess.findAll({ where: { gameId: id } });
+
+    if (!isStateNameValid(guessStateName) || !gameId)
+      throw new UnprocessableEntityException("Game id and a guess state name must both be valid");
+    else if (guesses.length >= MAX_GUESSES)
+      throw new UnprocessableEntityException("Too many request have been made for this game");
+    else if (guesses.map((guess: Guess) => guess.stateName).includes(guessStateName))
+      throw new UnprocessableEntityException("Duplicate of previous request");
   }
 
   getHealthCheck(): Object {

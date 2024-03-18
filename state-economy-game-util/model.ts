@@ -73,7 +73,6 @@ export interface GameHistory {
 
 export interface GameId {
   id: string;
-  attempts: number;
 }
 
 export interface EconomyResponse {

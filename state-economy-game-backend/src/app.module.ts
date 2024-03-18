@@ -4,6 +4,7 @@ import { AppService } from "./app.service";
 import { SequelizeModule } from "@nestjs/sequelize";
 import TargetState from "./data/targetState.model";
 import GameId from "./data/gameId.model";
+import Guess from "./data/guess.model";
 import { ModuleLogger } from "./logger.middleware";
 import { ScheduleModule } from "@nestjs/schedule";
 
@@ -13,10 +14,10 @@ import { ScheduleModule } from "@nestjs/schedule";
       dialect: "sqlite",
       storage: process.argv.at(2),
       logging: false,
-      models: [TargetState, GameId]
+      models: [TargetState, GameId, Guess]
     }),
     ScheduleModule.forRoot(),
-    SequelizeModule.forFeature([TargetState, GameId])
+    SequelizeModule.forFeature([TargetState, GameId, Guess])
   ],
   controllers: [AppController],
   providers: [AppService, ModuleLogger]
