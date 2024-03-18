@@ -63,6 +63,7 @@ export default function renderTreemap(data) {
   leaf
     .append("text")
     .attr("id", (_d) => textLabel(count++))
+
     .text((d) => d.data.gdpCategory)
     .attr("x", (d) => 0.5 * (d.x1 - d.x0))
     .attr("y", (d) => 0.5 * (d.y1 - d.y0))
@@ -76,6 +77,7 @@ export default function renderTreemap(data) {
   const getTooltipWidth = () => new Number(tooltipContainer.style("width").slice(0, -2));
 
   const styleVisibleTooltip = (leafData, topPoint, leftPoint) => {
+
     tooltipCategory.text(`Category: ${leafData?.data.gdpCategory}`);
     tooltipParent.text(`Parent Category: ${leafData?.parent?.data.gdpCategory}`);
     tooltipQuantity.text(`Value: \$${gdpFormat(Math.round(leafData?.data.gdp))} M`);
@@ -93,6 +95,7 @@ export default function renderTreemap(data) {
   const positionUnclippedTooltip = (leafData, event) => {
     tooltipContainer.style("max-width", `${unclippedTooltipWidth}px`);
     styleVisibleTooltip(leafData, event.pageY - 10, event.pageX + 10);
+
   };
 
   for (let leafIndex = 0; leafIndex < root.leaves().length; leafIndex++) {
@@ -130,6 +133,7 @@ export default function renderTreemap(data) {
     rect
       .on("mouseover", mouseOverHandler)
       .on("mousemove", mouseMoveHandler)
+
       .on("mouseout", function () {
         select(this).attr("stroke-width", "0").attr("fill-opacity", 1);
         tooltipContainer.style("visibility", "hidden");

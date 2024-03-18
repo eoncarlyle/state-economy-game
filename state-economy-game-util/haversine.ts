@@ -1,6 +1,5 @@
+import { R_MILE } from "./constants";
 import { Coordinates } from "./model";
-
-const rMile = 3960;
 
 // convert to radians
 const toRad = function (num: number) {
@@ -17,7 +16,7 @@ export default function haversineDistance(start: Coordinates, end: Coordinates) 
     Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return rMile * c;
+  return R_MILE * c;
 }
 
 export function haversineBearing(start: Coordinates, end: Coordinates) {
