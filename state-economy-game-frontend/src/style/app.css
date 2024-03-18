@@ -1,0 +1,135 @@
+:root {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+/* TODO: place only the minimum of things in CSS here, everything else to go in */
+
+.landing-copy {
+  margin: auto;
+  max-width: 30rem;
+}
+
+.guesses {
+  flex-direction: column;
+  display: flex;
+  margin: 1.5rem auto 2.5rem auto; 
+  align-items: center;
+  justify-content: center;
+  width: 20rem;
+}
+
+.guess-row {
+  border-radius: 0.5rem;
+  height: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.us-state-autocomplete {
+  margin: 1rem;
+  width: 90%;
+}
+
+.empty-guess-row {
+  background-color: #bdbdbd;
+}
+
+.incorrect-guess-color {
+  background-color: #e0e0e0;
+}
+
+.filled-guess-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  animation: animate-pop 0.3s forwards;
+}
+
+@keyframes animate-pop {
+  0% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.15);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.economy-diagram-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.guess-button {
+  width: 50%;
+}
+
+.state-name {
+  width: 45%;
+}
+
+.distance-label {
+  width: 20%
+}
+
+.end-guess-row-item {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.answer-dialog-content {
+  padding: 2rem;
+}
+
+.correct-guess-row {
+  background-color: #ffc107;
+}
+
+.gdple-heading {
+  display: flex;
+  justify-content: center;
+}
+
+.accordion-legend {
+  margin: auto auto 2rem auto;
+}
+
+.tooltip-container {
+  background-color: #ffffff;
+  font-family: sans-serif; 
+  font-size: 14px;
+  padding: 4px;
+  border: none;
+  box-shadow: 0px 0px 3px 0px #E6E6E6;
+  list-style-type: none;
+  max-width: 200px;
+  position: absolute;
+  visibility: hidden;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.tooltip-item {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.treemapRectangle {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
