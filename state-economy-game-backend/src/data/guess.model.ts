@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { Column, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, ForeignKey, HasOne, Model, Table } from "sequelize-typescript";
 
 import GameId from "./gameId.model";
 
@@ -10,11 +10,15 @@ export default class Guess extends Model {
   id: string;
 
   @Column({
-    type: DataTypes.STRING,
-    references: {
-      key: "id"
-    }
+    type: DataTypes.STRING
   })
+  @ForeignKey(() => GameId)
   gameId: string;
+
+  @Column({ type: DataTypes.STRING })
   stateName: string;
+
+  //! TODO this is absolutely heinous, #19
+  @BelongsTo(() => GameId)
+  game: GameId;
 }

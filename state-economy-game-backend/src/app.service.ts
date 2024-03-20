@@ -58,12 +58,13 @@ export class AppService {
 
     const gameId = await GameId.findOne({ where: { id: id } });
     const guesses = await Guess.findAll({ where: { gameId: id } });
- 
+
     if (!gameId) throw new UnprocessableEntityException("Game id must be valid");
     else if (guesses.length < MAX_GUESSES)
       throw new UnprocessableEntityException(`${MAX_GUESSES} guesses must be made before answer can be requested`);
 
     const record = await this.getTargetStateRecord();
+
     return {
       id: id,
       targetStateName: record.name
@@ -73,7 +74,7 @@ export class AppService {
   async postGameId(): Promise<GameId> {
     const newUUID = randomUUID();
     return await GameId.create({
-      id: newUUID,
+      id: newUUID
     });
   }
 
@@ -95,12 +96,7 @@ export class AppService {
         else return acc;
       }, 0);
 
-    await GameId.update(
-      { lastRequestTimestamp: requestTimestamp },
-      { where: { id: id } }
-    );
-    //! While guessStateName is accuate at this point,
-    //! it is not being written to the database
+    await GameId.update({ lastRequestTimestamp: requestTimestamp }, { where: { id: id } });
     await Guess.create({
       id: randomUUID(),
       gameId: gameId.id,

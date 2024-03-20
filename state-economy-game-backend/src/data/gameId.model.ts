@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
-import { Column, Model, Table } from "sequelize-typescript";
+import { Column, HasMany, Model, Table } from "sequelize-typescript";
+import Guess from "./guess.model";
 
 @Table({ tableName: "GameIds" })
 export default class GameId extends Model implements GameId{
@@ -8,4 +9,7 @@ export default class GameId extends Model implements GameId{
 
   @Column({ type: DataTypes.INTEGER })
   lastRequestTimestamp: number;
+
+  @HasMany(() => Guess)
+  guesses: Guess[];
 }

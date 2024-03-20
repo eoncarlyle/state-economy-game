@@ -101,16 +101,18 @@ export function getStoredGameState(setGameState: StateUpdater<GameState | null>)
       });
     } else {
       postGameId().then((gameId: GameId | null) => {
-        if (gameId)
-          setGameState({
+        if (gameId) {
+          const gameState = {
             id: gameId.id,
             guesses: [],
             currentGuessName: null,
             isWin: false,
             showAnswer: false,
             showShareableResultMessage: false,
-          });
-        else setGameState(null);
+          }
+          setGameState(gameState);
+          updateGameHistory(gameState);
+        }  else setGameState(null);
       });
     }
   }, [setGameState]);
