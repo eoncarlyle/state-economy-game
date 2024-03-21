@@ -6,7 +6,7 @@ import { Op, Sequelize } from "sequelize";
 
 import {
   StateRecord,
-  EconomyResponse,
+  StateEconomy,
   PuzzleAnswerResponse,
   GuessSubmissionRequest,
   GuessSubmissionResponse,
@@ -24,7 +24,7 @@ import {
 import { MAX_GUESSES, TARGET_STATE_RETENTION } from "./state-economy-game-util/constants";
 import TargetState from "./data/targetState.model";
 import Guess from "./data/guess.model";
-import GameId from "./data/gameId.model";
+import PuzzleSession from "./data/puzzleSession.model";
 import stateEconomies from "./stateEconomies";
 import { ModuleLogger } from "./logger.middleware";
 
@@ -33,21 +33,21 @@ export class AppService {
   constructor(
     @InjectModel(TargetState)
     private targetState: typeof TargetState,
-    @InjectModel(GameId)
-    private gameId: typeof GameId,
+    @InjectModel(PuzzleSession)
+    private puzzleSession: typeof PuzzleSession,
     private moduleLogger: ModuleLogger
   ) {}
 
-  async getTargetStateEconomy(): Promise<EconomyResponse> {
+  async getTargetStateEconomy(): Promise<StateEconomy> {
     const targetStateModel = await this.getTargetState();
     if (!targetStateModel) throw new NotFoundException("Target state not found");
 
-    const targetStateEconomy = this.getEconomyNode(targetStateModel.targetStateName);
+    const targetStateEconomy = this.getEconomyNode(targetStateModel.name);
     if (!targetStateEconomy) throw new NotFoundException("Target economy state not found");
 
     return {
       economy: targetStateEconomy,
-      totalGdp: targetStateModel.targetStateGdp
+      totalGdp: targetStateModel.gdp
     };
   }
 
@@ -56,24 +56,24 @@ export class AppService {
       throw new BadRequestException("Request must contain a game id");
     }
 
-    const gameId = await GameId.findOne({ where: { id: id } });
-    const guesses = await Guess.findAll({ where: { gameId: id } });
+    const puzzleSessionId = await PuzzleSession.findOne({ where: { id: id } });
+    const guesses = await Guess.findAll({ where: { puzzleSessionId: id } });
 
-    if (!gameId) throw new UnprocessableEntityException("Game id must be valid");
+    if (!puzzleSessionId) throw new UnprocessableEntityException("Game id must be valid");
     else if (guesses.length < MAX_GUESSES)
       throw new UnprocessableEntityException(`${MAX_GUESSES} guesses must be made before answer can be requested`);
 
-    const record = await this.getTargetStateRecord();
+    const targetStateRecord = await this.getTargetStateRecord();
 
     return {
       id: id,
-      targetStateName: record.name
+      targetStateName: targetStateRecord.name
     };
   }
 
-  async postGameId(): Promise<GameId> {
+  async postPuzzleSession(): Promise<PuzzleSession> {
     const newUUID = randomUUID();
-    return await GameId.create({
+    return await PuzzleSession.create({
       id: newUUID
     });
   }
@@ -84,8 +84,8 @@ export class AppService {
     if (!id || !guessStateName || !requestTimestamp)
       throw new BadRequestException("Request must contain and id, a state name, and a request timestamp");
 
-    const gameId = await GameId.findOne({ where: { id: id } });
-    await this.validateGuess(id, guessStateName, gameId);
+    const puzzleSession = await PuzzleSession.findOne({ where: { id: id } });
+    await this.validateGuess(id, guessStateName, puzzleSession);
     const targetStateRecord = await this.getTargetStateRecord();
     const distance = getHaversineDistance(StateRecord.of(guessStateName), targetStateRecord);
 
@@ -96,10 +96,10 @@ export class AppService {
         else return acc;
       }, 0);
 
-    await GameId.update({ lastRequestTimestamp: requestTimestamp }, { where: { id: id } });
+    await PuzzleSession.update({ lastRequestTimestamp: requestTimestamp }, { where: { id: id } });
     await Guess.create({
       id: randomUUID(),
-      gameId: gameId.id,
+      puzzleSessionId: puzzleSession.id,
       stateName: guessStateName
     });
 
@@ -111,11 +111,11 @@ export class AppService {
     };
   }
 
-  private async validateGuess(id: string, guessStateName: string, gameId: GameId) {
-    const guesses = await Guess.findAll({ where: { gameId: id } });
+  private async validateGuess(id: string, guessStateName: string, puzzleSessionId: PuzzleSession) {
+    const guesses = await Guess.findAll({ where: { puzzleSessionId: id } });
 
-    if (!isStateNameValid(guessStateName) || !gameId)
-      throw new UnprocessableEntityException("Game id and a guess state name must both be valid");
+    if (!puzzleSessionId || !isStateNameValid(guessStateName)) 
+      throw new UnprocessableEntityException("Puzzle session id and a guess state name must both be valid");
     else if (guesses.length >= MAX_GUESSES)
       throw new UnprocessableEntityException("Too many request have been made for this game");
     else if (guesses.map((guess: Guess) => guess.stateName).includes(guessStateName))
@@ -127,7 +127,7 @@ export class AppService {
   }
 
   async getTargetStateRecord(): Promise<StateRecord> {
-    return StateRecord.of((await this.getTargetState()).targetStateName);
+    return StateRecord.of((await this.getTargetState()).name);
   }
 
   async getTargetState(): Promise<TargetState> {
@@ -145,23 +145,23 @@ export class AppService {
 
   @Cron("0 0 * * *", { timeZone: "America/Chicago" })
   async runDailyTasks(): Promise<void> {
-    await this.deleteObsoleteGameIds();
+    await this.deleteObsoletePuzzleSessions();
     await this.deleteObsoleteTargetStates();
     await this.updateTargetState();
   }
 
-  async deleteObsoleteGameIds(): Promise<void> {
+  async deleteObsoletePuzzleSessions(): Promise<void> {
     const obsoleteDate = new Date();
     obsoleteDate.setDate(obsoleteDate.getDate() - 1);
 
-    const deletedGameIdCount = await this.gameId.destroy({
+    const deletedPuzzleSession = await this.puzzleSession.destroy({
       where: {
         createdAt: {
           [Op.lt]: obsoleteDate
         }
       }
     });
-    this.moduleLogger.info(`Obsolete GameIds deleted: ${deletedGameIdCount}`);
+    this.moduleLogger.info(`Obsolete puzzle sessions deleted: ${deletedPuzzleSession}`);
   }
 
   async deleteObsoleteTargetStates(): Promise<void> {
@@ -189,7 +189,7 @@ export class AppService {
 
   async updateTargetState(): Promise<void> {
     const unselectableTargetStateNames = (await this.targetState.findAll({ attributes: ["targetStateName"] })).map(
-      (targetState: TargetState) => targetState.targetStateName
+      (targetState: TargetState) => targetState.name
     );
 
     const selectableTargetStates = getUsStateRecords().filter(

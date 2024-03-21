@@ -1,10 +1,10 @@
 import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
-import { StateRecord, GameState, GameHistory, GameId, Guess } from "state-economy-game-util/model";
+import { StateRecord, GameState, PuzzleHistory, IPuzzleSession, Guess } from "state-economy-game-util/model";
 import { getUsStateRecords } from "state-economy-game-util/util";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
-import { postGuessSubmission, postGameId } from "./rest";
+import { postGuessSubmission, postPuzzleSession } from "./rest";
 import { useEffect } from "react";
 
 const GAME_HISTORY = "gameHistory";
@@ -52,7 +52,7 @@ export function getGuessSubmitHandler(
             showAnswer: true,
           };
         }
-        updateGameHistory(updatedState);
+        updatePuzzleHistory(updatedState);
         setGameState(updatedState);
       }
     }
@@ -67,7 +67,7 @@ function getReferenceDateString() {
   return getReferenceDate().toFormat("yyyy-MM-dd");
 }
 
-function getGameHistory(): GameHistory {
+function getPuzzleHistory(): PuzzleHistory {
   const gameHistory = localStorage.getItem(GAME_HISTORY);
   if (gameHistory) {
     return JSON.parse(gameHistory);
@@ -76,8 +76,8 @@ function getGameHistory(): GameHistory {
 
 //? Will strange things happen when players start a game on one reference...
 //? ...day and pick it up on the next reference day?
-export function updateGameHistory(updatedState: GameState) {
-  const gameHistory = getGameHistory();
+export function updatePuzzleHistory(updatedState: GameState) {
+  const gameHistory = getPuzzleHistory();
 
   gameHistory[getReferenceDateString()] = {
     id: updatedState.id,
@@ -89,21 +89,21 @@ export function updateGameHistory(updatedState: GameState) {
 
 export function getStoredGameState(setGameState: StateUpdater<GameState | null>) {
   useEffect(() => {
-    if (getReferenceDateString() in getGameHistory()) {
-      const gameEntry = getGameHistory()[getReferenceDateString()];
+    if (getReferenceDateString() in getPuzzleHistory()) {
+      const puzzleHistoryEntry = getPuzzleHistory()[getReferenceDateString()];
       setGameState({
-        id: gameEntry.id,
-        guesses: gameEntry.guesses,
+        id: puzzleHistoryEntry.id,
+        guesses: puzzleHistoryEntry.guesses,
         currentGuessName: null,
-        isWin: gameEntry.isWin,
-        showAnswer: !gameEntry.isWin && gameEntry.guesses.length >= MAX_GUESSES,
+        isWin: puzzleHistoryEntry.isWin,
+        showAnswer: !puzzleHistoryEntry.isWin && puzzleHistoryEntry.guesses.length >= MAX_GUESSES,
         showShareableResultMessage: false,
       });
     } else {
-      postGameId().then((gameId: GameId | null) => {
-        if (gameId) {
+      postPuzzleSession().then((puzzleSession: IPuzzleSession | null) => {
+        if (puzzleSession) {
           const gameState = {
-            id: gameId.id,
+            id: puzzleSession.id,
             guesses: [],
             currentGuessName: null,
             isWin: false,
@@ -111,7 +111,7 @@ export function getStoredGameState(setGameState: StateUpdater<GameState | null>)
             showShareableResultMessage: false,
           }
           setGameState(gameState);
-          updateGameHistory(gameState);
+          updatePuzzleHistory(gameState);
         }  else setGameState(null);
       });
     }

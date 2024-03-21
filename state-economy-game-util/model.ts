@@ -45,6 +45,11 @@ export interface InternalEconomyNode {
   children?: Array<InternalEconomyNode>;
 }
 
+export interface StateEconomy {
+  economy: NonLeafEconomyNode;
+  totalGdp: number;
+}
+
 export interface Guess {
   stateRecord: StateRecord;
   distance: number;
@@ -61,23 +66,18 @@ export interface GameState {
   showShareableResultMessage: boolean;
 }
 
-export interface GameEntry {
+export interface PuzzleHistoryEntry {
   isWin: boolean;
   id: string;
   guesses: Array<Guess>;
 }
 
-export interface GameHistory {
-  [key: string]: GameEntry
+export interface PuzzleHistory {
+  [key: string]: PuzzleHistoryEntry
 }
 
-export interface GameId {
+export interface IPuzzleSession {
   id: string;
-}
-
-export interface EconomyResponse {
-  economy: NonLeafEconomyNode;
-  totalGdp: number;
 }
 
 export interface GuessSubmissionRequest {

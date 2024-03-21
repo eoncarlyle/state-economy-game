@@ -2,9 +2,9 @@ import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 
 import { AppService } from "./app.service";
 import {
-  EconomyResponse,
+  StateEconomy,
   PuzzleAnswerResponse,
-  GameId,
+  IPuzzleSession,
   GuessSubmissionResponse,
   PuzzleAnswerRequest,
   GuessSubmissionRequest
@@ -15,7 +15,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get("/economy")
-  async getTargetStateEconomy(): Promise<EconomyResponse> {
+  async getTargetStateEconomy(): Promise<StateEconomy> {
     return this.appService.getTargetStateEconomy();
   }
 
@@ -24,9 +24,9 @@ export class AppController {
     return this.appService.getPuzzleAnswer(params.id);
   }
 
-  @Post("/gameId")
-  async postGameId(): Promise<GameId> {
-    return this.appService.postGameId();
+  @Post("/puzzle_session")
+  async postPuzzleSession(): Promise<IPuzzleSession> {
+    return this.appService.postPuzzleSession();
   }
 
   @Post("/guess")
