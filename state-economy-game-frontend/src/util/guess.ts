@@ -1,23 +1,23 @@
 import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
-import { StateRecord, GameState, GameHistory, GameId, Guess } from "state-economy-game-util/model";
+import { StateRecord, GameState, PuzzleHistory, IPuzzleSession, Guess } from "state-economy-game-util/model";
 import { getUsStateRecords } from "state-economy-game-util/util";
 import { MAX_GUESSES } from "state-economy-game-util/constants";
-import { postGuessSubmission, postGameId } from "./rest";
+import { postGuessSubmission, postPuzzleSession } from "./rest";
 import { useEffect } from "react";
 
 const GAME_HISTORY = "gameHistory";
 const GREEN_SQUARE_VALUE = 20;
 const YELLOW_SQUARE_VALUE = 10;
 
-export function guessSubmitHandlerFactory(
+export function getGuessSubmitHandler(
   maxGuesses: number,
   gameState: GameState,
   setGameState: StateUpdater<GameState | null>
 ) {
   return async () => {
-    //TODO: reflect on if the 'don't update anything if you hit an error' makes sense
+    //TODO: reflect on if the 'don't update anything if you hit an error' makes sense, Issue #20
     if (
       gameState.currentGuessName &&
       guessableStateRecords(gameState).includes(StateRecord.of(gameState.currentGuessName))
@@ -52,7 +52,7 @@ export function guessSubmitHandlerFactory(
             showAnswer: true,
           };
         }
-        updateGameHistory(updatedState);
+        updatePuzzleHistory(updatedState);
         setGameState(updatedState);
       }
     }
@@ -67,7 +67,7 @@ function getReferenceDateString() {
   return getReferenceDate().toFormat("yyyy-MM-dd");
 }
 
-function getGameHistory(): GameHistory {
+function getPuzzleHistory(): PuzzleHistory {
   const gameHistory = localStorage.getItem(GAME_HISTORY);
   if (gameHistory) {
     return JSON.parse(gameHistory);
@@ -76,8 +76,8 @@ function getGameHistory(): GameHistory {
 
 //? Will strange things happen when players start a game on one reference...
 //? ...day and pick it up on the next reference day?
-export function updateGameHistory(updatedState: GameState) {
-  const gameHistory = getGameHistory();
+export function updatePuzzleHistory(updatedState: GameState) {
+  const gameHistory = getPuzzleHistory();
 
   gameHistory[getReferenceDateString()] = {
     id: updatedState.id,
@@ -89,28 +89,30 @@ export function updateGameHistory(updatedState: GameState) {
 
 export function getStoredGameState(setGameState: StateUpdater<GameState | null>) {
   useEffect(() => {
-    if (getReferenceDateString() in getGameHistory()) {
-      const gameEntry = getGameHistory()[getReferenceDateString()];
+    if (getReferenceDateString() in getPuzzleHistory()) {
+      const puzzleHistoryEntry = getPuzzleHistory()[getReferenceDateString()];
       setGameState({
-        id: gameEntry.id,
-        guesses: gameEntry.guesses,
+        id: puzzleHistoryEntry.id,
+        guesses: puzzleHistoryEntry.guesses,
         currentGuessName: null,
-        isWin: gameEntry.isWin,
-        showAnswer: !gameEntry.isWin && gameEntry.guesses.length >= MAX_GUESSES,
+        isWin: puzzleHistoryEntry.isWin,
+        showAnswer: !puzzleHistoryEntry.isWin && puzzleHistoryEntry.guesses.length >= MAX_GUESSES,
         showShareableResultMessage: false,
       });
     } else {
-      postGameId().then((gameId: GameId | null) => {
-        if (gameId)
-          setGameState({
-            id: gameId.id,
+      postPuzzleSession().then((puzzleSession: IPuzzleSession | null) => {
+        if (puzzleSession) {
+          const gameState = {
+            id: puzzleSession.id,
             guesses: [],
             currentGuessName: null,
             isWin: false,
             showAnswer: false,
             showShareableResultMessage: false,
-          });
-        else setGameState(null);
+          }
+          setGameState(gameState);
+          updatePuzzleHistory(gameState);
+        }  else setGameState(null);
       });
     }
   }, [setGameState]);
@@ -129,7 +131,7 @@ export function getShareableResult(gameState: GameState) {
     })
     .join("\n");
   const numericResult = gameState.isWin ? String(gameState.guesses.length) : "X";
-  const referenceDate = getReferenceDate().toLocaleString(DateTime.DATE_MED) 
+  const referenceDate = getReferenceDate().toLocaleString(DateTime.DATE_MED);
   return `#gdple ${referenceDate}\n\n${numericResult}/5\n${emojiResult}\ngdple.iainschmitt.com`;
 }
 
@@ -144,7 +146,7 @@ export function shareableResultClickHandler(gameState: GameState, setGameState: 
   };
 }
 
-//TODO Change this for game state overhaul
+//TODO Change this for game state overhaul, Issue #21
 export function isGameOngoing(gameState: GameState) {
   return gameState.guesses.length < MAX_GUESSES && !gameState.isWin;
 }

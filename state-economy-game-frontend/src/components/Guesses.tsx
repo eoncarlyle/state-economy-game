@@ -15,7 +15,7 @@ export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   getStoredGameState(setGameState);
 
-  //TODO Not proud of this
+  //TODO Not proud of this Issue #22
   if (!gameState) return <></>;
 
   const closedGuesses = gameState.guesses.map((guess: Guess) => <GuessRow guess={guess} />);
@@ -33,7 +33,7 @@ export default function Guesses() {
     }
   } 
 
-  //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now
+  //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
   return (
     <>
       <div className="guesses">

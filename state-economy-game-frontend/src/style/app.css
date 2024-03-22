@@ -2,8 +2,6 @@
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
-/* TODO: place only the minimum of things in CSS here, everything else to go in */
-
 .landing-copy {
   margin: auto;
   max-width: 30rem;

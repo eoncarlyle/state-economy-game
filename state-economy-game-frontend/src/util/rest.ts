@@ -1,19 +1,19 @@
-import { GameId, GuessSubmissionResponse, PuzzleAnswerResponse, EconomyResponse } from "state-economy-game-util/model";
+import { GuessSubmissionResponse, PuzzleAnswerResponse, IPuzzleSession, StateEconomy } from "state-economy-game-util/model";
 import { GuessSubmissionRequest } from "state-economy-game-util/model";
 
 export function getBaseUrl() {
   return import.meta.env.VITE_API_DOMAIN;
 }
 
-//TODO: Implement a sane retry policy (3x?) for these rest functions
+//TODO: Implement a sane retry policy (3x?) for these rest functions, Issue #20
 export async function getTargetStateEconomy() {
   const response = await getResponse("/economy", "GET")
-  return await handleResponse<EconomyResponse>(response)
+  return await handleResponse<StateEconomy>(response)
 }
 
-export async function postGameId() {
-  const response = await getResponse("/gameId", "POST")
-  return await handleResponse<GameId>(response)
+export async function postPuzzleSession() {
+  const response = await getResponse("/puzzle_session", "POST")
+  return await handleResponse<IPuzzleSession>(response)
 }
 
 export async function postGuessSubmission(guessSubmissionRequest: GuessSubmissionRequest) {
