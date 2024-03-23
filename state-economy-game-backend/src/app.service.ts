@@ -188,7 +188,7 @@ export class AppService {
   }
 
   async updateTargetState(): Promise<void> {
-    const unselectableTargetStateNames = (await this.targetState.findAll({ attributes: ["targetStateName"] })).map(
+    const unselectableTargetStateNames = (await this.targetState.findAll({ attributes: ["name"] })).map(
       (targetState: TargetState) => targetState.name
     );
 
