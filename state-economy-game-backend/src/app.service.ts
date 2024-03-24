@@ -205,8 +205,8 @@ export class AppService {
 
     await this.targetState.create({
       id: (await this.targetState.count()) + 1,
-      targetStateName: newTargetState.name,
-      targetStateGdp: this.getRoundedTotalGdp(newEconomyNode)
+      name: newTargetState.name,
+      gdp: this.getRoundedTotalGdp(newEconomyNode)
     });
     this.moduleLogger.info(`New target state: ${newTargetState.name}`);
   }
