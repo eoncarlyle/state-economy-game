@@ -20,6 +20,10 @@ export class ModuleLogger implements NestMiddleware {
     this.logger.error(message);
   }
 
+  httpError(status: number, message: string) {
+    this.logger.error({ status: status, message: message })
+  }
+
   use(req: Request, res: Response, next: NextFunction) {
     const [method, url, statusCode] = [req.method, req.originalUrl || req.url, req.statusCode];
     this.info(

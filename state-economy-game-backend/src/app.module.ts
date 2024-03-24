@@ -1,12 +1,15 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { APP_FILTER } from "@nestjs/core";
+import { SequelizeModule } from "@nestjs/sequelize";
+import { ScheduleModule } from "@nestjs/schedule";
+
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { SequelizeModule } from "@nestjs/sequelize";
 import TargetState from "./data/targetState.model";
 import PuzzleSession from "./data/puzzleSession.model";
 import Guess from "./data/guess.model";
 import { ModuleLogger } from "./logger.middleware";
-import { ScheduleModule } from "@nestjs/schedule";
+import { GlobalExceptionsFilter } from "./app.filter";
 
 @Module({
   imports: [
@@ -20,7 +23,7 @@ import { ScheduleModule } from "@nestjs/schedule";
     SequelizeModule.forFeature([TargetState, PuzzleSession, Guess])
   ],
   controllers: [AppController],
-  providers: [AppService, ModuleLogger]
+  providers: [AppService, ModuleLogger, { provide: APP_FILTER, useClass: GlobalExceptionsFilter }]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
