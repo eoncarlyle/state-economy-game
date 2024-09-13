@@ -7,19 +7,22 @@ type StateRecord =
       LatitudeN: float
       LongitudeW: float }
 
-type LeafEconomyNode = { GdpCategory: string; Gdp: int64 }
+type NonLeafEconomyNodeM = {
+    GdpCategory: string
+    Gdp: float
+}
 
-type EconomyNode = //Teaching point: originally had LeafEconomyNode | NonLeafEconomyNode! not same!
-    | Leaf of LeafEconomyNode //Showed strange type hints
-    | NonLeaf of NonLeafEconomyNode
+type LeafEconomyNode = {
+    GdpCategory: string
+    Children: List<EconomyNode>
+} and EconomyNode = Leaf of LeafEconomyNode | NonLeaf of NonLeafEconomyNodeM 
 
-and NonLeafEconomyNode =
-    { GdpCategory: string
-      Children: List<NonLeafEconomyNode> }
-
+type StateEconomy = { }
+  
 
 type Guess =
     { StateRecord: StateRecord
       Distance: float
       Bearing: float
       PercentileScore: float }
+

@@ -1,11 +1,17 @@
 module StateEconomyGame.Service
 
+open System
 open StateEconomyGame.Model
+open System.Data.SQLite
 
+let connection = new SQLiteConnection("Data Source=app.db")
 
 let getTargetStateEconomy () = 0
 
-let rec getTotalGdp economyNode =
-    match economyNode with
-    | NonLeaf nonLeaf -> List.map getTotalGdp nonLeaf.Children |> List.reduce (fun n1 n2 -> n1 + n2)
-    | Leaf leaf -> leaf.Gdp
+let getTotalGdp (economyNode: EconomyNode) =
+    let rec loop economyNode = 
+        match economyNode with
+        | NonLeaf nonLeaf -> nonLeaf.Gdp
+        | Leaf leaf -> leaf.Children |> List.map loop |> List.sum
+
+    loop economyNode |> Math.Round |> Convert.ToInt64

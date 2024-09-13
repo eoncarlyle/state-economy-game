@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="6.4.0" />
     <PackageReference Include="Giraffe.ViewEngine" Version="1.4.*" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model.fs" />
