@@ -7,7 +7,7 @@ open System.Threading.Tasks
 open StateEconomyGame.Model
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite
-open FSharp.Data
+open FSharp.Data //! Namespaces across packages is very nice
 
 // Use Dapper instead, doesn't have the SQLite interop .dll issue
 
@@ -39,12 +39,14 @@ let getTotalGdp (economyNode: EconomyNode) =
     loop economyNode |> Math.Round |> Convert.ToInt64
 
 let MgetTotalGdp (economyNode: StateEconomies.Root) =
-    let rec loop a =
-        match economyNode with
-        | LabeledStateEconomy le -> le.StateEconomy
+    let rec loop (mNode: MNode) =
+        match mNode with
+        | Leaf leaf -> leaf.Gdp
+        | StateEconomy se -> (se.Children) |> Array.map loop |> array.sum
+        | OuterChild oc -> oc.Children |> Array.map loop |> array.sum
+        | MiddleChild mc -> mc.Children |> Array.map loop |> array.sum
 
-    loop economyNode |> Math.Round |> Convert.ToInt64
-
+    loop economyNode.StateEconomy |> Math.Round |> Convert.ToInt64
 
 let getTargetState () : Task<AppResult<TargetState>> =
     select {
