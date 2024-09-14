@@ -8,12 +8,18 @@ open StateEconomyGame.Model
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite
 open FSharp.Data //! Namespaces across packages is very nice
+open System.Text.Json
 
 // Use Dapper instead, doesn't have the SQLite interop .dll issue
 
-//! <-- Here, doing JSON serialisation
+let stateEconomies =
+    let json = File.ReadAllText "./stateEconomies.json"
 
-let stateEconomies = StateEconomies.GetSamples()
+    let options =
+        JsonSerializerOptions(PropertyNamingPolicy = JsonNamingPolicy.CamelCase)
+    //! This way does work with descriminated unions (?)
+    JsonSerializer.Deserialize<List<NamedStateEconomy>>(json, options)
+
 
 // H/T to Michael
 let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
@@ -38,15 +44,7 @@ let getTotalGdp (economyNode: EconomyNode) =
 
     loop economyNode |> Math.Round |> Convert.ToInt64
 
-let MgetTotalGdp (economyNode: StateEconomies.Root) =
-    let rec loop (mNode: MNode) =
-        match mNode with
-        | Leaf leaf -> leaf.Gdp
-        | StateEconomy se -> (se.Children) |> Array.map loop |> array.sum
-        | OuterChild oc -> oc.Children |> Array.map loop |> array.sum
-        | MiddleChild mc -> mc.Children |> Array.map loop |> array.sum
-
-    loop economyNode.StateEconomy |> Math.Round |> Convert.ToInt64
+//! d1d6f54: The type providers get to be a pain in the ass for nested classes, reference MgetTotalGdp
 
 let getTargetState () : Task<AppResult<TargetState>> =
     select {
@@ -64,19 +62,19 @@ let getTargetState () : Task<AppResult<TargetState>> =
                   Message = "Internal error: target state not present" })
 
 let getEconomyNode (stateName: string) = //! Type inference legitamitely didn't work on this until I used the pipeline operator
-    match stateEconomies |> Array.filter (fun state -> state.Name = stateName) with
-    | [||] ->
+    match stateEconomies |> List.filter (fun state -> state.Name = stateName) with
+    | [] ->
         Error
             { Code = 500
               Message = $"Internal Error: {stateName} not found!" }
-    | [| stateEconomy |] -> Ok stateEconomy
+    | [ stateEconomy ] -> Ok stateEconomy
     | _ ->
         Error
             { Code = 500
               Message = "Internal error:" }
 
 
-let getTargetStateEconomy () : Task<AppResult<TargetState>> =
+let getTargetStateEconomy () : Task<AppResult<StateEconomy>> =
 
     task {
         let! targetState = getTargetState ()
@@ -86,5 +84,5 @@ let getTargetStateEconomy () : Task<AppResult<TargetState>> =
             | Ok state -> getEconomyNode state.name |> Result.bind (fun node -> getTotalGdp node |> Ok)
             | Error e -> Error e
 
-        return targetStateE
+        return targetStateEconomy
     }

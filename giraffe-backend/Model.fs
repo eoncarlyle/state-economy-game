@@ -30,8 +30,16 @@ and EconomyNode =
     | Leaf of LeafEconomyNode
     | NonLeaf of NonLeafEconomyNode
 
-type StateEconomies = JsonProvider<"./stateEconomies.json">
+type StateEconomy =
+    { GdpCategory: string
+      Children: List<EconomyNode> }
 
-type LabeledStateEconomy = StateEconomies.Root
+type ListedStateEconomy =
+    { Name: string
+      StateEconomy: StateEconomy }
+
+type FEStateEconomyRequest =
+    { economy: StateEconomy
+      totalGdp: int64 }
 
 type TargetState = { id: int; name: string; gdp: float }
