@@ -10,6 +10,8 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 
+open StateEconomyGame.Service
+
 // ---------------------------------
 // Models
 // ---------------------------------
@@ -89,8 +91,7 @@ let configureServices (services: IServiceCollection) =
 let configureLogging (builder: ILoggingBuilder) =
     builder.AddConsole().AddDebug() |> ignore
 
-[<EntryPoint>]
-let main args =
+let giraffeMain args =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot = Path.Combine(contentRoot, "WebRoot")
 
@@ -107,4 +108,7 @@ let main args =
         .Build()
         .Run()
 
+[<EntryPoint>]
+let main args =
+    let a = stateEconomies
     0

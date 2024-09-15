@@ -22,6 +22,7 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="altJson.json" />
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="WebRoot\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

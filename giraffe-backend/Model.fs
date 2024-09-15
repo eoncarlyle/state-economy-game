@@ -1,45 +1,40 @@
 namespace StateEconomyGame.Model
 
+open System
 open FSharp.Data
 
 type Coordinates = { Latitude: float; Longitude: float }
 
-type AppHttpError = { Code: int; Message: string }
+type AppError = { Code: int; Message: string }
 
-type AppResult<'a> = Result<'a, AppHttpError>
+type AppResult<'a> = Result<'a, AppError>
 
-type Guesses = //? Should this be destinct from other state data structures
+type Guess = 
     { id: int
-      puzzleSession: string
+      puzzleSessionId: string
       stateName: string
-      createdAt: string
-      updatedAt: string } //! Need to make the non-option verions, this is getting tedious
+      createdAt: DateTime
+      updatedAt: DateTime }
+    
 
 type StateRecord =
     { Name: string
       LatitudeN: float
       LongitudeW: float }
 
-type NonLeafEconomyNode = { GdpCategory: string; Gdp: float }
-
-type LeafEconomyNode =
+type EconomyNode =
     { GdpCategory: string
-      Children: List<EconomyNode> }
+      Gdp: Option<float>
+      Children: Option<List<EconomyNode>> }
 
-and EconomyNode =
-    | Leaf of LeafEconomyNode
-    | NonLeaf of NonLeafEconomyNode
-
-type StateEconomy =
-    { GdpCategory: string
-      Children: List<EconomyNode> }
-
-type ListedStateEconomy =
+type NamedStateEconomy =
     { Name: string
-      StateEconomy: StateEconomy }
+      StateEconomy: EconomyNode }
 
-type FEStateEconomyRequest =
-    { economy: StateEconomy
-      totalGdp: int64 }
+type DtoStateEconomy =
+    { economy: EconomyNode
+      totalGdp: float }
 
 type TargetState = { id: int; name: string; gdp: float }
+
+type PuzzleSession = { id: string; lastRequestTimestamp: Option<int>; createdAt: DateTime; updatedAt: DateTime  }
