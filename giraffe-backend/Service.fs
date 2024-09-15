@@ -30,11 +30,19 @@ let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
 
 let taskGet (task: Task<'a>) = task.Result //Why no Result.get?
 
-let resultValidateMap (validPredicate: 'a -> bool) (appErrorOnFailed: AppError) (appResult: AppResult<'a>) =
-    if Result.exists validPredicate appResult then
-        appResult
+let resultValidateMap (validationPredicate: 'a -> bool) (appErrorOnFailed: AppError) (appResult: AppResult<'a>) =
+    if Result.exists validationPredicate appResult then
+        Option.None
     else
-        Error appErrorOnFailed
+        Some appErrorOnFailed
+
+let validationAppResultOption (appResult: AppResult<'a>) =
+    match appResult with
+    | Ok _ -> Option.None
+    | Error e -> Some e
+
+let validationBoolOption (isValid: bool) (appErrorOnFailed: AppError) =
+    if isValid then Option.None else Some appErrorOnFailed
 
 let getAppError code message : AppError = { code = code; message = message }
 
@@ -171,30 +179,24 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
         puzzleSession
         |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
     //! This _really_ should be using option, where the option is popualted in the event of an invalid answer and is other wise not populated, example in original commit of this comment
-    let isValid = 
-        puzzleSession
-        |> Result.bind (fun _ ->
-            if isStateNameValid guessSubmission.guessStateName then
-                Ok ""
-            else
-                getAppError 422 $"Invalid guess state name ${guessSubmission.guessStateName}"
-                |> Error)
-        |> Result.bind (fun _ -> guesses)
-        |> Result.bind (fun guesses ->
-            if Seq.length guesses >= MAX_GUESSES then
-                (getAppError 422 "Too many requests have been made for this game") |> Error
-            else
-                Ok guesses)
-        |> Result.bind (fun guesses ->
-            if
-                (guesses
-                 |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName))
-            then
-                (getAppError 422 "Duplicate of previous request" |> Error)
-            else
-                Ok "")
 
-
+    //! 1)  Understand Haskell's love of infix operators, this is getting time consuming with these `ModuleName.function`  2) Can be difficult to know when you're whitespacing correctly on long statements
+    let validationErrors =
+        Option.None
+        |> Option.orElseWith (fun _ -> validationAppResultOption puzzleSession)
+        |> Option.orElseWith (fun _ -> validationAppResultOption guesses)
+        |> Option.orElseWith (fun _ ->
+            validationBoolOption
+                (isStateNameValid guessSubmission.guessStateName)
+                (getAppError 422 $"Invalid guess state name ${guessSubmission.guessStateName}"))
+        |> Option.orElseWith (fun _ ->
+            validationBoolOption
+                (guesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES)) 
+                (getAppError 422 "Too many requests have been made for this game"))
+        |> Option.orElseWith (fun _ ->
+            validationBoolOption
+                (guesses |> Result.exists (fun guesses -> guesses |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName)))
+                (getAppError 422 "Duplicate of previous request")
+            )
     
-    //
     0

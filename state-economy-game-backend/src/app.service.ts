@@ -38,6 +38,7 @@ export class AppService {
     private moduleLogger: ModuleLogger
   ) {}
 
+  // ✅ = in Giraffe backend
   async getTargetStateEconomy(): Promise<StateEconomy> {
     const targetStateModel = await this.getTargetState();
     if (!targetStateModel) throw new NotFoundException("Target state not found");
@@ -51,6 +52,7 @@ export class AppService {
     };
   }
 
+  // ✅ 
   async getPuzzleAnswer(id: string): Promise<PuzzleAnswerResponse> {
     if (!id) {
       throw new BadRequestException("Request must contain a game id");
