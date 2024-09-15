@@ -25,7 +25,7 @@ type StateRecord =
 type EconomyNode =
     { GdpCategory: string
       Gdp: Option<float>
-      Children: Option<List<EconomyNode>> }
+      Children: EconomyNode list option }
 
 type NamedStateEconomy =
     { Name: string

@@ -15,8 +15,8 @@ open System.Text.Json
 let MAX_GUESSES = 5
 let stateEconomies =
     let json = File.ReadAllText "./stateEconomies.json"
-    JsonSerializer.Deserialize<List<NamedStateEconomy>>(json)
-    //! This way does work with descriminated unions (?)
+    JsonSerializer.Deserialize<NamedStateEconomy list>(json)
+    //! F# lists != .NET lists, this got me in some type trouble
 
 // H/T to Michael
 let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
@@ -67,7 +67,7 @@ let getTargetState (dbConnection: DbConnection) : Task<AppResult<TargetState>> =
     |> getOneFromQuery (getInternalError "target state not present") 
 
 let getEconomyNode (stateName: string) = //! Type inference legitamitely didn't work on this until I used the pipeline operator
-    match stateEconomies |> List.filter (fun state -> state.Name = stateName) with
+    match stateEconomies |> List.filter (fun (state: NamedStateEconomy) -> state.Name = stateName) with
     | [] -> getInternalError $"{stateName} not foud" |> Error
     | [ stateEconomy ] -> Ok stateEconomy
     | _ -> getInternalError $"Multiple records for {stateName}" |> Error
