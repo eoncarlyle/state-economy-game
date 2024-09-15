@@ -3,9 +3,10 @@ namespace StateEconomyGame.Model
 open System
 open FSharp.Data
 
-type Coordinates = { Latitude: float; Longitude: float }
+//! Don't love using lowercase for API consistency with the frontend
+type Coordinates = { latitude: float; longitude: float }
 
-type AppError = { Code: int; Message: string }
+type AppError = { code: int; message: string } //! This is named badly
 
 type AppResult<'a> = Result<'a, AppError>
 
@@ -18,14 +19,14 @@ type Guess =
     
 
 type StateRecord =
-    { Name: string
-      LatitudeN: float
-      LongitudeW: float }
+    { name: string
+      latitudeN: float
+      longitudeW: float }
 
 type EconomyNode =
-    { GdpCategory: string
-      Gdp: Option<float>
-      Children: EconomyNode list option }
+    { gdpCategory: string
+      gdp: Option<float>
+      children: EconomyNode list option }
 
 type NamedStateEconomy =
     { Name: string
@@ -35,6 +36,12 @@ type DtoStateEconomy =
     { economy: EconomyNode
       totalGdp: float }
 
+type DtoOutPuzzleAnswer = { id: string; targetStateName: string }
+
+type DtoOutPuzzleSession = { id: string; }
+
+type DtoInGuessSubmission = { id:string; guessStateName: string; requestTimestamp: int64  }
+
 type TargetState = { id: int; name: string; gdp: float }
 
-type PuzzleSession = { id: string; lastRequestTimestamp: Option<int>; createdAt: DateTime; updatedAt: DateTime  }
+type PuzzleSession = { id: string; lastRequestTimestamp: int option; createdAt: DateTime; updatedAt: DateTime  }

@@ -3,20 +3,23 @@ module StateEconomyGame.Service
 open System
 open System.Collections.Generic
 open System.IO
+open System.Runtime.InteropServices.JavaScript
 open System.Threading.Tasks
 open System.Data.Common
 open Dapper
 open Giraffe
+open Microsoft.FSharp.Core
 open StateEconomyGame.Model
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite //! Had annoying SQLite interop issues
 open System.Text.Json
 
 let MAX_GUESSES = 5
+
 let stateEconomies =
     let json = File.ReadAllText "./stateEconomies.json"
     JsonSerializer.Deserialize<NamedStateEconomy list>(json)
-    //! F# lists != .NET lists, this got me in some type trouble
+//! F# lists != .NET lists, this got me in some type trouble with 4e18b9d]
 
 // H/T to Michael
 let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
@@ -25,9 +28,18 @@ let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
         return fn results
     }
 
-let getAppError code message : AppError = { Code = code; Message = message }
+let taskGet (task: Task<'a>) = task.Result //Why no Result.get?
 
-let getInternalError subMsg = getAppError 500  $"Internal Error:{subMsg}"
+let resultValidateMap (validPredicate: 'a -> bool) (appErrorOnFailed: AppError) (appResult: AppResult<'a>) =
+    if Result.exists validPredicate appResult then
+        appResult
+    else
+        Error appErrorOnFailed
+
+let getAppError code message : AppError = { code = code; message = message }
+
+let getInternalError subMsg =
+    getAppError 500 $"Internal Error:{subMsg}"
 
 
 let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
@@ -42,16 +54,16 @@ let guessTable = table'<Guess> "guesses"
 
 let getTotalGdp (economyNode: NamedStateEconomy) =
     let rec loop (economyNode: EconomyNode) =
-        match economyNode.Children with
+        match economyNode.children with
         | Some children -> children |> List.map loop |> List.sum
-        | _ -> economyNode.Gdp |> Option.defaultValue 0
+        | _ -> economyNode.gdp |> Option.defaultValue 0
 
     loop economyNode.StateEconomy |> Math.Round |> Convert.ToInt64
 
 //! d1d6f54: The type providers get to be a pain in the ass for nested classes, reference MgetTotalGdp
 //! Don't love the double unions but it's whatever
 
-let getOneFromQuery (appErrorOnEmpty: AppError)  =
+let getOneFromQuery (appErrorOnEmpty: AppError) =
     taskMap (fun result ->
         match Seq.tryHead result with
         | Some targetState -> Ok targetState
@@ -64,14 +76,19 @@ let getTargetState (dbConnection: DbConnection) : Task<AppResult<TargetState>> =
             orderByDescending targetState.id
     }
     |> dbConnection.SelectAsync<TargetState>
-    |> getOneFromQuery (getInternalError "target state not present") 
+    |> getOneFromQuery (getInternalError "target state not present")
+
 
 let getEconomyNode (stateName: string) = //! Type inference legitamitely didn't work on this until I used the pipeline operator
-    match stateEconomies |> List.filter (fun (state: NamedStateEconomy) -> state.Name = stateName) with
-    | [] -> getInternalError $"{stateName} not foud" |> Error
+    match
+        stateEconomies
+        |> List.filter (fun (state: NamedStateEconomy) -> state.Name = stateName)
+    with
+    | [] -> getInternalError $"{stateName} not found" |> Error
     | [ stateEconomy ] -> Ok stateEconomy
     | _ -> getInternalError $"Multiple records for {stateName}" |> Error
 
+let isStateNameValid stateName = getEconomyNode stateName |> Result.isOk
 
 let getTargetStateEconomy (dbConnection: DbConnection) : Task<AppResult<DtoStateEconomy>> =
     //! b6053e8: semi-interesting type error
@@ -91,20 +108,93 @@ let getTargetStateEconomy (dbConnection: DbConnection) : Task<AppResult<DtoState
         return DtoStateEconomy
     }
 
-let getGuessCount puzzleSessionId (dbConnection: DbConnection) =
+let getGuesses puzzleSessionId (dbConnection: DbConnection) =
     select {
         for guess in guessTable do
             where (guess.puzzleSessionId = puzzleSessionId)
-    } |> dbConnection.SelectAsync<Guess>
-      |> taskMap (fun result -> Seq.length result) //Do not understand the typing issues herew
-    
+    }
+    |> dbConnection.SelectAsync<Guess>
 
-let getPuzzleAnswer (puzzleSessionId: string) (dbConnection: DbConnection) =
-   let puzzleSessionId =
-            select {
-            for puzzleSession in puzzleSessionTable do
-                where (puzzleSession.id = puzzleSessionId)
-            } |> dbConnection.SelectAsync<PuzzleSession>|> getOneFromQuery (getAppError 422 "Invalid puzzle session id")
-   
-   let guesses = puzzleSessionId |> Result.bind (fun id -> getGuessCount id dbConnection)
-   0 
+let getGuessCount puzzleSessionId (dbConnection: DbConnection) =
+    getGuesses puzzleSessionId dbConnection |> taskMap Seq.length //Do not understand the typing issues here
+
+let getPuzzleSession puzzleSessionId (dbConnection: DbConnection) =
+    select {
+        for puzzleSession in puzzleSessionTable do
+            where (puzzleSession.id = puzzleSessionId)
+    }
+    |> dbConnection.SelectAsync<PuzzleSession>
+    |> getOneFromQuery (getAppError 422 "Invalid puzzle session id")
+
+let getPuzzleAnswer (unverifiedPuzzleSessionId: string) (dbConnection: DbConnection) =
+    let puzzleSession = getPuzzleSession unverifiedPuzzleSessionId dbConnection
+
+    let guessCount =
+        puzzleSession.Result
+        |> Result.map (fun sessionId -> getGuessCount sessionId.id dbConnection |> taskGet)
+
+
+    match guessCount with
+    | Ok count when count >= MAX_GUESSES ->
+        getTargetState dbConnection
+        |> taskGet
+        |> Result.map (fun state ->
+            { id = unverifiedPuzzleSessionId //! I don't love doing this, there has to be a better way
+              targetStateName = state.name })
+    | Ok _ ->
+        getAppError 422 $"{MAX_GUESSES} must be made before an answer can be requested"
+        |> Error //!Doesn't show complete pattern matching with 'Ok count when count < MAX_GUESSES'
+    | Error e -> Error e
+
+let postPuzzleSession (dbConnection: DbConnection) =
+    let guid = System.Guid.NewGuid().ToString()
+    let time = DateTime.Now
+
+    insert {
+        into puzzleSessionTable
+
+        value
+            { id = guid
+              lastRequestTimestamp = Option.None
+              createdAt = time
+              updatedAt = time }
+    }
+    |> dbConnection.InsertAsync
+    |> fun task -> task.Wait()
+
+    { id = guid }
+
+let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnection) =
+    let puzzleSession = getPuzzleSession guessSubmission.id dbConnection |> taskGet
+
+    let guesses =
+        puzzleSession
+        |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
+    //! This _really_ should be using option, where the option is popualted in the event of an invalid answer and is other wise not populated, example in original commit of this comment
+    let isValid = 
+        puzzleSession
+        |> Result.bind (fun _ ->
+            if isStateNameValid guessSubmission.guessStateName then
+                Ok ""
+            else
+                getAppError 422 $"Invalid guess state name ${guessSubmission.guessStateName}"
+                |> Error)
+        |> Result.bind (fun _ -> guesses)
+        |> Result.bind (fun guesses ->
+            if Seq.length guesses >= MAX_GUESSES then
+                (getAppError 422 "Too many requests have been made for this game") |> Error
+            else
+                Ok guesses)
+        |> Result.bind (fun guesses ->
+            if
+                (guesses
+                 |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName))
+            then
+                (getAppError 422 "Duplicate of previous request" |> Error)
+            else
+                Ok "")
+
+
+    
+    //
+    0
