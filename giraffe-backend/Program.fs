@@ -110,5 +110,5 @@ let giraffeMain args =
 
 [<EntryPoint>]
 let main args =
-    let a = stateEconomies
+    let a = states
     0

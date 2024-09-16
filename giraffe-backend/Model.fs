@@ -1,7 +1,8 @@
-namespace StateEconomyGame.Model
+module StateEconomyGame.Model
 
 open System
-open FSharp.Data
+open System.IO
+open System.Text.Json
 
 //! Don't love using lowercase for API consistency with the frontend
 type Coordinates = { latitude: float; longitude: float }
@@ -16,23 +17,19 @@ type Guess =
       stateName: string
       createdAt: DateTime
       updatedAt: DateTime }
-    
-
-type StateCoordinate =
-    { name: string
-      latitudeN: float
-      longitudeW: float }
 
 type EconomyNode =
     { gdpCategory: string
       gdp: Option<float>
       children: EconomyNode list option }
 
-type NamedStateEconomy =
+type State =
     { name: string
-      stateEconomy: EconomyNode }
+      stateEconomy: EconomyNode
+      latitudeN: float
+      longitudeW: float }
 
-type DtoStateEconomy =
+type DtoOutStateEconomy =
     { economy: EconomyNode
       totalGdp: float }
 
@@ -42,6 +39,20 @@ type DtoOutPuzzleSession = { id: string; }
 
 type DtoInGuessSubmission = { id:string; guessStateName: string; requestTimestamp: int64  }
 
-type TargetState = { id: int; name: string; gdp: float }
+type TargetState = { id: int; name: string; gdp: float } //! Something should be done to show this is a table name
 
 type PuzzleSession = { id: string; lastRequestTimestamp: int option; createdAt: DateTime; updatedAt: DateTime  }
+
+let states =
+    File.ReadAllText "./states.json"
+    |> JsonSerializer.Deserialize<State list>
+
+type StateName = private StateName of string
+
+module StateName =
+    let create stateName =
+        match states |> List.filter (fun state -> state.name = stateName) with
+        | [_] -> Ok stateName
+        | _ -> Error "Invalid state name"
+    
+    let toString (StateName stateName) = stateName

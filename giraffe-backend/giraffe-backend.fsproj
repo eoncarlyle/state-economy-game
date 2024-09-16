@@ -19,12 +19,12 @@
   <ItemGroup>
     <Compile Include="Constants.fs" />
     <Compile Include="Model.fs" />
+    <Compile Include="Data.fs" />
     <Compile Include="Util.fs" />
     <Compile Include="Service.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="altJson.json" />
     <Content Include="app.sqlite" />
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="WebRoot\**\*">

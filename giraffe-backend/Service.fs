@@ -17,14 +17,8 @@ open StateEconomyGame.Model
 open StateEconomyGame.Constants
 open StateEconomyGame.Util
 
-let stateEconomies =
-    File.ReadAllText "./stateEconomies.json"
-    |> JsonSerializer.Deserialize<NamedStateEconomy list>
-//! F# lists != .NET lists, this got me in some type trouble with 4e18b9d]
 
-let stateCoordinates =
-    File.ReadAllText "./stateCoordinates.json"
-    |> JsonSerializer.Deserialize<StateCoordinate list>
+//! F# lists != .NET lists, this got me in some type trouble with 4e18b9d]
 
 // H/T to Michael
 let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
@@ -65,7 +59,7 @@ let targetStateTable = table'<TargetState> "target_states"
 let puzzleSessionTable = table'<PuzzleSession> "puzzle_sessions"
 let guessTable = table'<Guess> "guesses"
 
-let getTotalGdp (economyNode: NamedStateEconomy) =
+let getTotalGdp (economyNode: State) =
     let rec loop (economyNode: EconomyNode) =
         match economyNode.children with
         | Some children -> children |> List.map loop |> List.sum
@@ -79,7 +73,7 @@ let getTotalGdp (economyNode: NamedStateEconomy) =
 let getOneFromQuery (appErrorOnEmpty: AppError) =
     taskMap (fun result ->
         match Seq.tryHead result with
-        | Some targetState -> Ok targetState
+        | Some value -> Ok value
         | None -> Error appErrorOnEmpty)
 
 let getTargetState (dbConnection: DbConnection) : Task<AppResult<TargetState>> =
@@ -89,38 +83,28 @@ let getTargetState (dbConnection: DbConnection) : Task<AppResult<TargetState>> =
             orderByDescending targetState.id
     }
     |> dbConnection.SelectAsync<TargetState>
-    |> getOneFromQuery (getInternalError "target state not present")
+    |> taskMap (fun result ->
+        match Seq.tryHead result with
+        | Some value -> Ok value
+        | None -> failwith "target state not found") //Should never be thrown
+    
 
+let getState (stateName: StateName) = //! Type inference legitamitely didn't work on this until I used the pipeline operator
+        states
+        |> List.find (fun state -> state.name = StateName.toString(stateName))
+    
 
-let getEconomyNode (stateName: string) = //! Type inference legitamitely didn't work on this until I used the pipeline operator
-    match
-        stateEconomies
-        |> List.filter (fun (state: NamedStateEconomy) -> state.name = stateName)
-    with
-    | [] -> getInternalError $"{stateName} not found" |> Error
-    | [ stateEconomy ] -> Ok stateEconomy
-    | _ -> getInternalError $"Multiple economy records for {stateName}" |> Error
-
-let isStateNameValid stateName = getEconomyNode stateName |> Result.isOk
-
-let getStateCoordinate stateName = //! There should be a special stateName field validated to exist in both JSONs to avoid these checks
-    match stateCoordinates |> List.filter (fun state -> state.name = stateName) with
-    | [] -> getInternalError $"{stateName} not found" |> Error
-    | [ stateEconomy ] -> Ok stateEconomy
-    | _ -> getInternalError $"Multiple coordinate records for {stateName}" |> Error
-
-
-let getTargetStateEconomy (dbConnection: DbConnection) : Task<AppResult<DtoStateEconomy>> =
+let getTargetStateEconomy (dbConnection: DbConnection) : Task<AppResult<DtoOutStateEconomy>> =
     //! b6053e8: semi-interesting type error
     task {
         let! targetState = getTargetState dbConnection
-
+        //HERE Need to finish target state name wranglign
+        let targetStateName = targetState |> Result.bind (fun state -> StateName.create(state.name) 
         let DtoStateEconomy =
-            match targetState with
-            | Ok state ->
-                getEconomyNode state.name
-                |> Result.bind (fun node ->
-                    { economy = node.stateEconomy
+            match targetStateName with
+            | Ok state -> 
+                    
+                    { economy = getState().stateEconomy
                       totalGdp = state.gdp }
                     |> Ok)
             | Error e -> Error e
@@ -213,6 +197,8 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
                      |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName)))
                 (getAppError 422 "Duplicate of previous request"))
 
+    //! STARTHERE option for the validation, result for the StateName type
+    
     if Option.isSome validationErrors then
         Error validationErrors
     else
@@ -223,7 +209,6 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
 
         let guessStateCoordinate = getStateCoordinate guessSubmission.guessStateName
         let targetStateDistance = targetStateCoordinate |> Result.bind (fun coord -> getH)
-        //Here: at this point the need for a 'String50' style stateName type is demonstrated, we can't keep doing these validation cycels
 
 
         Error validationErrors
