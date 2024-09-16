@@ -17,7 +17,9 @@
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.fs" />
     <Compile Include="Model.fs" />
+    <Compile Include="Util.fs" />
     <Compile Include="Service.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

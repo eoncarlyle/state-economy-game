@@ -9,17 +9,22 @@ open System.Data.Common
 open Dapper
 open Giraffe
 open Microsoft.FSharp.Core
-open StateEconomyGame.Model
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite //! Had annoying SQLite interop issues
 open System.Text.Json
 
-let MAX_GUESSES = 5
+open StateEconomyGame.Model
+open StateEconomyGame.Constants
+open StateEconomyGame.Util
 
 let stateEconomies =
-    let json = File.ReadAllText "./stateEconomies.json"
-    JsonSerializer.Deserialize<NamedStateEconomy list>(json)
+    File.ReadAllText "./stateEconomies.json"
+    |> JsonSerializer.Deserialize<NamedStateEconomy list>
 //! F# lists != .NET lists, this got me in some type trouble with 4e18b9d]
+
+let stateCoordinates =
+    File.ReadAllText "./stateCoordinates.json"
+    |> JsonSerializer.Deserialize<StateCoordinate list>
 
 // H/T to Michael
 let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
@@ -66,7 +71,7 @@ let getTotalGdp (economyNode: NamedStateEconomy) =
         | Some children -> children |> List.map loop |> List.sum
         | _ -> economyNode.gdp |> Option.defaultValue 0
 
-    loop economyNode.StateEconomy |> Math.Round |> Convert.ToInt64
+    loop economyNode.stateEconomy |> Math.Round |> Convert.ToInt64
 
 //! d1d6f54: The type providers get to be a pain in the ass for nested classes, reference MgetTotalGdp
 //! Don't love the double unions but it's whatever
@@ -90,13 +95,20 @@ let getTargetState (dbConnection: DbConnection) : Task<AppResult<TargetState>> =
 let getEconomyNode (stateName: string) = //! Type inference legitamitely didn't work on this until I used the pipeline operator
     match
         stateEconomies
-        |> List.filter (fun (state: NamedStateEconomy) -> state.Name = stateName)
+        |> List.filter (fun (state: NamedStateEconomy) -> state.name = stateName)
     with
     | [] -> getInternalError $"{stateName} not found" |> Error
     | [ stateEconomy ] -> Ok stateEconomy
-    | _ -> getInternalError $"Multiple records for {stateName}" |> Error
+    | _ -> getInternalError $"Multiple economy records for {stateName}" |> Error
 
 let isStateNameValid stateName = getEconomyNode stateName |> Result.isOk
+
+let getStateCoordinate stateName = //! There should be a special stateName field validated to exist in both JSONs to avoid these checks
+    match stateCoordinates |> List.filter (fun state -> state.name = stateName) with
+    | [] -> getInternalError $"{stateName} not found" |> Error
+    | [ stateEconomy ] -> Ok stateEconomy
+    | _ -> getInternalError $"Multiple coordinate records for {stateName}" |> Error
+
 
 let getTargetStateEconomy (dbConnection: DbConnection) : Task<AppResult<DtoStateEconomy>> =
     //! b6053e8: semi-interesting type error
@@ -108,7 +120,7 @@ let getTargetStateEconomy (dbConnection: DbConnection) : Task<AppResult<DtoState
             | Ok state ->
                 getEconomyNode state.name
                 |> Result.bind (fun node ->
-                    { economy = node.StateEconomy
+                    { economy = node.stateEconomy
                       totalGdp = state.gdp }
                     |> Ok)
             | Error e -> Error e
@@ -191,12 +203,27 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
                 (getAppError 422 $"Invalid guess state name ${guessSubmission.guessStateName}"))
         |> Option.orElseWith (fun _ ->
             validationBoolOption
-                (guesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES)) 
+                (guesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
                 (getAppError 422 "Too many requests have been made for this game"))
         |> Option.orElseWith (fun _ ->
             validationBoolOption
-                (guesses |> Result.exists (fun guesses -> guesses |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName)))
-                (getAppError 422 "Duplicate of previous request")
-            )
-    
-    0
+                (guesses
+                 |> Result.exists (fun guesses ->
+                     guesses
+                     |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName)))
+                (getAppError 422 "Duplicate of previous request"))
+
+    if Option.isSome validationErrors then
+        Error validationErrors
+    else
+        let targetState = getTargetState dbConnection |> taskGet
+
+        let targetStateCoordinate =
+            targetState |> Result.bind (fun state -> getStateCoordinate state.name)
+
+        let guessStateCoordinate = getStateCoordinate guessSubmission.guessStateName
+        let targetStateDistance = targetStateCoordinate |> Result.bind (fun coord -> getH)
+        //Here: at this point the need for a 'String50' style stateName type is demonstrated, we can't keep doing these validation cycels
+
+
+        Error validationErrors

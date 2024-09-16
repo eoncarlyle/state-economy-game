@@ -18,7 +18,7 @@ type Guess =
       updatedAt: DateTime }
     
 
-type StateRecord =
+type StateCoordinate =
     { name: string
       latitudeN: float
       longitudeW: float }
@@ -29,8 +29,8 @@ type EconomyNode =
       children: EconomyNode list option }
 
 type NamedStateEconomy =
-    { Name: string
-      StateEconomy: EconomyNode }
+    { name: string
+      stateEconomy: EconomyNode }
 
 type DtoStateEconomy =
     { economy: EconomyNode
