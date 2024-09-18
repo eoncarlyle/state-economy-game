@@ -29,17 +29,17 @@ let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
 
 let taskGet (task: Task<'a>) = task.Result //Why no Result.get?
 
-let validationAppResultOption appResult =
-    match appResult with
-    | Ok _ -> Option.None
-    | Error e -> Some e
-
 let validationBoolOption (isValid: bool) (appErrorOnFail: AppErrorDto) =
     if isValid then Option.None else Some appErrorOnFail
 
 let getAppErrorDto code message : AppErrorDto = { code = code; message = message }
 
 let internalErrorDto = getAppErrorDto 500 "Internal server error"
+
+let validationAppResultOption failCode failMessage result =
+    match result with
+    | Ok _ -> Option.None
+    | Error e -> getAppErrorDto failCode failMessage |> Some
 
 
 let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
@@ -178,13 +178,14 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
     let guesses =
         puzzleSession
         |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
-    //! This _really_ should be using option, where the option is popualted in the event of an invalid answer and is other wise not populated, example in original commit of this comment
 
     //! 1)  Understand Haskell's love of infix operators, this is getting time consuming with these `ModuleName.function`  2) Can be difficult to know when you're whitespacing correctly on long statements
     let validationErrors =
         Option.None
-        |> Option.orElseWith (fun _ -> validationAppResultOption puzzleSession)
-        |> Option.orElseWith (fun _ -> validationAppResultOption guesses)
+        |> Option.orElseWith (fun _ -> puzzleSession |> validationAppResultOption 404 "`puzzleSession` not found")
+        |> Option.orElseWith (fun _ ->
+            StateName.create guessSubmission.guessStateName
+            |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
         |> Option.orElseWith (fun _ ->
             validationBoolOption
                 (guesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
