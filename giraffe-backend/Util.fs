@@ -24,4 +24,4 @@ let haversineBearing (c0: State) (c1: State) =
 
     let y = Math.Sin(lambdaEnd - lambdaStart)
     let x = Math.Sin(phiStart) * Math.Sin(phiEnd) - Math.Sin(phiStart) * Math.Cos(phiEnd) * Math.Cos(lambdaEnd - lambdaStart)
-    (Math.Atan2(y, x) * 180.0/Math.PI + 360.0) % 360.0
+    (Math.Atan2(y, x) * 180.0/Math.PI + 360.0) % 360.0 |> Math.Round |> Convert.ToInt32

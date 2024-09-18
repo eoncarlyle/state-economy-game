@@ -12,7 +12,7 @@ type AppErrorDto = { code: int; message: string } //! This is named badly
 type AppResult<'a> = Result<'a, AppErrorDto>
 
 type Guess =
-    { id: int
+    { id: string
       puzzleSessionId: string
       stateName: string
       createdAt: DateTime
@@ -42,11 +42,13 @@ type DtoInGuessSubmission =
       guessStateName: string
       requestTimestamp: int64 }
 
+type DtoOutGuessSubmission = { id: string; distance: float; bearing: int; percentileScore: float}
+
 type PuzzleAnswer = { id: int; name: string; gdp: float } //! Something should be done to show this is a table name
 
 type PuzzleSession =
     { id: string
-      lastRequestTimestamp: int option
+      lastRequestTimestamp: int64 option
       createdAt: DateTime
       updatedAt: DateTime }
 

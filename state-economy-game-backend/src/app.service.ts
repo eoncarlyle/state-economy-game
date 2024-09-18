@@ -36,7 +36,7 @@ export class AppService {
     @InjectModel(PuzzleSession)
     private puzzleSession: typeof PuzzleSession,
     private moduleLogger: ModuleLogger
-  ) {}
+  ) { }
 
   // ✅ = in Giraffe backend
   async getTargetStateEconomy(): Promise<StateEconomy> {
@@ -73,6 +73,7 @@ export class AppService {
     };
   }
 
+  // ✅ 
   async postPuzzleSession(): Promise<PuzzleSession> {
     const newUUID = randomUUID();
     return await PuzzleSession.create({
@@ -80,6 +81,7 @@ export class AppService {
     });
   }
 
+  // ✅ 
   async postGuess(body: GuessSubmissionRequest): Promise<GuessSubmissionResponse> {
     const { id, guessStateName, requestTimestamp } = body;
 
@@ -113,10 +115,11 @@ export class AppService {
     };
   }
 
+  // ✅ 
   private async validateGuess(id: string, guessStateName: string, puzzleSessionId: PuzzleSession) {
     const guesses = await Guess.findAll({ where: { puzzleSessionId: id } });
 
-    if (!puzzleSessionId || !isStateNameValid(guessStateName)) 
+    if (!puzzleSessionId || !isStateNameValid(guessStateName))
       throw new UnprocessableEntityException("Puzzle session id and a guess state name must both be valid");
     else if (guesses.length >= MAX_GUESSES)
       throw new UnprocessableEntityException("Too many request have been made for this game");
@@ -128,10 +131,12 @@ export class AppService {
     return { status: "UP" };
   }
 
+  // ✅ 
   async getTargetStateRecord(): Promise<StateRecord> {
     return StateRecord.of((await this.getTargetState()).name);
   }
 
+  // ✅ 
   async getTargetState(): Promise<TargetState> {
     const targetStateModel = await this.targetState.findOne({
       order: [["id", "DESC"]]
@@ -140,6 +145,7 @@ export class AppService {
     return targetStateModel;
   }
 
+  // ✅ 
   getEconomyNode(stateName: string) {
     if (stateName in stateEconomies) return stateEconomies[stateName];
     else return null;
