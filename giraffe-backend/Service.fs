@@ -127,7 +127,7 @@ let getPuzzleSession puzzleSessionId (dbConnection: DbConnection) =
     |> getOneFromQuery
 
 
-let postPuzzleSession (dbConnection: DbConnection) =
+    let postPuzzleSession (dbConnection: DbConnection) =
     let guid = Guid.NewGuid().ToString()
     let time = DateTime.Now
 
@@ -193,3 +193,53 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
         Ok {id=session.id; distance=distance; bearing = haversineBearing guess answer; percentileScore = (100.0 * (1.0 - distance / maxDistance) )|> Math.Round }
     | (_, _, _, Some validationError) -> Error validationError
     | _ -> Error internalErrorDto
+    
+let deleteObsoletePuzzleSessions (dbConnection: DbConnection) =
+    let obsoleteDate = DateTime.Now.Subtract ( TimeSpan(0, 1, 0) )
+    delete {
+        for puzzleSession in puzzleSessionTable do
+            where (puzzleSession.createdAt < obsoleteDate)
+    } |> dbConnection.DeleteAsync 
+    
+    
+let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
+    
+    let puzzleAnswerCount = select {
+                for puzzleAnswer in puzzleAnswerTable do selectAll
+                            }
+                            |> dbConnection.SelectAsync<PuzzleAnswer>
+                            |> taskMap Seq.length
+                            |> taskGet
+
+    let obsoletePuzzleAnswerCount = puzzleAnswerCount - PUZZLE_ANSWER_RETENTION + 1
+    
+    if obsoletePuzzleAnswerCount > 0 then
+        delete {
+            for puzzleAnswer in puzzleAnswerTable do
+                where (puzzleAnswer.id <= obsoletePuzzleAnswerCount)
+        } |> dbConnection.DeleteAsync |> taskGet |> ignore
+  
+    // The commented pieces aren't possivle, this is a sign I don't understand something!
+    //  
+    // let updatePuzzleAnswer (puzzleAnswer: PuzzleAnswer) =
+    //     {id=puzzleAnswer.id-obsoletePuzzleAnswerCount; name=puzzleAnswer.name; gdp=puzzleAnswer.gdp}
+    // 
+    // update {
+    //     for puzzleAnswer in puzzleAnswerTable do
+    //         set (updatePuzzleAnswer puzzleAnswer)
+    //     } |> ignore
+    
+    dbConnection.Execute($"UPDATE puzzle_sessions SET id = id - {obsoletePuzzleAnswerCount}") |> ignore
+     
+
+let updateTargetState (dbConnection: DbConnection) =
+    let unselectableTargetStateNames =
+                   select {
+                            for puzzleAnswer in puzzleAnswerTable do
+                                selectAll
+                   } // What is done beloew should really be done by the type mapper instead
+                   |> dbConnection.SelectAsync<PuzzleAnswer> 
+                   |> taskMap (fun Seq.map _.name 
+                   |> taskGet
+                   
+    0
