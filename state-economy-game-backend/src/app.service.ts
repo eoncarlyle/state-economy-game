@@ -151,6 +151,7 @@ export class AppService {
     else return null;
   }
 
+  // ✅ 
   @Cron("0 0 * * *", { timeZone: "America/Chicago" })
   async runDailyTasks(): Promise<void> {
     await this.deleteObsoletePuzzleSessions();
@@ -158,6 +159,7 @@ export class AppService {
     await this.updateTargetState();
   }
 
+  // ✅  
   async deleteObsoletePuzzleSessions(): Promise<void> {
     const obsoleteDate = new Date();
     obsoleteDate.setDate(obsoleteDate.getDate() - 1);
@@ -172,6 +174,7 @@ export class AppService {
     this.moduleLogger.info(`Obsolete puzzle sessions deleted: ${deletedPuzzleSession}`);
   }
 
+  // ✅  
   async deleteObsoleteTargetStates(): Promise<void> {
     const targetStateCount = await this.targetState.count();
     this.moduleLogger.info(`Current target state count: ${targetStateCount}`);
@@ -195,6 +198,7 @@ export class AppService {
     }
   }
 
+  // ✅  
   async updateTargetState(): Promise<void> {
     const unselectableTargetStateNames = (await this.targetState.findAll({ attributes: ["name"] })).map(
       (targetState: TargetState) => targetState.name
@@ -219,14 +223,17 @@ export class AppService {
     this.moduleLogger.info(`New target state: ${newTargetState.name}`);
   }
 
+  // ✅  
   getRandomInt(max: number) {
     return Math.floor(Math.random() * max);
   }
 
+  // ✅  
   getRoundedTotalGdp(economy: NonLeafEconomyNode): number {
     return Math.round(this.getTotalGdp(economy));
   }
 
+  // ✅  
   getTotalGdp(economy: NonLeafEconomyNode | LeafEconomyNode): number {
     if ("children" in economy) {
       return economy.children.map((node) => this.getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0);

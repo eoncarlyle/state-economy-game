@@ -9,18 +9,13 @@ open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
+open Quartz
 
+open StateEconomyGame.Constants
 open StateEconomyGame.Service
-
-// ---------------------------------
-// Models
-// ---------------------------------
+open StateEconomyGame.Controller
 
 type Message = { Text: string }
-
-// ---------------------------------
-// Views
-// ---------------------------------
 
 module Views =
     open Giraffe.ViewEngine
@@ -39,10 +34,6 @@ module Views =
     let index (model: Message) =
         [ partial (); p [] [ encodedText model.Text ] ] |> layout
 
-// ---------------------------------
-// Web app
-// ---------------------------------
-
 let indexHandler (name: string) =
     let greetings = sprintf "Hello %s, from Giraffe!" name
     let model = { Text = greetings }
@@ -55,17 +46,9 @@ let webApp =
           >=> choose [ route "/" >=> indexHandler "world"; routef "/hello/%s" indexHandler ]
           setStatusCode 404 >=> text "Not Found" ]
 
-// ---------------------------------
-// Error handler
-// ---------------------------------
-
 let errorHandler (ex: Exception) (logger: ILogger) =
     logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
     clearResponse >=> setStatusCode 500 >=> text ex.Message
-
-// ---------------------------------
-// Config and Main
-// ---------------------------------
 
 let configureCors (builder: CorsPolicyBuilder) =
     builder
@@ -87,6 +70,8 @@ let configureApp (app: IApplicationBuilder) =
 let configureServices (services: IServiceCollection) =
     services.AddCors() |> ignore
     services.AddGiraffe() |> ignore
+    //services.AddQuartz(fun q -> q.UseMicrosoftDependencyInjectionJobFactory()) //May not be needed?
+    services.AddQuartz() |> ignore
 
 let configureLogging (builder: ILoggingBuilder) =
     builder.AddConsole().AddDebug() |> ignore
@@ -95,20 +80,40 @@ let giraffeMain args =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot = Path.Combine(contentRoot, "WebRoot")
 
-    Host
-        .CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(fun webHostBuilder ->
-            webHostBuilder
-                .UseContentRoot(contentRoot)
-                .UseWebRoot(webRoot)
-                .Configure(Action<IApplicationBuilder> configureApp)
-                .ConfigureServices(configureServices)
-                .ConfigureLogging(configureLogging)
-            |> ignore)
-        .Build()
-        .Run()
+    let builder =
+        Host
+            .CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(fun webHostBuilder ->
+                webHostBuilder
+                    .UseContentRoot(contentRoot)
+                    .UseWebRoot(webRoot)
+                    .Configure(Action<IApplicationBuilder> configureApp)
+                    .ConfigureServices(configureServices)
+                    .ConfigureLogging(configureLogging)
+                |> ignore)
+            .Build()
+
+    let schedulerFactory = builder.Services.GetRequiredService<ISchedulerFactory>()
+    let scheduler = schedulerFactory.GetScheduler() |> _.Result
+
+    let job =
+        JobBuilder
+            .Create<DailyJob>()
+            .WithIdentity(DAILY_JOB_NAME)
+            .UsingJobData(SQLITE_DB_FILE_NAME_KEY, Array.item 0 args)
+            .Build()
+
+    let trigger =
+        TriggerBuilder
+            .Create()
+            .WithIdentity("trigger0", "group0")
+            .WithCronSchedule("0 0 * * *")
+            .ForJob(DAILY_JOB_NAME)
+            .Build()
+
+    scheduler.ScheduleJob(job, trigger) |> _.Result |> ignore
+
+    builder.Run()
 
 [<EntryPoint>]
-let main args =
-    let a = states
-    0
+let main args = 0
