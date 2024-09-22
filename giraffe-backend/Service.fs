@@ -151,13 +151,36 @@ let postPuzzleSession (dbConnection: DbConnection) =
 
     { id = guid }
 
+let getPuzzleAnswerForSession (id: string) (dbConnection: DbConnection) =
+    let puzzleSession = getPuzzleSession id dbConnection |> taskGet
+
+    let sessionGuesses =
+        puzzleSession
+        |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
+
+    let validationErrors =
+        Option.None
+        |> Option.orElseWith (fun _ -> puzzleSession |> validationAppResultOption 404 "`puzzleSession` not found")
+        |> Option.orElseWith (fun _ ->
+            validationBoolOption
+                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses < MAX_GUESSES))
+                (getAppErrorDto 422 $"{MAX_GUESSES} guesses must be made before answer can be requested"))
+    
+    let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
+    
+    match puzzleSession, sessionGuesses, puzzleAnswerState, validationErrors with
+    | Ok session, Ok guesses, Ok answer, None ->
+        Ok {| id=id; targetStateName=answer.name |} 
+    | _, _, _, Some validationError -> Error validationError
+    | _ -> Error internalErrorDto
+
 let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnection) =
     let puzzleSession = getPuzzleSession guessSubmission.id dbConnection |> taskGet
 
     let guessState =
         StateName.create guessSubmission.guessStateName |> Result.map getState
 
-    let guesses =
+    let sessionGuesses =
         puzzleSession
         |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
 
@@ -173,22 +196,22 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
             |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
         |> Option.orElseWith (fun _ ->
             validationBoolOption
-                (guesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
+                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
                 (getAppErrorDto 422 "Too many requests have been made for this game"))
         |> Option.orElseWith (fun _ ->
             validationBoolOption
-                (guesses
+                (sessionGuesses
                  |> Result.exists (fun guesses ->
                      guesses
                      |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName)))
                 (getAppErrorDto 422 "Duplicate of previous request"))
 
-    match (puzzleSession, guessState, puzzleAnswerState, validationErrors) with
-    | Ok session, Ok guess, Ok answer, None ->
-        let distance = haversineDistance guess answer
+    match puzzleSession, guessState, puzzleAnswerState, validationErrors with
+    | Ok session, Ok guesses, Ok answer, None ->
+        let distance = haversineDistance guesses answer
 
         let maxDistance =
-            states |> List.map (fun state -> haversineDistance guess state) |> List.max
+            states |> List.map (fun state -> haversineDistance guesses state) |> List.max
 
         update {
             for puzzleSession in puzzleSessionTable do
@@ -206,7 +229,7 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
             value
                 { id = Guid.NewGuid.ToString()
                   puzzleSessionId = session.id
-                  stateName = guess.name
+                  stateName = guesses.name
                   createdAt = time
                   updatedAt = time }
         }
@@ -216,7 +239,7 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
         Ok
             { id = session.id
               distance = distance
-              bearing = haversineBearing guess answer
+              bearing = haversineBearing guesses answer
               percentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
     | _, _, _, Some validationError -> Error validationError
     | _ -> Error internalErrorDto
