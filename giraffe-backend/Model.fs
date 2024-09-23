@@ -37,6 +37,7 @@ type DtoOutPuzzleAnswer = { id: string; targetStateName: string }
 
 type DtoOutPuzzleSession = { id: string }
 
+[<CLIMutable>]
 type DtoInGuessSubmission =
     { id: string
       guessStateName: string

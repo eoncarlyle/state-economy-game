@@ -1,17 +1,12 @@
 module StateEconomyGame.Service
 
 open System
-open System.Collections.Generic
-open System.IO
-open System.Runtime.InteropServices.JavaScript
 open System.Threading.Tasks
 open System.Data.Common
 open Dapper
-open Giraffe
 open Microsoft.FSharp.Core
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite //! Had annoying SQLite interop issues
-open System.Text.Json
 
 open Quartz
 open StateEconomyGame.Model
@@ -47,7 +42,7 @@ let validationAppResultOption failCode failMessage result =
 
 let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
     use connection = new SqliteConnection($"Data Source={sqliteDbFileName}")
-    OptionTypes.register ()
+    OptionTypes.register()
     connection.Open()
     connection
 
@@ -99,7 +94,7 @@ let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
             |> Result.map getState
     }
 
-let getPuzzleAnswerEconomy dbConnection : Task<AppResult<DtoOutStateEconomy>> =
+let getPuzzleAnswerEconomy dbConnection : AppResult<DtoOutStateEconomy> =
     //! b6053e8: semi-interesting type error
     task {
         let puzzleAnswer = getPuzzleAnswer dbConnection |> taskGet
@@ -112,7 +107,7 @@ let getPuzzleAnswerEconomy dbConnection : Task<AppResult<DtoOutStateEconomy>> =
                     { economy = state.stateEconomy
                       totalGdp = answer.gdp }
             | _ -> Error internalErrorDto
-    }
+    } |> taskGet 
 
 let getGuesses puzzleSessionId (dbConnection: DbConnection) =
     select {

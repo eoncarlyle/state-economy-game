@@ -18,7 +18,6 @@
     <PackageReference Include="Quartz" Version="3.13.0" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.0" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.fs" />
@@ -29,7 +28,7 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app.sqlite" />
+    <Content Include="app.db" />
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="WebRoot\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

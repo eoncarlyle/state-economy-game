@@ -15,36 +15,8 @@ open StateEconomyGame.Constants
 open StateEconomyGame.Service
 open StateEconomyGame.Controller
 
-type Message = { Text: string }
 
-module Views =
-    open Giraffe.ViewEngine
 
-    let layout (content: XmlNode list) =
-        html
-            []
-            [ head
-                  []
-                  [ title [] [ encodedText "giraffe_backend" ]
-                    link [ _rel "stylesheet"; _type "text/css"; _href "/main.css" ] ]
-              body [] content ]
-
-    let partial () = h1 [] [ encodedText "giraffe_backend" ]
-
-    let index (model: Message) =
-        [ partial (); p [] [ encodedText model.Text ] ] |> layout
-
-let indexHandler (name: string) =
-    let greetings = sprintf "Hello %s, from Giraffe!" name
-    let model = { Text = greetings }
-    let view = Views.index model
-    htmlView view
-
-let webApp =
-    choose
-        [ GET
-          >=> choose [ route "/" >=> indexHandler "world"; routef "/hello/%s" indexHandler ]
-          setStatusCode 404 >=> text "Not Found" ]
 
 let errorHandler (ex: Exception) (logger: ILogger) =
     logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
@@ -57,15 +29,18 @@ let configureCors (builder: CorsPolicyBuilder) =
         .AllowAnyHeader()
     |> ignore
 
-let configureApp (app: IApplicationBuilder) =
-    let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
 
-    (match env.IsDevelopment() with
-     | true -> app.UseDeveloperExceptionPage()
-     | false -> app.UseGiraffeErrorHandler(errorHandler).UseHttpsRedirection())
-        .UseCors(configureCors)
-        .UseStaticFiles()
-        .UseGiraffe(webApp)
+let configureAppFactory (sqliteDbFileName: string) =
+    let configureApp (app: IApplicationBuilder) =
+        let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
+
+        (match env.IsDevelopment() with
+         | true -> app.UseDeveloperExceptionPage()
+         | false -> app.UseGiraffeErrorHandler(errorHandler).UseHttpsRedirection())
+            .UseCors(configureCors)
+            .UseStaticFiles()
+            .UseGiraffe(webApp sqliteDbFileName)
+    configureApp
 
 let configureServices (services: IServiceCollection) =
     services.AddCors() |> ignore
@@ -76,15 +51,18 @@ let configureServices (services: IServiceCollection) =
 let configureLogging (builder: ILoggingBuilder) =
     builder.AddConsole().AddDebug() |> ignore
 
+[<EntryPoint>]
 let giraffeMain args =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot = Path.Combine(contentRoot, "WebRoot")
-
+    
+    let configureApp = Array.item 0 args |> configureAppFactory
     let builder =
         Host
             .CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(fun webHostBuilder ->
                 webHostBuilder
+                    .UseUrls("http://localhost:4000")
                     .UseContentRoot(contentRoot)
                     .UseWebRoot(webRoot)
                     .Configure(Action<IApplicationBuilder> configureApp)
@@ -107,13 +85,10 @@ let giraffeMain args =
         TriggerBuilder
             .Create()
             .WithIdentity("trigger0", "group0")
-            .WithCronSchedule("0 0 * * *")
+            .WithCronSchedule("0 0 0 ? * * *")
             .ForJob(DAILY_JOB_NAME)
             .Build()
 
     scheduler.ScheduleJob(job, trigger) |> _.Result |> ignore
-
     builder.Run()
-
-[<EntryPoint>]
-let main args = 0
+    0
