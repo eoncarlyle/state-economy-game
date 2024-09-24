@@ -7,10 +7,10 @@
     "giraffe-backend": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:39676",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "commandLineArgs": "/Users/iain/code/state-economy-game/giraffe-backend/app.db"
     }
   }
 }

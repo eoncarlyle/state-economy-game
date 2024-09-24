@@ -55,7 +55,6 @@ let configureLogging (builder: ILoggingBuilder) =
 let giraffeMain args =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot = Path.Combine(contentRoot, "WebRoot")
-    
     let configureApp = Array.item 0 args |> configureAppFactory
     let builder =
         Host

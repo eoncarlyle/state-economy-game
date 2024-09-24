@@ -9,20 +9,9 @@ open StateEconomyGame.Service
 
 // Had the following mesage, but in Rider the correct type was inferrred
 //Value restriction: The value 'ma' has an inferred generic function type
-//Here: need to read the error code from the result DTOs, also need to get in the get answer for session
 
 
 let appResultHandler (successCode: int) (result: AppResult<'a>) =
-    match result with
-    | Ok success -> setStatusCode successCode >=> json success
-    | Error e ->
-        setStatusCode e.code
-        >=> json
-                {| statusCode = e.code
-                   message = e.message |}
-
-let appResultAsyncHandler (successCode: int) (result: AppResult<'a>) =
-
     match result with
     | Ok success -> setStatusCode successCode >=> json success
     | Error e ->
@@ -38,6 +27,7 @@ let getPuzzleAnswerForSessionHandler (id: string) (dbConnection: DbConnection) =
 
 let webApp (sqliteDbFileName: string) : HttpFunc -> HttpContext -> HttpFuncResult =
     let dbConnection = sqliteConnection sqliteDbFileName
+
     choose
         [ GET
           >=> choose
@@ -48,7 +38,7 @@ let webApp (sqliteDbFileName: string) : HttpFunc -> HttpContext -> HttpFuncResul
           >=> choose
                   [ route "/puzzle_session"
                     >=> setStatusCode 201
-                    >=> json (postPuzzleSession dbConnection)
+                    >=> json (postPuzzleSession dbConnection) // Here: there is some issue with puzzle session lastRequestTimestamp tracking
                     route "/guess"
                     >=> bindJson<DtoInGuessSubmission> (fun guess ->
                         postGuess guess dbConnection |> appResultHandler 201) ]

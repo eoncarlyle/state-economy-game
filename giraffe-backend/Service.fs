@@ -56,7 +56,7 @@ let getTotalGdp (economyNode: State) =
         | Some children -> children |> List.map loop |> List.sum
         | _ -> economyNode.gdp |> Option.defaultValue 0
 
-    loop economyNode.stateEconomy |> Math.Round
+    Convert.ToInt64(loop economyNode.stateEconomy)
 
 //! d1d6f54: The type providers get to be a pain in the ass for nested classes, reference getTotalGdp
 //! Don't love the double unions but it's whatever
@@ -101,11 +101,11 @@ let getPuzzleAnswerEconomy dbConnection : AppResult<DtoOutStateEconomy> =
         let state = getPuzzleAnswerState dbConnection |> taskGet
 
         return
-            match (puzzleAnswer, state) with // Don't love the double result here
+            match puzzleAnswer, state with // Don't love the double result here
             | Ok answer, Ok state ->
                 Ok
                     { economy = state.stateEconomy
-                      totalGdp = answer.gdp }
+                      totalGdp = answer.gdp  }
             | _ -> Error internalErrorDto
     } |> taskGet 
 
@@ -130,16 +130,16 @@ let getPuzzleSession puzzleSessionId (dbConnection: DbConnection) =
 
 let postPuzzleSession (dbConnection: DbConnection) =
     let guid = Guid.NewGuid().ToString()
-    let time = DateTime.Now
+    let now = DateTime.Now
 
     insert {
         into puzzleSessionTable
 
         value
             { id = guid
-              lastRequestTimestamp = Option.None
-              createdAt = time
-              updatedAt = time }
+              lastRequestTimestamp =  0 //Option.None
+              createdAt = now
+              updatedAt = now }
     }
     |> dbConnection.InsertAsync
     |> _.Wait()
@@ -158,13 +158,13 @@ let getPuzzleAnswerForSession (id: string) (dbConnection: DbConnection) =
         |> Option.orElseWith (fun _ -> puzzleSession |> validationAppResultOption 404 "`puzzleSession` not found")
         |> Option.orElseWith (fun _ ->
             validationBoolOption
-                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses < MAX_GUESSES))
+                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
                 (getAppErrorDto 422 $"{MAX_GUESSES} guesses must be made before answer can be requested"))
     
     let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
     
     match puzzleSession, sessionGuesses, puzzleAnswerState, validationErrors with
-    | Ok session, Ok guesses, Ok answer, None ->
+    | Ok _, Ok _, Ok answer, None ->
         Ok {| id=id; targetStateName=answer.name |} 
     | _, _, _, Some validationError -> Error validationError
     | _ -> Error internalErrorDto
@@ -191,14 +191,14 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
             |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
         |> Option.orElseWith (fun _ ->
             validationBoolOption
-                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
+                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses < MAX_GUESSES))
                 (getAppErrorDto 422 "Too many requests have been made for this game"))
         |> Option.orElseWith (fun _ ->
             validationBoolOption
                 (sessionGuesses
                  |> Result.exists (fun guesses ->
                      guesses
-                     |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName)))
+                     |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName))|> not )
                 (getAppErrorDto 422 "Duplicate of previous request"))
 
     match puzzleSession, guessState, puzzleAnswerState, validationErrors with
@@ -210,7 +210,7 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
 
         update {
             for puzzleSession in puzzleSessionTable do
-                setColumn puzzleSession.lastRequestTimestamp (Some guessSubmission.requestTimestamp)
+                setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp //(Some guessSubmission.requestTimestamp)
                 where (puzzleSession.id = session.id)
         }
         |> dbConnection.UpdateAsync
@@ -220,9 +220,9 @@ let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnectio
 
         insert {
             into guessTable
-
+            
             value
-                { id = Guid.NewGuid.ToString()
+                { id = Guid.NewGuid().ToString() //Guid.NewGuid.ToString() lmao
                   puzzleSessionId = session.id
                   stateName = guesses.name
                   createdAt = time
@@ -284,7 +284,8 @@ let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
         //     for puzzleAnswer in puzzleAnswerTable do
         //         set (updatePuzzleAnswer puzzleAnswer)
         //     } |> ignore
-        dbConnection.Execute($"UPDATE puzzle_sessions SET id = id - {obsoletePuzzleAnswerCount}")
+        let updatedAt = DateTime.Now
+        dbConnection.Execute($"UPDATE puzzle_sessions SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = {updatedAt}")
         |> ignore
     }
 
@@ -305,11 +306,14 @@ let updateTargetState (dbConnection: DbConnection) =
             |> List.filter (fun state -> List.contains state.name unselectableTargetStateNames |> not)
 
         let newState = List.item (rnd.Next(0, selectableStates.Length)) selectableStates //Why are the parenthesis needed?
-
+        let now = DateTime.Now
         let newPuzzleAnswer =
             { id = (getPuzzleAnswerCount dbConnection |> taskGet |> (fun x -> x + 1))
               name = newState.name
-              gdp = getTotalGdp newState }
+              gdp = getTotalGdp newState
+              createdAt = now
+              updatedAt = now 
+            }
 
         insert {
             into puzzleAnswerTable

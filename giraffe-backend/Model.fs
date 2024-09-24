@@ -31,7 +31,7 @@ type State =
 
 type DtoOutStateEconomy =
     { economy: EconomyNode
-      totalGdp: float }
+      totalGdp: int64}
 
 type DtoOutPuzzleAnswer = { id: string; targetStateName: string }
 
@@ -43,13 +43,23 @@ type DtoInGuessSubmission =
       guessStateName: string
       requestTimestamp: int64 }
 
-type DtoOutGuessSubmission = { id: string; distance: float; bearing: int; percentileScore: float}
+type DtoOutGuessSubmission =
+    { id: string
+      distance: float
+      bearing: int
+      percentileScore: float }
 
-type PuzzleAnswer = { id: int; name: string; gdp: float } //! Something should be done to show this is a table name
+type PuzzleAnswer =
+    { id: int
+      name: string
+      gdp: int64
+      createdAt: DateTime
+      updatedAt: DateTime } //! Something should be done to show this is a table name
 
 type PuzzleSession =
     { id: string
-      lastRequestTimestamp: int64 option
+      //lastRequestTimestamp: int64 option
+      lastRequestTimestamp: int64
       createdAt: DateTime
       updatedAt: DateTime }
 
