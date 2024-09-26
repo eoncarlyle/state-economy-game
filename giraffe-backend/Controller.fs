@@ -28,7 +28,7 @@ let getPuzzleAnswerForSessionHandler (id: string) (dbConnection: DbConnection) =
 let webApp (sqliteDbFileName: string) : HttpFunc -> HttpContext -> HttpFuncResult =
     let dbConnection = sqliteConnection sqliteDbFileName
 
-    choose
+    choose //Need to add warblers in more places here: postPuzzleSession is fixed on santa-monica, but getEconomy is _not_
         [ GET
           >=> choose
                   [ route "/health" >=> json {| status = "UP" |}
