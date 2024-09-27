@@ -11,47 +11,37 @@ open StateEconomyGame.Service
 // Had the following mesage, but in Rider the correct type was inferrred
 //Value restriction: The value 'ma' has an inferred generic function type
 
-
-let appResultHandler (successCode: int) (result: AppResult<'a>) =
-    match result with
-    | Ok success -> json success
-    | Error e ->
-        setStatusCode e.code
-        >=> json
-                {| statusCode = e.code
-                   message = e.message |}
-
-let mappResultHandler (successCode: int) (result: Task<AppResult<'a>>) =
+let mapResultHandler (result: Task<AppResult<'a>>) =
     task {
         let! completedResult = result
-        return match completedResult with
-                | Ok success -> json success
-                | Error e ->
-                    setStatusCode e.code
-                    >=> json
-                            {| statusCode = e.code
-                               message = e.message |}
-    }
 
-let getPuzzleAnswerForSessionHandler (dbConnection: DbConnection) (id: string) =
-    getPuzzleAnswerForSession dbConnection id |> mappResultHandler 200
+        return
+            match completedResult with
+            | Ok success -> json success
+            | Error e ->
+                setStatusCode e.code
+                >=> json
+                        {| statusCode = e.code
+                           message = e.message |}
+    }
+    |> _.Result
 
 let webApp (sqliteDbFileName: string) : HttpFunc -> HttpContext -> HttpFuncResult =
     let dbConnection = sqliteConnection sqliteDbFileName
 
-    choose //I think the status code handling is already baked into the `GET` and `POST` handlers
+    choose //There has to be a better way with these warblers
         [ GET
           >=> choose
-                  [ route "/health" >=> json {| status = "UP" |}
-                    route "/economy" >=> mappResultHandler 200 (getPuzzleAnswerEconomy dbConnection)
-                    routef "/answer/%s" (getPuzzleAnswerForSessionHandler dbConnection) ]
+                  [ route "/health" >=> warbler (fun _ -> json {| status = "UP" |})
+                    route "/economy"
+                    >=> warbler (fun _ -> (getPuzzleAnswerEconomy dbConnection |> mapResultHandler))
+                    routef "/answer/%s" (getPuzzleAnswerForSession dbConnection >> mapResultHandler) ]
           POST
           >=> choose
                   [ route "/puzzle_session"
-                    >=> setStatusCode 201
-                    >=> warbler (fun _ -> postPuzzleSession dbConnection |> json) // Here: there is some issue with puzzle session lastRequestTimestamp tracking
+                    >=> warbler (fun _ -> (postPuzzleSession dbConnection |> json))
                     route "/guess"
-                    >=> bindJson<DtoInGuessSubmission> (postGuess dbConnection >> mappResultHandler 201) ]
+                    >=> bindJson<DtoInGuessSubmission> (postGuess dbConnection >> mapResultHandler) ]
           setStatusCode 404
           >=> json
                   {| statusCode = 404
