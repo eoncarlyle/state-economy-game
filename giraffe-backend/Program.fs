@@ -23,10 +23,7 @@ let errorHandler (ex: Exception) (logger: ILogger) =
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 let configureCors (builder: CorsPolicyBuilder) =
-    builder
-        .WithOrigins("http://localhost:5000", "https://localhost:5001")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
+    builder.WithOrigins("http://localhost:4000").AllowAnyMethod().AllowAnyHeader()
     |> ignore
 
 
@@ -40,6 +37,7 @@ let configureAppFactory (sqliteDbFileName: string) =
             .UseCors(configureCors)
             .UseStaticFiles()
             .UseGiraffe(webApp sqliteDbFileName)
+
     configureApp
 
 let configureServices (services: IServiceCollection) =
@@ -56,6 +54,7 @@ let giraffeMain args =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot = Path.Combine(contentRoot, "WebRoot")
     let configureApp = Array.item 0 args |> configureAppFactory
+
     let builder =
         Host
             .CreateDefaultBuilder(args)

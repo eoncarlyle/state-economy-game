@@ -39,10 +39,9 @@ let validationAppResultOption failCode failMessage result =
     | Ok _ -> Option.None
     | Error _ -> getAppErrorDto failCode failMessage |> Some
 
-
 let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
     use connection = new SqliteConnection($"Data Source={sqliteDbFileName}")
-    OptionTypes.register()
+    OptionTypes.register ()
     connection.Open()
     connection
 
@@ -57,9 +56,6 @@ let getTotalGdp (economyNode: State) =
         | _ -> economyNode.gdp |> Option.defaultValue 0
 
     Convert.ToInt64(loop economyNode.stateEconomy)
-
-//! d1d6f54: The type providers get to be a pain in the ass for nested classes, reference getTotalGdp
-//! Don't love the double unions but it's whatever
 
 let getOneFromQuery =
     taskMap (fun result ->
@@ -86,7 +82,7 @@ let getState (stateName: StateName) = //! Type inference legitimately didn't wor
 let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
     //! b6053e8: semi-interesting type error
     task {
-        let puzzleAnswer = getPuzzleAnswer dbConnection |> taskGet
+        let! puzzleAnswer = getPuzzleAnswer dbConnection
 
         return
             puzzleAnswer
@@ -94,32 +90,28 @@ let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
             |> Result.map getState
     }
 
-let getPuzzleAnswerEconomy dbConnection : AppResult<DtoOutStateEconomy> =
-    //! b6053e8: semi-interesting type error
+let getPuzzleAnswerEconomy dbConnection : Task<AppResult<DtoOutStateEconomy>> =
     task {
-        let puzzleAnswer = getPuzzleAnswer dbConnection |> taskGet
-        let state = getPuzzleAnswerState dbConnection |> taskGet
+        let! puzzleAnswer = getPuzzleAnswer dbConnection
+        let! state = getPuzzleAnswerState dbConnection
 
         return
             match puzzleAnswer, state with // Don't love the double result here
             | Ok answer, Ok state ->
                 Ok
                     { economy = state.stateEconomy
-                      totalGdp = answer.gdp  }
+                      totalGdp = answer.gdp }
             | _ -> Error internalErrorDto
-    } |> taskGet 
+    }
 
-let getGuesses puzzleSessionId (dbConnection: DbConnection) =
+let getGuesses (dbConnection: DbConnection) puzzleSessionId =
     select {
         for guess in guessTable do
             where (guess.puzzleSessionId = puzzleSessionId)
     }
     |> dbConnection.SelectAsync<Guess>
 
-let getGuessCount puzzleSessionId (dbConnection: DbConnection) =
-    getGuesses puzzleSessionId dbConnection |> taskMap Seq.length //Do not understand the typing issues here
-
-let getPuzzleSession puzzleSessionId (dbConnection: DbConnection) =
+let getPuzzleSession (dbConnection: DbConnection) puzzleSessionId =
     select {
         for puzzleSession in puzzleSessionTable do
             where (puzzleSession.id = puzzleSessionId)
@@ -128,7 +120,7 @@ let getPuzzleSession puzzleSessionId (dbConnection: DbConnection) =
     |> getOneFromQuery
 
 
-let postPuzzleSession (dbConnection: DbConnection) =
+let postPuzzleSession (dbConnection: DbConnection) = //ea18bd58-b546-4a50-a43a-7977eb30e8f0: spot the problem!
     let guid = Guid.NewGuid().ToString()
     let now = DateTime.Now
 
@@ -137,7 +129,7 @@ let postPuzzleSession (dbConnection: DbConnection) =
 
         value
             { id = guid
-              lastRequestTimestamp =  0 //Option.None
+              lastRequestTimestamp = 0 //Option.None
               createdAt = now
               updatedAt = now }
     }
@@ -146,98 +138,109 @@ let postPuzzleSession (dbConnection: DbConnection) =
 
     { id = guid }
 
-let getPuzzleAnswerForSession (id: string) (dbConnection: DbConnection) =
-    let puzzleSession = getPuzzleSession id dbConnection |> taskGet
+let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
+    task {
+        let! puzzleSession = getPuzzleSession dbConnection id
 
-    let sessionGuesses =
-        puzzleSession
-        |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
+        let sessionGuesses =
+            puzzleSession
+            |> Result.map (fun session -> getGuesses dbConnection session.id |> _.Result)
 
-    let validationErrors =
-        Option.None
-        |> Option.orElseWith (fun _ -> puzzleSession |> validationAppResultOption 404 "`puzzleSession` not found")
-        |> Option.orElseWith (fun _ ->
-            validationBoolOption
-                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
-                (getAppErrorDto 422 $"{MAX_GUESSES} guesses must be made before answer can be requested"))
-    
-    let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
-    
-    match puzzleSession, sessionGuesses, puzzleAnswerState, validationErrors with
-    | Ok _, Ok _, Ok answer, None ->
-        Ok {| id=id; targetStateName=answer.name |} 
-    | _, _, _, Some validationError -> Error validationError
-    | _ -> Error internalErrorDto
+        let validationErrors =
+            puzzleSession
+            |> validationAppResultOption 404 "`puzzleSession` not found"
+            |> Option.orElseWith (fun _ ->
+                validationBoolOption
+                    (sessionGuesses
+                     |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
+                    (getAppErrorDto 422 $"{MAX_GUESSES} guesses must be made before answer can be requested"))
 
-let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnection) =
-    let puzzleSession = getPuzzleSession guessSubmission.id dbConnection |> taskGet
+        let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
 
-    let guessState =
-        StateName.create guessSubmission.guessStateName |> Result.map getState
+        return
+            match puzzleSession, sessionGuesses, puzzleAnswerState, validationErrors with
+            | Ok _, Ok _, Ok answer, None ->
+                Ok
+                    {| id = id
+                       targetStateName = answer.name |}
+            | _, _, _, Some validationError -> Error validationError
+            | _ -> Error internalErrorDto
+    }
 
-    let sessionGuesses =
-        puzzleSession
-        |> Result.map (fun session -> getGuesses session.id dbConnection |> taskGet)
+let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmission) =
 
-    let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
-    // lmao implement request timestamp validation
+    task {
+        let! puzzleSession = getPuzzleSession dbConnection guessSubmission.id
 
-    //! 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`  2) Can be difficult to know when you're whitespacing correctly on long statements
-    let validationErrors =
-        Option.None
-        |> Option.orElseWith (fun _ -> puzzleSession |> validationAppResultOption 404 "`puzzleSession` not found")
-        |> Option.orElseWith (fun _ ->
-            guessState
-            |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
-        |> Option.orElseWith (fun _ ->
-            validationBoolOption
-                (sessionGuesses |> Result.exists (fun guesses -> Seq.length guesses < MAX_GUESSES))
-                (getAppErrorDto 422 "Too many requests have been made for this game"))
-        |> Option.orElseWith (fun _ ->
-            validationBoolOption
-                (sessionGuesses
-                 |> Result.exists (fun guesses ->
-                     guesses
-                     |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName))|> not )
-                (getAppErrorDto 422 "Duplicate of previous request"))
+        let guessState =
+            StateName.create guessSubmission.guessStateName |> Result.map getState
 
-    match puzzleSession, guessState, puzzleAnswerState, validationErrors with
-    | Ok session, Ok guesses, Ok answer, None ->
-        let distance = haversineDistance guesses answer
+        let sessionGuesses =
+            puzzleSession
+            |> Result.map (fun session -> getGuesses dbConnection session.id |> taskGet)
 
-        let maxDistance =
-            states |> List.map (fun state -> haversineDistance guesses state) |> List.max
+        let! puzzleAnswerState = getPuzzleAnswerState dbConnection
 
-        update {
-            for puzzleSession in puzzleSessionTable do
-                setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp //(Some guessSubmission.requestTimestamp)
-                where (puzzleSession.id = session.id)
-        }
-        |> dbConnection.UpdateAsync
-        |> _.Wait()
+        //! 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`  2) Can be difficult to know when you're whitespacing correctly on long statements
+        let validationErrors =
+            puzzleSession
+            |> validationAppResultOption 404 "`puzzleSession` not found"
+            |> Option.orElseWith (fun _ ->
+                guessState
+                |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
+            |> Option.orElseWith (fun _ ->
+                validationBoolOption
+                    (sessionGuesses
+                     |> Result.exists (fun guesses -> Seq.length guesses < MAX_GUESSES))
+                    (getAppErrorDto 422 "Too many requests have been made for this game"))
+            |> Option.orElseWith (fun _ ->
+                validationBoolOption
+                    (sessionGuesses
+                     |> Result.exists (fun guesses ->
+                         guesses
+                         |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName))
+                     |> not)
+                    (getAppErrorDto 422 "Duplicate of previous request"))
 
-        let time = DateTime.Now
+        return
+            match puzzleSession, guessState, puzzleAnswerState, validationErrors with
+            | Ok session, Ok guesses, Ok answer, None ->
+                let distance = haversineDistance guesses answer
 
-        insert {
-            into guessTable
-            
-            value
-                { id = Guid.NewGuid().ToString() //Guid.NewGuid.ToString() lmao
-                  puzzleSessionId = session.id
-                  stateName = guesses.name
-                  createdAt = time
-                  updatedAt = time }
-        }
-        |> dbConnection.InsertAsync
-        |> _.Wait()
+                let maxDistance =
+                    states |> List.map (fun state -> haversineDistance guesses state) |> List.max
 
-        Ok
-            { id = session.id
-              distance = distance
-              bearing = haversineBearing guesses answer
-              percentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
-    | _, _, _, Some validationError -> Error validationError
-    | _ -> Error internalErrorDto
+                update {
+                    for puzzleSession in puzzleSessionTable do
+                        setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp //(Some guessSubmission.requestTimestamp)
+                        where (puzzleSession.id = session.id)
+                }
+                |> dbConnection.UpdateAsync
+                |> _.Wait()
+
+                let time = DateTime.Now
+
+                insert {
+                    into guessTable
+
+                    value
+                        { id = Guid.NewGuid().ToString() //Guid.NewGuid.ToString() lmao
+                          puzzleSessionId = session.id
+                          stateName = guesses.name
+                          createdAt = time
+                          updatedAt = time }
+                }
+                |> dbConnection.InsertAsync
+                |> _.Wait()
+
+                Ok
+                    { id = session.id
+                      distance = distance
+                      bearing = haversineBearing guesses answer
+                      percentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
+            | _, _, _, Some validationError -> Error validationError
+            | _ -> Error internalErrorDto
+    }
 
 let deleteObsoletePuzzleSessions (dbConnection: DbConnection) =
     task {
@@ -253,20 +256,19 @@ let deleteObsoletePuzzleSessions (dbConnection: DbConnection) =
 
 let getPuzzleAnswerCount (dbConnection: DbConnection) =
     task {
-        return
+        return!
             select {
                 for puzzleAnswer in puzzleAnswerTable do
                     selectAll
             }
             |> dbConnection.SelectAsync<PuzzleAnswer>
             |> taskMap Seq.length
-            |> taskGet
     }
 
 let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
 
     task {
-        let puzzleAnswerCount = getPuzzleAnswerCount dbConnection |> taskGet
+        let! puzzleAnswerCount = getPuzzleAnswerCount dbConnection
         let obsoletePuzzleAnswerCount = puzzleAnswerCount - PUZZLE_ANSWER_RETENTION + 1
 
         if obsoletePuzzleAnswerCount > 0 then
@@ -285,13 +287,16 @@ let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
         //         set (updatePuzzleAnswer puzzleAnswer)
         //     } |> ignore
         let updatedAt = DateTime.Now
-        dbConnection.Execute($"UPDATE puzzle_sessions SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = {updatedAt}")
+
+        dbConnection.Execute(
+            $"UPDATE puzzle_sessions SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = {updatedAt}"
+        )
         |> ignore
     }
 
 let updateTargetState (dbConnection: DbConnection) =
     task {
-        let unselectableTargetStateNames =
+        let! unselectableTargetStateNames =
             select {
                 for puzzleAnswer in puzzleAnswerTable do
                     selectAll
@@ -299,7 +304,6 @@ let updateTargetState (dbConnection: DbConnection) =
             |> dbConnection.SelectAsync<PuzzleAnswer>
             |> taskMap (Seq.map _.name)
             |> taskMap Seq.toList
-            |> taskGet
 
         let selectableStates =
             states
@@ -307,20 +311,20 @@ let updateTargetState (dbConnection: DbConnection) =
 
         let newState = List.item (rnd.Next(0, selectableStates.Length)) selectableStates //Why are the parenthesis needed?
         let now = DateTime.Now
+        let! id = getPuzzleAnswerCount dbConnection |> taskMap (fun x -> x + 1)
+
         let newPuzzleAnswer =
-            { id = (getPuzzleAnswerCount dbConnection |> taskGet |> (fun x -> x + 1))
+            { id = id
               name = newState.name
               gdp = getTotalGdp newState
               createdAt = now
-              updatedAt = now 
-            }
+              updatedAt = now }
 
         insert {
             into puzzleAnswerTable
             value newPuzzleAnswer
         }
         |> dbConnection.InsertAsync
-        |> taskGet
         |> ignore
     }
 
@@ -331,9 +335,7 @@ type DailyJob =
             task {
                 let dataMap = context.JobDetail.JobDataMap
                 let dbConnection = dataMap.GetString SQLITE_DB_FILE_NAME_KEY |> sqliteConnection
-                deleteObsoletePuzzleSessions dbConnection |> taskGet
-                deleteObsoletePuzzleAnswers dbConnection |> taskGet
-                updateTargetState dbConnection |> taskGet
+                do! deleteObsoletePuzzleSessions dbConnection
+                do! deleteObsoletePuzzleAnswers dbConnection
+                do! updateTargetState dbConnection
             }
-
-let runDailyTasks () = ignore
