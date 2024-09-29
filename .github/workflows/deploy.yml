@@ -23,5 +23,5 @@ jobs:
       - name: Copying new runtime directory
         run: cp -r giraffe-backend /home/iain/f-sharp-backend
 
-      #- name: Restarting service
-      #  run: sudo systemctl --user -M iain@ restart portfolio-website.service
+      - name: Restarting service
+        run: sudo systemctl --user -M iain@ restart giraffe-backend.service
