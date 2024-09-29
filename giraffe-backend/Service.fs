@@ -7,6 +7,7 @@ open Dapper
 open Microsoft.FSharp.Core
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite //! Had annoying SQLite interop issues
+open Microsoft.Extensions.Logging
 
 open Quartz
 open StateEconomyGame.Model
@@ -329,9 +330,11 @@ let updateTargetState (dbConnection: DbConnection) =
     }
 
 
-type DailyJob =
+type DailyJob() =
     interface IJob with
         member this.Execute context =
+            Console.WriteLine("here")
+
             task {
                 let dataMap = context.JobDetail.JobDataMap
                 let dbConnection = dataMap.GetString SQLITE_DB_FILE_NAME_KEY |> sqliteConnection

@@ -43,7 +43,6 @@ let configureAppFactory (sqliteDbFileName: string) =
 let configureServices (services: IServiceCollection) =
     services.AddCors() |> ignore
     services.AddGiraffe() |> ignore
-    //services.AddQuartz(fun q -> q.UseMicrosoftDependencyInjectionJobFactory()) //May not be needed?
     services.AddQuartz() |> ignore
 
 let configureLogging (builder: ILoggingBuilder) =
@@ -83,10 +82,11 @@ let giraffeMain args =
         TriggerBuilder
             .Create()
             .WithIdentity("trigger0", "group0")
-            .WithCronSchedule("0 0 0 ? * * *")
+            .WithCronSchedule("0 * * ? * * *")
             .ForJob(DAILY_JOB_NAME)
             .Build()
 
     scheduler.ScheduleJob(job, trigger) |> _.Result |> ignore
+    scheduler.Start() |> ignore
     builder.Run()
     0
