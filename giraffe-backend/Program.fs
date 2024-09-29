@@ -23,7 +23,7 @@ let errorHandler (ex: Exception) (logger: ILogger) =
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 let configureCors (builder: CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:4000").AllowAnyMethod().AllowAnyHeader()
+    builder.WithOrigins("http://localhost:5000").AllowAnyMethod().AllowAnyHeader()
     |> ignore
 
 
@@ -59,7 +59,7 @@ let giraffeMain args =
             .CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(fun webHostBuilder ->
                 webHostBuilder
-                    .UseUrls("http://localhost:4000")
+                    .UseUrls("http://localhost:5000")
                     .UseContentRoot(contentRoot)
                     .UseWebRoot(webRoot)
                     .Configure(Action<IApplicationBuilder> configureApp)
