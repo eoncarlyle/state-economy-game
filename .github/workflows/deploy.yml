@@ -24,4 +24,4 @@ jobs:
         run: cp -r giraffe-backend /home/iain/f-sharp-backend
 
       - name: Restarting service
-        run: sudo systemctl --user -M iain@ restart giraffe-backend.service
+        run: systemctl --user -M iain@ restart giraffe-backend.service
