@@ -36,8 +36,9 @@ export class AppService {
     @InjectModel(PuzzleSession)
     private puzzleSession: typeof PuzzleSession,
     private moduleLogger: ModuleLogger
-  ) {}
+  ) { }
 
+  // ✅ = in Giraffe backend
   async getTargetStateEconomy(): Promise<StateEconomy> {
     const targetStateModel = await this.getTargetState();
     if (!targetStateModel) throw new NotFoundException("Target state not found");
@@ -51,6 +52,7 @@ export class AppService {
     };
   }
 
+  // ✅ 
   async getPuzzleAnswer(id: string): Promise<PuzzleAnswerResponse> {
     if (!id) {
       throw new BadRequestException("Request must contain a game id");
@@ -71,6 +73,7 @@ export class AppService {
     };
   }
 
+  // ✅ 
   async postPuzzleSession(): Promise<PuzzleSession> {
     const newUUID = randomUUID();
     return await PuzzleSession.create({
@@ -78,6 +81,7 @@ export class AppService {
     });
   }
 
+  // ✅ 
   async postGuess(body: GuessSubmissionRequest): Promise<GuessSubmissionResponse> {
     const { id, guessStateName, requestTimestamp } = body;
 
@@ -111,10 +115,11 @@ export class AppService {
     };
   }
 
+  // ✅ 
   private async validateGuess(id: string, guessStateName: string, puzzleSessionId: PuzzleSession) {
     const guesses = await Guess.findAll({ where: { puzzleSessionId: id } });
 
-    if (!puzzleSessionId || !isStateNameValid(guessStateName)) 
+    if (!puzzleSessionId || !isStateNameValid(guessStateName))
       throw new UnprocessableEntityException("Puzzle session id and a guess state name must both be valid");
     else if (guesses.length >= MAX_GUESSES)
       throw new UnprocessableEntityException("Too many request have been made for this game");
@@ -126,10 +131,12 @@ export class AppService {
     return { status: "UP" };
   }
 
+  // ✅ 
   async getTargetStateRecord(): Promise<StateRecord> {
     return StateRecord.of((await this.getTargetState()).name);
   }
 
+  // ✅ 
   async getTargetState(): Promise<TargetState> {
     const targetStateModel = await this.targetState.findOne({
       order: [["id", "DESC"]]
@@ -138,11 +145,13 @@ export class AppService {
     return targetStateModel;
   }
 
+  // ✅ 
   getEconomyNode(stateName: string) {
     if (stateName in stateEconomies) return stateEconomies[stateName];
     else return null;
   }
 
+  // ✅ 
   @Cron("0 0 * * *", { timeZone: "America/Chicago" })
   async runDailyTasks(): Promise<void> {
     await this.deleteObsoletePuzzleSessions();
@@ -150,6 +159,7 @@ export class AppService {
     await this.updateTargetState();
   }
 
+  // ✅  
   async deleteObsoletePuzzleSessions(): Promise<void> {
     const obsoleteDate = new Date();
     obsoleteDate.setDate(obsoleteDate.getDate() - 1);
@@ -164,6 +174,7 @@ export class AppService {
     this.moduleLogger.info(`Obsolete puzzle sessions deleted: ${deletedPuzzleSession}`);
   }
 
+  // ✅  
   async deleteObsoleteTargetStates(): Promise<void> {
     const targetStateCount = await this.targetState.count();
     this.moduleLogger.info(`Current target state count: ${targetStateCount}`);
@@ -187,6 +198,7 @@ export class AppService {
     }
   }
 
+  // ✅  
   async updateTargetState(): Promise<void> {
     const unselectableTargetStateNames = (await this.targetState.findAll({ attributes: ["name"] })).map(
       (targetState: TargetState) => targetState.name
@@ -211,14 +223,17 @@ export class AppService {
     this.moduleLogger.info(`New target state: ${newTargetState.name}`);
   }
 
+  // ✅  
   getRandomInt(max: number) {
     return Math.floor(Math.random() * max);
   }
 
+  // ✅  
   getRoundedTotalGdp(economy: NonLeafEconomyNode): number {
     return Math.round(this.getTotalGdp(economy));
   }
 
+  // ✅  
   getTotalGdp(economy: NonLeafEconomyNode | LeafEconomyNode): number {
     if ("children" in economy) {
       return economy.children.map((node) => this.getTotalGdp(node)).reduce((prev, cur) => prev + cur, 0);
