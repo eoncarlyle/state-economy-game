@@ -247,12 +247,13 @@ let deleteObsoletePuzzleSessions (dbConnection: DbConnection) =
     task {
         let obsoleteDate = DateTime.Now.Subtract(TimeSpan(0, 1, 0))
 
-        delete {
-            for puzzleSession in puzzleSessionTable do
-                where (puzzleSession.createdAt < obsoleteDate)
-        }
-        |> dbConnection.DeleteAsync
-        |> ignore
+        let obsoleteSessionCount = 
+            delete {
+                for puzzleSession in puzzleSessionTable do
+                    where (puzzleSession.createdAt < obsoleteDate)
+            }
+            |> dbConnection.DeleteAsync
+        Console.WriteLine($"Deleting {obsoleteSessionCount} obsolete sessions")
     }
 
 let getPuzzleAnswerCount (dbConnection: DbConnection) =
@@ -264,6 +265,25 @@ let getPuzzleAnswerCount (dbConnection: DbConnection) =
             }
             |> dbConnection.SelectAsync<PuzzleAnswer>
             |> taskMap Seq.length
+    }
+
+let cleanPuzzleAnswers (dbConnection: DbConnection) =
+    task {
+
+        let! puzzleAnswers =
+            select {
+                for puzzleAnswer in puzzleAnswerTable do
+                    selectAll
+            }
+            |> dbConnection.SelectAsync<PuzzleAnswer>
+
+        let minId = puzzleAnswers |> Seq.map _.id |> Seq.min
+
+        if minId > 1 then
+            dbConnection.Execute(
+                $"UPDATE target_states SET id = id - {(minId - 1)}, updatedAt = CURRENT_TIMESTAMP"
+            )
+            |> ignore
     }
 
 let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
@@ -280,22 +300,22 @@ let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
             |> dbConnection.DeleteAsync
             |> taskGet
             |> ignore
-        // The commented pieces aren't possible, this is a sign I don't understand something!
-        // let updatePuzzleAnswer (puzzleAnswer: PuzzleAnswer) =
-        //     {id=puzzleAnswer.id-obsoletePuzzleAnswerCount; name=puzzleAnswer.name; gdp=puzzleAnswer.gdp}
-        // update {
-        //     for puzzleAnswer in puzzleAnswerTable do
-        //         set (updatePuzzleAnswer puzzleAnswer)
-        //     } |> ignore
-        let updatedAt = DateTime.Now
+            // The commented pieces aren't possible, this is a sign I don't understand something!
+            // let updatePuzzleAnswer (puzzleAnswer: PuzzleAnswer) =
+            //     {id=puzzleAnswer.id-obsoletePuzzleAnswerCount; name=puzzleAnswer.name; gdp=puzzleAnswer.gdp}
+            // update {
+            //     for puzzleAnswer in puzzleAnswerTable do
+            //         set (updatePuzzleAnswer puzzleAnswer)
+            //     } |> ignore
+            Console.WriteLine($"Deleting {obsoletePuzzleAnswerCount} obsolete puzzle answers") 
 
-        dbConnection.Execute(
-            $"UPDATE puzzle_sessions SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = {updatedAt}"
-        )
-        |> ignore
+            dbConnection.Execute(
+                $"UPDATE target_states SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = CURRENT_TIMESTAMP"
+            )
+            |> ignore
     }
 
-let updateTargetState (dbConnection: DbConnection) =
+let updatePuzzleAnswer (dbConnection: DbConnection) =
     task {
         let! unselectableTargetStateNames =
             select {
@@ -311,6 +331,8 @@ let updateTargetState (dbConnection: DbConnection) =
             |> List.filter (fun state -> List.contains state.name unselectableTargetStateNames |> not)
 
         let newState = List.item (rnd.Next(0, selectableStates.Length)) selectableStates //Why are the parenthesis needed?
+        Console.WriteLine($"Selected {newState.name} as the next puzzle answer") 
+        
         let now = DateTime.Now
         let! id = getPuzzleAnswerCount dbConnection |> taskMap (fun x -> x + 1)
 
@@ -333,12 +355,13 @@ let updateTargetState (dbConnection: DbConnection) =
 type DailyJob() =
     interface IJob with
         member this.Execute context =
-            Console.WriteLine("here")
 
             task {
+                
                 let dataMap = context.JobDetail.JobDataMap
                 let dbConnection = dataMap.GetString SQLITE_DB_FILE_NAME_KEY |> sqliteConnection
+                do! cleanPuzzleAnswers dbConnection
                 do! deleteObsoletePuzzleSessions dbConnection
                 do! deleteObsoletePuzzleAnswers dbConnection
-                do! updateTargetState dbConnection
+                do! updatePuzzleAnswer dbConnection
             }

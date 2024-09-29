@@ -1,0 +1,27 @@
+name: Deploy backend
+
+on:
+  push:
+    branches:
+      - f-sharp
+
+jobs:
+  deploy:
+    name: Deploy on new-york-0
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build application
+        run: dotnet publish -c Release -o published
+
+      - name: Remove runtime directory
+        run: rm -rf /home/iain/f-sharp-backend
+
+      - name: Copying new runtime directory
+        run: cp -r . /home/iain/f-sharp-backend
+
+      - name: Restarting service
+        run: sudo systemctl --user -M iain@ restart portfolio-website.service

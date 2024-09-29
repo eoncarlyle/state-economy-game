@@ -82,7 +82,7 @@ let giraffeMain args =
         TriggerBuilder
             .Create()
             .WithIdentity("trigger0", "group0")
-            .WithCronSchedule("0 * * ? * * *")
+            .WithCronSchedule("0 0 0 * * ?	")
             .ForJob(DAILY_JOB_NAME)
             .Build()
 
