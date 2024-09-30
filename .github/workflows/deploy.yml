@@ -18,7 +18,7 @@ jobs:
         run: dotnet build giraffe-backend -c Release
 
       - name: Remove runtime directory
-        run: rm -rf /home/iain/f-sharp-backend
+        run: sudo rm -rf /home/iain/f-sharp-backend
 
       - name: Copying new runtime directory
         run: cp -r giraffe-backend /home/iain/f-sharp-backend
