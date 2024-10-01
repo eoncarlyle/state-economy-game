@@ -23,7 +23,10 @@ let errorHandler (ex: Exception) (logger: ILogger) =
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 let configureCors (builder: CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:5000", "https://gdple.iainschmitt.com").AllowAnyMethod().AllowAnyHeader()
+    builder
+        .WithOrigins("https://gdple.iainschmitt.com", "http://localhost:5173")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
     |> ignore
 
 

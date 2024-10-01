@@ -20,8 +20,8 @@ type Guess =
 
 type EconomyNode =
     { gdpCategory: string
-      gdp: Option<float>
-      children: EconomyNode list option }
+      gdp: float
+      children: EconomyNode list }
 
 type State =
     { name: string

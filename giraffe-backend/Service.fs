@@ -53,8 +53,8 @@ let guessTable = table'<Guess> "guesses"
 let getTotalGdp (economyNode: State) =
     let rec loop (economyNode: EconomyNode) =
         match economyNode.children with
-        | Some children -> children |> List.map loop |> List.sum
-        | _ -> economyNode.gdp |> Option.defaultValue 0
+        | [] -> economyNode.gdp
+        | children -> children |> List.map loop |> List.sum
 
     Convert.ToInt64(loop economyNode.stateEconomy)
 
