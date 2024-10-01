@@ -85,7 +85,7 @@ let giraffeMain args =
         TriggerBuilder
             .Create()
             .WithIdentity("trigger0", "group0")
-            .WithCronSchedule("0 0 0 * * ?	")
+            .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0 ).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")))
             .ForJob(DAILY_JOB_NAME)
             .Build()
 
