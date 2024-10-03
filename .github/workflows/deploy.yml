@@ -1,0 +1,44 @@
+name: Deploy Backend & Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-backend:
+    name: Deploy backend on new-york-0
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build application
+        run: dotnet build gdple-backend -c Release
+
+      - name: Remove runtime directory
+        run: rm -rf /home/iain/gdple-backend/
+
+      - name: Recreate runtime directory
+        run: mkdir /home/iain/gdple-backend/
+
+      - name: Copying new runtime directory
+        run: cp -r gdple-backend/bin/Release/net8.0/* /home/iain/gdple-backend
+
+      - name: Restarting service
+        run: sudo systemctl restart gdple-backend.service
+  
+  deploy-frontend:
+    name: Deploy frontend on new-york-0
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build application
+        run: cd gdple-frontend && npm i && npm run prebuild
+
+      - name: Copying new runtime directory
+        run: cp -r dist /home/iain/gdple-frontend-dist
