@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <AssemblyName>giraffe-backend</AssemblyName>
+        <AssemblyName>gdple-backend</AssemblyName>
         <EnableDefaultContentItems>false</EnableDefaultContentItems>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
