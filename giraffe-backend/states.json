@@ -9,7 +9,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 2653, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 2653,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 684.3,
@@ -37,8 +41,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 8377.5, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 12879.7, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 8377.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 12879.7,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -149,8 +161,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 17276.6, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 21319.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 17276.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 21319.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -327,7 +347,11 @@
                   "gdp": 11619.8,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 5473, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 5473,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1898.1,
@@ -387,7 +411,11 @@
           "gdp": 10316.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 5486, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 5486,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 27723.5,
@@ -406,7 +434,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 7.5, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 7.5,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 464.1,
@@ -434,8 +466,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1046.3, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 2800.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1046.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 2800.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -546,8 +586,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 1695.4, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 3179.2, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 1695.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 3179.2,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -556,7 +604,11 @@
               "gdp": 1335.5,
               "children": []
             },
-            { "gdpCategory": "Rail transportation", "gdp": 0, "children": [] },
+            {
+              "gdpCategory": "Rail transportation",
+              "gdp": 0,
+              "children": []
+            },
             {
               "gdpCategory": "Water transportation",
               "gdp": 430.4,
@@ -645,7 +697,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 5564.9, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 5564.9,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 890.5,
@@ -716,7 +772,11 @@
                   "gdp": 2602.2,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 1793.4, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 1793.4,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 233.9,
@@ -776,7 +836,11 @@
           "gdp": 2551.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 2816.7, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 2816.7,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 6491.5,
@@ -795,7 +859,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1871.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1871.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 743.8,
@@ -823,8 +891,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 8991.6, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 27345.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 8991.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 27345.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -935,8 +1011,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 25697.2, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 36242.3, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 25697.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 36242.3,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -1113,7 +1197,11 @@
                   "gdp": 20740.4,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 11485.2, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 11485.2,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3242.1,
@@ -1173,7 +1261,11 @@
           "gdp": 9548.9,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 4806.5, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 4806.5,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 38051.5,
@@ -1192,7 +1284,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 4313.5, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 4313.5,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 638.4,
@@ -1220,8 +1316,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 4523.2, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 6467.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 4523.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 6467.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -1332,8 +1436,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 13217.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 13224.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 13217.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 13224.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -1510,7 +1622,11 @@
                   "gdp": 6596.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 4304.2, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 4304.2,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1349.5,
@@ -1570,7 +1686,11 @@
           "gdp": 2928.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1008.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1008.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 15480.6,
@@ -1589,7 +1709,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 29169.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 29169.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 16161.1,
@@ -1617,8 +1741,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 52323.9, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 140528.1, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 52323.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 140528.1,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -1729,8 +1861,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 200828.9, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 218144.3, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 200828.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 218144.3,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -1907,7 +2047,11 @@
                   "gdp": 121212.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 58866.4, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 58866.4,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 19599.9,
@@ -1967,7 +2111,11 @@
           "gdp": 54387.2,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 31448.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 31448.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 295556.3,
@@ -1986,7 +2134,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 894.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 894.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 446.1,
@@ -2014,8 +2166,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 6766.1, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 28665.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 6766.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 28665.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -2126,8 +2286,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 27592.7, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 29125.9, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 27592.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 29125.9,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -2304,7 +2472,11 @@
                   "gdp": 16386.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 6929.5, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 6929.5,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 2406.4,
@@ -2364,7 +2536,11 @@
           "gdp": 11301.8,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 6403.4, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 6403.4,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 36661,
@@ -2383,7 +2559,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 495.7, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 495.7,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 62.6,
@@ -2411,8 +2591,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 5231, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 8575.7, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 5231,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 8575.7,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -2523,12 +2711,24 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 18004.7, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 18660.2, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 18004.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 18660.2,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
-            { "gdpCategory": "Air transportation", "gdp": 531, "children": [] },
+            {
+              "gdpCategory": "Air transportation",
+              "gdp": 531,
+              "children": []
+            },
             {
               "gdpCategory": "Rail transportation",
               "gdp": 108.4,
@@ -2697,7 +2897,11 @@
                   "gdp": 11960.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 7651.4, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 7651.4,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3783.6,
@@ -2757,7 +2961,11 @@
           "gdp": 3698.2,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 2882.5, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 2882.5,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 22581.5,
@@ -2776,7 +2984,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1121.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1121.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 33.6,
@@ -2804,8 +3016,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1396.9, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 3323.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1396.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 3323.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -2916,8 +3136,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 2632.9, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 3988.1, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 2632.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 3988.1,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -3019,7 +3247,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 9443.2, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 9443.2,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 7277.6,
@@ -3090,7 +3322,11 @@
                   "gdp": 2253.3,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3294.4, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3294.4,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 636,
@@ -3150,7 +3386,11 @@
           "gdp": 1059.9,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 707.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 707.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 6884,
@@ -3169,7 +3409,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 0, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 0,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 4.6,
@@ -3197,8 +3441,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1779.6, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 1875.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1779.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 1875.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -3309,8 +3561,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 1790, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 1905.8, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 1790,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 1905.8,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -3487,7 +3747,11 @@
                   "gdp": 2722.1,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3219.8, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3219.8,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 487.2,
@@ -3547,7 +3811,11 @@
           "gdp": 44115.8,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 4218.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 4218.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 4741.9,
@@ -3566,7 +3834,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5071.9, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5071.9,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 2658.7,
@@ -3594,8 +3866,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 26137.1, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 77488.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 26137.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 77488.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -3706,8 +3986,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 98186.7, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 115097.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 98186.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 115097.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -3884,7 +4172,11 @@
                   "gdp": 62069.8,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 33537.8, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 33537.8,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 9729.2,
@@ -3944,7 +4236,11 @@
           "gdp": 24596.1,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 13462.4, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 13462.4,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 98056.8,
@@ -3963,7 +4259,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5429.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5429.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 1216.1,
@@ -3991,8 +4291,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 14962.6, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 37951.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 14962.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 37951.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -4103,8 +4411,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 57694.9, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 48940.8, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 57694.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 48940.8,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -4281,7 +4597,11 @@
                   "gdp": 26778.8,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 15645.3, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 15645.3,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3033.8,
@@ -4341,7 +4661,11 @@
           "gdp": 17808.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 9300.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 9300.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 53575.7,
@@ -4360,7 +4684,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 412.9, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 412.9,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 104.1,
@@ -4388,8 +4716,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 2519.2, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 5714.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 2519.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 5714.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -4500,8 +4836,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 3257.8, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 7692.1, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 3257.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 7692.1,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -4510,7 +4854,11 @@
               "gdp": 2728.9,
               "children": []
             },
-            { "gdpCategory": "Rail transportation", "gdp": 0, "children": [] },
+            {
+              "gdpCategory": "Rail transportation",
+              "gdp": 0,
+              "children": []
+            },
             {
               "gdpCategory": "Water transportation",
               "gdp": 343.1,
@@ -4674,7 +5022,11 @@
                   "gdp": 4053.1,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2116.3, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2116.3,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 523.5,
@@ -4734,7 +5086,11 @@
           "gdp": 5616,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 5604.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 5604.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 8553.1,
@@ -4753,7 +5109,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5152, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5152,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 754.5,
@@ -4781,8 +5141,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1777.4, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 6942.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1777.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 6942.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -4893,8 +5261,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 7980.2, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 9408.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 7980.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 9408.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -5071,7 +5447,11 @@
                   "gdp": 4250,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3206.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3206.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 761.9,
@@ -5131,7 +5511,11 @@
           "gdp": 2368.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 708, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 708,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 9209.7,
@@ -5150,7 +5534,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 15154.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 15154.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 647.8,
@@ -5178,8 +5566,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 19441.3, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 35024.2, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 19441.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 35024.2,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -5290,8 +5686,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 83595.6, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 60176.9, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 83595.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 60176.9,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -5468,7 +5872,11 @@
                   "gdp": 29629.1,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 28676.1, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 28676.1,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 8006.3,
@@ -5528,7 +5936,11 @@
           "gdp": 14664.2,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 4417.1, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 4417.1,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 72934.6,
@@ -5547,7 +5959,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 8405.3, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 8405.3,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 513.5,
@@ -5575,8 +5991,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 8697.2, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 21667.4, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 8697.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 21667.4,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -5687,8 +6111,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 27621.5, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 29297.5, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 27621.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 29297.5,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -5865,7 +6297,11 @@
                   "gdp": 17579.5,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 13955.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 13955.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 4058.6,
@@ -5925,7 +6361,11 @@
           "gdp": 6065.1,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1400, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1400,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 32413.5,
@@ -5944,7 +6384,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 17840.3, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 17840.3,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 796.5,
@@ -5972,8 +6416,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 4192.8, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 10195.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 4192.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 10195.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -6084,8 +6536,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 14240.6, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 13897.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 14240.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 13897.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -6262,7 +6722,11 @@
                   "gdp": 6514.9,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3873, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3873,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 2518.1,
@@ -6322,7 +6786,11 @@
           "gdp": 2352,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1410.9, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1410.9,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 20920.8,
@@ -6341,7 +6809,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5149.9, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5149.9,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 531.6,
@@ -6369,8 +6841,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 3763.4, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 8030.5, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 3763.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 8030.5,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -6481,8 +6961,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 13437.9, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 13478.7, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 13437.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 13478.7,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -6496,7 +6984,11 @@
               "gdp": 1967.2,
               "children": []
             },
-            { "gdpCategory": "Water transportation", "gdp": 2, "children": [] },
+            {
+              "gdpCategory": "Water transportation",
+              "gdp": 2,
+              "children": []
+            },
             {
               "gdpCategory": "Truck transportation",
               "gdp": 2839.4,
@@ -6655,7 +7147,11 @@
                   "gdp": 6910.1,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 5320.3, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 5320.3,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1782.8,
@@ -6715,7 +7211,11 @@
           "gdp": 3326.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 3199.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 3199.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 18352.3,
@@ -6734,7 +7234,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 4154.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 4154.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 612,
@@ -6762,8 +7266,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 5171, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 9858.5, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 5171,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 9858.5,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -6874,8 +7386,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 19400, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 17548.8, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 19400,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 17548.8,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -7052,7 +7572,11 @@
                   "gdp": 10579.3,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 8809.8, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 8809.8,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 2121.1,
@@ -7088,7 +7612,11 @@
             {
               "gdpCategory": "Accommodation and food services",
               "children": [
-                { "gdpCategory": "Accommodation", "gdp": 1457, "children": [] },
+                {
+                  "gdpCategory": "Accommodation",
+                  "gdp": 1457,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Food services and drinking places",
                   "gdp": 7214.8,
@@ -7108,7 +7636,11 @@
           "gdp": 5355.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 4985.4, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 4985.4,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 21009.3,
@@ -7127,7 +7659,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1743.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1743.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 581.4,
@@ -7155,8 +7691,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 6683.9, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 16324.2, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 6683.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 16324.2,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -7267,8 +7811,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 15906.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 21724, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 15906.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 21724,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -7445,7 +7997,11 @@
                   "gdp": 10789.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 8323.5, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 8323.5,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1948.5,
@@ -7505,7 +8061,11 @@
           "gdp": 4940.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 2802.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 2802.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 23723.3,
@@ -7524,7 +8084,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 657.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 657.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 663.2,
@@ -7552,8 +8116,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1474, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 2990.7, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1474,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 2990.7,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -7664,8 +8236,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 4402, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 7937.7, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 4402,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 7937.7,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -7674,7 +8254,11 @@
               "gdp": 111.7,
               "children": []
             },
-            { "gdpCategory": "Rail transportation", "gdp": 80, "children": [] },
+            {
+              "gdpCategory": "Rail transportation",
+              "gdp": 80,
+              "children": []
+            },
             {
               "gdpCategory": "Water transportation",
               "gdp": 16.4,
@@ -7838,7 +8422,11 @@
                   "gdp": 3482.2,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3600.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3600.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1280.3,
@@ -7898,7 +8486,11 @@
           "gdp": 2578.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 458.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 458.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 7011.8,
@@ -7917,7 +8509,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1591.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1591.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 160.7,
@@ -7945,8 +8541,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 6993.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 28249, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 6993.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 28249,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -8057,8 +8661,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 21343.8, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 27388.1, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 21343.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 27388.1,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -8235,7 +8847,11 @@
                   "gdp": 17469.4,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 11120, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 11120,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3856.8,
@@ -8271,7 +8887,11 @@
             {
               "gdpCategory": "Accommodation and food services",
               "children": [
-                { "gdpCategory": "Accommodation", "gdp": 3437, "children": [] },
+                {
+                  "gdpCategory": "Accommodation",
+                  "gdp": 3437,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Food services and drinking places",
                   "gdp": 10207.7,
@@ -8291,7 +8911,11 @@
           "gdp": 50551.6,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 10915, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 10915,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 36229.7,
@@ -8310,7 +8934,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 350, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 350,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 624.9,
@@ -8338,8 +8966,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 15499.3, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 26297.1, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 15499.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 26297.1,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -8450,8 +9086,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 34595.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 32889.7, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 34595.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 32889.7,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -8628,7 +9272,11 @@
                   "gdp": 23804,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 25308.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 25308.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 6134.9,
@@ -8688,7 +9336,11 @@
           "gdp": 10835.1,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 7210, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 7210,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 43195.5,
@@ -8707,7 +9359,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5542.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5542.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 691.4,
@@ -8735,8 +9391,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 12553.1, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 23474, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 12553.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 23474,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -8847,8 +9511,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 41919.6, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 44513.7, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 41919.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 44513.7,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -9025,7 +9697,11 @@
                   "gdp": 21277.5,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 21194.2, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 21194.2,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 4751.7,
@@ -9085,7 +9761,11 @@
           "gdp": 9476.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1972.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1972.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 51039.9,
@@ -9104,7 +9784,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 11014.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 11014.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 507.1,
@@ -9132,8 +9816,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 7273.1, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 21030.6, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 7273.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 21030.6,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -9244,8 +9936,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 32693.4, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 26750.5, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 32693.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 26750.5,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -9347,7 +10047,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 49916, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 49916,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 4186.4,
@@ -9418,7 +10122,11 @@
                   "gdp": 18641.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 12971.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 12971.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 5639.2,
@@ -9478,7 +10186,11 @@
           "gdp": 4971.6,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1629.5, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1629.5,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 34276.8,
@@ -9497,7 +10209,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 2326.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 2326.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 714.2,
@@ -9525,8 +10241,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 4249.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 4593.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 4249.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 4593.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -9637,8 +10361,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 7376, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 12515.7, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 7376,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 12515.7,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -9740,7 +10472,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 14417, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 14417,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 1301.2,
@@ -9811,7 +10547,11 @@
                   "gdp": 5660.4,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2590.3, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2590.3,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1063.2,
@@ -9871,7 +10611,11 @@
           "gdp": 4201.1,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 2273.4, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 2273.4,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 16165.3,
@@ -9890,7 +10634,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5976.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5976.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 495.1,
@@ -9918,8 +10666,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 6912.2, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 17894.1, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 6912.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 17894.1,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -10030,8 +10786,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 27698.9, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 27215.7, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 27698.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 27215.7,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -10208,7 +10972,11 @@
                   "gdp": 13695.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 13893.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 13893.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3621.7,
@@ -10268,7 +11036,11 @@
           "gdp": 9126.7,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 2923.8, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 2923.8,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 29710.3,
@@ -10287,7 +11059,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 2192.3, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 2192.3,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 373.4,
@@ -10315,8 +11091,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1299.4, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 4182.6, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1299.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 4182.6,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -10427,12 +11211,24 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 3695.2, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 4925, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 3695.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 4925,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
-            { "gdpCategory": "Air transportation", "gdp": 241, "children": [] },
+            {
+              "gdpCategory": "Air transportation",
+              "gdp": 241,
+              "children": []
+            },
             {
               "gdpCategory": "Rail transportation",
               "gdp": 1219.2,
@@ -10526,7 +11322,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 8230.7, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 8230.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 740.6,
@@ -10597,7 +11397,11 @@
                   "gdp": 2492.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2921.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2921.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 549,
@@ -10657,7 +11461,11 @@
           "gdp": 1964.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 615.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 615.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 6081.3,
@@ -10676,7 +11484,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 9054.7, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 9054.7,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 439.3,
@@ -10704,8 +11516,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 4575.2, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 7223.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 4575.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 7223.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -10816,8 +11636,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 9971.1, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 8597.3, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 9971.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 8597.3,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -10994,7 +11822,11 @@
                   "gdp": 5511.2,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3669.5, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3669.5,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1494.5,
@@ -11054,7 +11886,11 @@
           "gdp": 2173.2,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1218.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1218.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 14843.3,
@@ -11073,7 +11909,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 177.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 177.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 87.1,
@@ -11101,8 +11941,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 3518.8, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 17894.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 3518.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 17894.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -11213,8 +12061,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 9441.4, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 16527.8, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 9441.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 16527.8,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -11316,7 +12172,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 28328, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 28328,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 3623.2,
@@ -11387,7 +12247,11 @@
                   "gdp": 7577.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3911.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3911.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 873.5,
@@ -11447,7 +12311,11 @@
           "gdp": 3292.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 2022.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 2022.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 16213.9,
@@ -11466,7 +12334,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 55, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 55,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 130,
@@ -11494,8 +12366,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1645.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 3354.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1645.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 3354.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -11606,8 +12486,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 7766.5, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 8446, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 7766.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 8446,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -11784,7 +12672,11 @@
                   "gdp": 4586.1,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3109.3, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3109.3,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 896.4,
@@ -11844,7 +12736,11 @@
           "gdp": 1761.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1000.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1000.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 7187,
@@ -11863,7 +12759,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 990.5, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 990.5,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 365.7,
@@ -11891,8 +12791,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 12161.4, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 24997.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 12161.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 24997.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -12003,8 +12911,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 64505.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 47174.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 64505.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 47174.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -12181,7 +13097,11 @@
                   "gdp": 30279.5,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 18456.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 18456.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 5861,
@@ -12241,7 +13161,11 @@
           "gdp": 8698,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 3573.9, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 3573.9,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 58746.9,
@@ -12260,7 +13184,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1721.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1721.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 198.6,
@@ -12288,8 +13216,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 2032.3, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 4888.1, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 2032.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 4888.1,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -12400,8 +13336,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 3894.7, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 7405.5, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 3894.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 7405.5,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -12503,7 +13447,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 12940, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 12940,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 1186.9,
@@ -12574,7 +13522,11 @@
                   "gdp": 3952.9,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2913.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2913.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 707.7,
@@ -12634,7 +13586,11 @@
           "gdp": 9017.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 4662.3, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 4662.3,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 14322.2,
@@ -12653,7 +13609,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 4623.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 4623.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 570.4,
@@ -12681,8 +13641,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 31438.5, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 59162.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 31438.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 59162.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -12793,8 +13761,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 84111.2, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 99316.6, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 84111.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 99316.6,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -12896,7 +13872,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 266482, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 266482,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 21161.4,
@@ -12967,7 +13947,11 @@
                   "gdp": 61621.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 50946, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 50946,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 15044.9,
@@ -13027,7 +14011,11 @@
           "gdp": 22736.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 5652.8, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 5652.8,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 169882.7,
@@ -13046,7 +14034,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 5640.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 5640.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 1029.4,
@@ -13074,8 +14066,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 13633.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 32807.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 13633.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 32807.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -13186,8 +14186,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 44224.6, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 46198.9, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 44224.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 46198.9,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -13364,7 +14372,11 @@
                   "gdp": 24354,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 14248.4, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 14248.4,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 4534.4,
@@ -13424,7 +14436,11 @@
           "gdp": 13366.9,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 13214.9, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 13214.9,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 60035.5,
@@ -13443,7 +14459,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 6367.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 6367.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 254.5,
@@ -13471,8 +14491,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1674.8, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 3285, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1674.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 3285,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -13583,8 +14611,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 5179, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 3936.1, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 5179,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 3936.1,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -13686,7 +14722,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 5149.1, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 5149.1,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 1054.2,
@@ -13757,7 +14797,11 @@
                   "gdp": 2097.5,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2267.4, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2267.4,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 666.4,
@@ -13817,7 +14861,11 @@
           "gdp": 496.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1065.9, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1065.9,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 5406.2,
@@ -13836,7 +14884,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 6289.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 6289.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 815,
@@ -13864,8 +14916,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 13879.4, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 30993.1, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 13879.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 30993.1,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -13976,8 +15036,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 52269.8, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 55295.1, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 52269.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 55295.1,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -14154,7 +15222,11 @@
                   "gdp": 29632.6,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 26137.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 26137.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 7650.4,
@@ -14214,7 +15286,11 @@
           "gdp": 14030.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 5715.9, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 5715.9,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 63537.1,
@@ -14233,7 +15309,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1712.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1712.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 329.7,
@@ -14261,8 +15341,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 5107.8, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 8674.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 5107.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 8674.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -14373,8 +15461,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 11952.7, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 16441.6, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 11952.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 16441.6,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -14551,7 +15647,11 @@
                   "gdp": 8236.2,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 5961, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 5961,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1613.1,
@@ -14587,7 +15687,11 @@
             {
               "gdpCategory": "Accommodation and food services",
               "children": [
-                { "gdpCategory": "Accommodation", "gdp": 1018, "children": [] },
+                {
+                  "gdpCategory": "Accommodation",
+                  "gdp": 1018,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Food services and drinking places",
                   "gdp": 6332.2,
@@ -14607,7 +15711,11 @@
           "gdp": 7364.8,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 3289, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 3289,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 26902,
@@ -14626,7 +15734,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 3397.2, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 3397.2,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 2131.9,
@@ -14654,8 +15766,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 4124.5, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 14796.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 4124.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 14796.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -14766,8 +15886,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 17363.8, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 18844.3, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 17363.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 18844.3,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -14944,7 +16072,11 @@
                   "gdp": 11486.8,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 7623.5, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 7623.5,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 2933.8,
@@ -15004,7 +16136,11 @@
           "gdp": 5055.1,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 746.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 746.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 31512,
@@ -15023,7 +16159,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 4673.9, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 4673.9,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 920.8,
@@ -15051,8 +16191,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 15052.9, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 34900.4, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 15052.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 34900.4,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -15163,8 +16311,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 51506.8, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 56591.9, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 51506.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 56591.9,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -15341,7 +16497,11 @@
                   "gdp": 39964,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 29456.9, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 29456.9,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 10134.1,
@@ -15401,7 +16561,11 @@
           "gdp": 17822.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 3239.7, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 3239.7,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 60525,
@@ -15420,7 +16584,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 55.6, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 55.6,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 75.2,
@@ -15448,8 +16616,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1311.5, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 2750.7, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1311.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 2750.7,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -15560,8 +16736,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 4203, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 4803.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 4203,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 4803.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -15663,7 +16847,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 9906.2, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 9906.2,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 589.5,
@@ -15734,7 +16922,11 @@
                   "gdp": 3012.2,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2442.1, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2442.1,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1000.2,
@@ -15794,7 +16986,11 @@
           "gdp": 2117,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1319.7, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1319.7,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 6072.6,
@@ -15813,7 +17009,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 778.9, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 778.9,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 583.7,
@@ -15841,8 +17041,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 7050.8, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 15497.7, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 7050.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 15497.7,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -15953,8 +17161,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 19709.4, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 23203.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 19709.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 23203.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -16131,7 +17347,11 @@
                   "gdp": 11731,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 3601.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 3601.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 2155.2,
@@ -16191,7 +17411,11 @@
           "gdp": 5671.2,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 4358.5, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 4358.5,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 31592.9,
@@ -16210,7 +17434,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 7626.1, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 7626.1,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 214.7,
@@ -16238,8 +17466,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1215.6, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 2780.8, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1215.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 2780.8,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -16350,8 +17586,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 4567, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 4995.5, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 4567,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 4995.5,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -16453,7 +17697,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 5766, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 5766,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 476.3,
@@ -16469,7 +17717,11 @@
             {
               "gdpCategory": "Professional, scientific, and technical services",
               "children": [
-                { "gdpCategory": "Legal services", "gdp": 319, "children": [] },
+                {
+                  "gdpCategory": "Legal services",
+                  "gdp": 319,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Computer systems design and related services",
                   "gdp": 517.9,
@@ -16520,7 +17772,11 @@
                   "gdp": 2373,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 2912.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 2912.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 603.2,
@@ -16556,7 +17812,11 @@
             {
               "gdpCategory": "Accommodation and food services",
               "children": [
-                { "gdpCategory": "Accommodation", "gdp": 1087, "children": [] },
+                {
+                  "gdpCategory": "Accommodation",
+                  "gdp": 1087,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Food services and drinking places",
                   "gdp": 1261.3,
@@ -16576,7 +17836,11 @@
           "gdp": 963.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 635, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 635,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 5300.5,
@@ -16595,7 +17859,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1850.6, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1850.6,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 391.7,
@@ -16623,8 +17891,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 4905.1, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 18520.2, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 4905.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 18520.2,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -16735,8 +18011,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 33078.9, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 38409.2, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 33078.9,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 38409.2,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -16913,7 +18197,11 @@
                   "gdp": 20440.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 17296, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 17296,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3298.1,
@@ -16973,7 +18261,11 @@
           "gdp": 12321.9,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1765.9, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1765.9,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 33559.6,
@@ -16992,7 +18284,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 9110.4, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 9110.4,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 2107,
@@ -17020,8 +18316,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 41395.5, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 110223.3, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 41395.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 110223.3,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -17132,8 +18436,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 184925.4, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 148017.3, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 184925.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 148017.3,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -17310,7 +18622,11 @@
                   "gdp": 75410.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 38851.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 38851.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 9430.1,
@@ -17370,7 +18686,11 @@
           "gdp": 35173.9,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 18137.3, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 18137.3,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 169094.4,
@@ -17389,7 +18709,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 1605.5, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 1605.5,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 130.1,
@@ -17417,8 +18741,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 5952.1, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 19636.2, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 5952.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 19636.2,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -17529,8 +18861,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 12229.1, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 20675.5, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 12229.1,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 20675.5,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -17707,7 +19047,11 @@
                   "gdp": 6776.8,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 4278.9, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 4278.9,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 1473.9,
@@ -17767,7 +19111,11 @@
           "gdp": 6148.4,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 1689, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 1689,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 18815.1,
@@ -17786,7 +19134,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 620.8, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 620.8,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 84.5,
@@ -17814,8 +19166,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 887.6, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 1383.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 887.6,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 1383.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -17926,8 +19286,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 2064.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 3440.5, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 2064.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 3440.5,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -17936,7 +19304,11 @@
               "gdp": 41.9,
               "children": []
             },
-            { "gdpCategory": "Rail transportation", "gdp": 23, "children": [] },
+            {
+              "gdpCategory": "Rail transportation",
+              "gdp": 23,
+              "children": []
+            },
             {
               "gdpCategory": "Water transportation",
               "gdp": 17.4,
@@ -18025,7 +19397,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 5182.6, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 5182.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 221.5,
@@ -18096,7 +19472,11 @@
                   "gdp": 1818.1,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 1541.6, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 1541.6,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 386.7,
@@ -18156,7 +19536,11 @@
           "gdp": 1182.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 191.5, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 191.5,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 4100.5,
@@ -18175,7 +19559,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 2475.6, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 2475.6,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 549.9,
@@ -18203,8 +19591,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 10140.8, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 30797.5, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 10140.8,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 30797.5,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -18315,8 +19711,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 30509.2, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 39611.1, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 30509.2,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 39611.1,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -18493,7 +19897,11 @@
                   "gdp": 22380.9,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 11408.5, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 11408.5,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 4086,
@@ -18529,7 +19937,11 @@
             {
               "gdpCategory": "Accommodation and food services",
               "children": [
-                { "gdpCategory": "Accommodation", "gdp": 3883, "children": [] },
+                {
+                  "gdpCategory": "Accommodation",
+                  "gdp": 3883,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Food services and drinking places",
                   "gdp": 14199.6,
@@ -18549,7 +19961,11 @@
           "gdp": 38958.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 20720.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 20720.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 50410.1,
@@ -18568,7 +19984,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 7156.6, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 7156.6,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 2994.3,
@@ -18596,8 +20016,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 6594.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 31903.9, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 6594.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 31903.9,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -18708,8 +20136,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 37965.5, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 49564.4, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 37965.5,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 49564.4,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -18886,7 +20322,11 @@
                   "gdp": 20048.8,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 12529.8, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 12529.8,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3581.9,
@@ -18946,7 +20386,11 @@
           "gdp": 14353.7,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 8334.2, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 8334.2,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 62048,
@@ -18965,7 +20409,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 241.1, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 241.1,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 134.9,
@@ -18993,8 +20441,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 2695.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 3502.5, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 2695.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 3502.5,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -19105,8 +20561,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 4264.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 6880.8, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 4264.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 6880.8,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -19208,7 +20672,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 8744.2, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 8744.2,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 628.2,
@@ -19279,7 +20747,11 @@
                   "gdp": 3876.7,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 4083.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 4083.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 908.4,
@@ -19339,7 +20811,11 @@
           "gdp": 4083.5,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 423, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 423,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 10155.2,
@@ -19358,7 +20834,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 7700.5, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 7700.5,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 774.2,
@@ -19386,8 +20866,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 6032.7, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 17280.5, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 6032.7,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 17280.5,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -19498,8 +20986,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 25763.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 26574.3, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 25763.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 26574.3,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -19676,7 +21172,11 @@
                   "gdp": 16379.4,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 11475.7, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 11475.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 3407.6,
@@ -19736,7 +21236,11 @@
           "gdp": 4782.3,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 962.6, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 962.6,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 34959.5,
@@ -19755,7 +21259,11 @@
         {
           "gdpCategory": "Agriculture, forestry, fishing and hunting",
           "children": [
-            { "gdpCategory": "Farms", "gdp": 900.7, "children": [] },
+            {
+              "gdpCategory": "Farms",
+              "gdp": 900.7,
+              "children": []
+            },
             {
               "gdpCategory": "Forestry, fishing, and related activities",
               "gdp": 106.4,
@@ -19783,8 +21291,16 @@
             }
           ]
         },
-        { "gdpCategory": "Utilities", "gdp": 1143.4, "children": [] },
-        { "gdpCategory": "Construction", "gdp": 2480.1, "children": [] },
+        {
+          "gdpCategory": "Utilities",
+          "gdp": 1143.4,
+          "children": []
+        },
+        {
+          "gdpCategory": "Construction",
+          "gdp": 2480.1,
+          "children": []
+        },
         {
           "gdpCategory": "Manufacturing",
           "children": [
@@ -19895,8 +21411,16 @@
             }
           ]
         },
-        { "gdpCategory": "Wholesale trade", "gdp": 1577.3, "children": [] },
-        { "gdpCategory": "Retail trade", "gdp": 2893.6, "children": [] },
+        {
+          "gdpCategory": "Wholesale trade",
+          "gdp": 1577.3,
+          "children": []
+        },
+        {
+          "gdpCategory": "Retail trade",
+          "gdp": 2893.6,
+          "children": []
+        },
         {
           "gdpCategory": "Transportation and warehousing",
           "children": [
@@ -19998,7 +21522,11 @@
             {
               "gdpCategory": "Real estate and rental and leasing",
               "children": [
-                { "gdpCategory": "Real estate", "gdp": 4410.7, "children": [] },
+                {
+                  "gdpCategory": "Real estate",
+                  "gdp": 4410.7,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Rental and leasing services and lessors of nonfinancial intangible assets",
                   "gdp": 528.4,
@@ -20069,7 +21597,11 @@
                   "gdp": 1094,
                   "children": []
                 },
-                { "gdpCategory": "Hospitals", "gdp": 350.1, "children": [] },
+                {
+                  "gdpCategory": "Hospitals",
+                  "gdp": 350.1,
+                  "children": []
+                },
                 {
                   "gdpCategory": "Nursing and residential care facilities",
                   "gdp": 215.5,
@@ -20129,7 +21661,11 @@
           "gdp": 1113.8,
           "children": []
         },
-        { "gdpCategory": "Military", "gdp": 521, "children": [] },
+        {
+          "gdpCategory": "Military",
+          "gdp": 521,
+          "children": []
+        },
         {
           "gdpCategory": "State and local government",
           "gdp": 5347.2,

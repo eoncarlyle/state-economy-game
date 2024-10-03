@@ -6,11 +6,17 @@
   "profiles": {
     "giraffe-backend": {
       "commandName": "Project",
-      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "commandLineArgs": "/Users/iain/code/state-economy-game/giraffe-backend/app.db"
+    },
+    "giraffe-backend-linux": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "commandLineArgs": "/home/iain/code/state-economy-game/giraffe-backend/app.db"
     }
   }
 }

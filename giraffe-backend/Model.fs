@@ -31,7 +31,7 @@ type State =
 
 type DtoOutStateEconomy =
     { economy: EconomyNode
-      totalGdp: int64}
+      totalGdp: int64 }
 
 type DtoOutPuzzleAnswer = { id: string; targetStateName: string }
 

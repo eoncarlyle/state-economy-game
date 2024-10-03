@@ -8,14 +8,17 @@ let toRad (num: float) = (num * Math.PI) / 180.0
 
 let haversineDistance (c0: State) (c1: State) =
     let dLat = c1.latitudeN - c0.latitudeN |> toRad
-    let dLon = (-1.0 * c1.longitudeW) - (-1.0 * c0.longitudeW)|> toRad
+    let dLon = (-1.0 * c1.longitudeW) - (-1.0 * c0.longitudeW) |> toRad
     let lat0 = toRad c0.latitudeN
     let lat1 = toRad c1.latitudeN
-     
-    let a = Math.Sin(dLat / 2.0) * Math.Sin(dLat / 2.0) + Math.Sin(dLon / 2.0) * Math.Sin(dLon / 2.0) * Math.Cos(lat0) * Math.Cos(lat1);
+
+    let a =
+        Math.Sin(dLat / 2.0) * Math.Sin(dLat / 2.0)
+        + Math.Sin(dLon / 2.0) * Math.Sin(dLon / 2.0) * Math.Cos(lat0) * Math.Cos(lat1)
+
     let c = 2.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1.0 - a))
     R_MILE * c
-    
+
 let haversineBearing (c0: State) (c1: State) =
     let phiStart = toRad c0.latitudeN
     let phiEnd = toRad c1.latitudeN
@@ -23,5 +26,11 @@ let haversineBearing (c0: State) (c1: State) =
     let lambdaEnd = toRad (-1.0 * c1.longitudeW)
 
     let y = Math.Sin(lambdaEnd - lambdaStart)
-    let x = Math.Cos(phiStart) * Math.Sin(phiEnd) - Math.Sin(phiStart) * Math.Cos(phiEnd) * Math.Cos(lambdaEnd - lambdaStart)
-    (Math.Atan2(y, x) * 180.0/Math.PI + 360.0) % 360.0 |> Math.Round |> Convert.ToInt32
+
+    let x =
+        Math.Cos(phiStart) * Math.Sin(phiEnd)
+        - Math.Sin(phiStart) * Math.Cos(phiEnd) * Math.Cos(lambdaEnd - lambdaStart)
+
+    (Math.Atan2(y, x) * 180.0 / Math.PI + 360.0) % 360.0
+    |> Math.Round
+    |> Convert.ToInt32

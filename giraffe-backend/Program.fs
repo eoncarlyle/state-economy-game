@@ -53,8 +53,6 @@ let configureLogging (builder: ILoggingBuilder) =
 
 [<EntryPoint>]
 let giraffeMain args =
-    let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot = Path.Combine(contentRoot, "WebRoot")
     let configureApp = Array.item 0 args |> configureAppFactory
 
     let builder =
@@ -63,8 +61,6 @@ let giraffeMain args =
             .ConfigureWebHostDefaults(fun webHostBuilder ->
                 webHostBuilder
                     .UseUrls("http://localhost:5000")
-                    .UseContentRoot(contentRoot)
-                    .UseWebRoot(webRoot)
                     .Configure(Action<IApplicationBuilder> configureApp)
                     .ConfigureServices(configureServices)
                     .ConfigureLogging(configureLogging)
@@ -85,7 +81,11 @@ let giraffeMain args =
         TriggerBuilder
             .Create()
             .WithIdentity("trigger0", "group0")
-            .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time")))
+            .WithSchedule(
+                CronScheduleBuilder
+                    .DailyAtHourAndMinute(0, 0)
+                    .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"))
+            )
             .ForJob(DAILY_JOB_NAME)
             .Build()
 

@@ -7,7 +7,6 @@ open Dapper
 open Microsoft.FSharp.Core
 open Dapper.FSharp.SQLite
 open Microsoft.Data.Sqlite //! Had annoying SQLite interop issues
-open Microsoft.Extensions.Logging
 
 open Quartz
 open StateEconomyGame.Model
@@ -66,7 +65,7 @@ let getOneFromQuery =
 
 let getPuzzleAnswer (dbConnection: DbConnection) =
     select {
-        for puzzleAnswer in puzzleAnswerTable do //! Ideally would use 'top' instead
+        for puzzleAnswer in puzzleAnswerTable do
             selectAll
             orderByDescending puzzleAnswer.id
     }
@@ -97,7 +96,7 @@ let getPuzzleAnswerEconomy dbConnection : Task<AppResult<DtoOutStateEconomy>> =
         let! state = getPuzzleAnswerState dbConnection
 
         return
-            match puzzleAnswer, state with // Don't love the double result here
+            match puzzleAnswer, state with
             | Ok answer, Ok state ->
                 Ok
                     { economy = state.stateEconomy
@@ -121,7 +120,7 @@ let getPuzzleSession (dbConnection: DbConnection) puzzleSessionId =
     |> getOneFromQuery
 
 
-let postPuzzleSession (dbConnection: DbConnection) = //ea18bd58-b546-4a50-a43a-7977eb30e8f0: spot the problem!
+let postPuzzleSession (dbConnection: DbConnection) =
     let guid = Guid.NewGuid().ToString()
     let now = DateTime.Now
 
@@ -130,7 +129,7 @@ let postPuzzleSession (dbConnection: DbConnection) = //ea18bd58-b546-4a50-a43a-7
 
         value
             { id = guid
-              lastRequestTimestamp = 0 //Option.None
+              lastRequestTimestamp = 0
               createdAt = now
               updatedAt = now }
     }
@@ -182,7 +181,8 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
 
         let! puzzleAnswerState = getPuzzleAnswerState dbConnection
 
-        //! 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`  2) Can be difficult to know when you're whitespacing correctly on long statements
+        // 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`
+        // 2) Can be difficult to know when you're whitespacing correctly on long statements
         let validationErrors =
             puzzleSession
             |> validationAppResultOption 404 "`puzzleSession` not found"
@@ -213,7 +213,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
 
                 update {
                     for puzzleSession in puzzleSessionTable do
-                        setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp //(Some guessSubmission.requestTimestamp)
+                        setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp
                         where (puzzleSession.id = session.id)
                 }
                 |> dbConnection.UpdateAsync
@@ -225,7 +225,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                     into guessTable
 
                     value
-                        { id = Guid.NewGuid().ToString() //Guid.NewGuid.ToString() lmao
+                        { id = Guid.NewGuid().ToString()
                           puzzleSessionId = session.id
                           stateName = guesses.name
                           createdAt = time
@@ -247,12 +247,13 @@ let deleteObsoletePuzzleSessions (dbConnection: DbConnection) =
     task {
         let obsoleteDate = DateTime.Now.Subtract(TimeSpan(0, 1, 0))
 
-        let obsoleteSessionCount = 
+        let obsoleteSessionCount =
             delete {
                 for puzzleSession in puzzleSessionTable do
                     where (puzzleSession.createdAt < obsoleteDate)
             }
             |> dbConnection.DeleteAsync
+
         Console.WriteLine($"Deleting {obsoleteSessionCount} obsolete sessions")
     }
 
@@ -280,9 +281,7 @@ let cleanPuzzleAnswers (dbConnection: DbConnection) =
         let minId = puzzleAnswers |> Seq.map _.id |> Seq.min
 
         if minId > 1 then
-            dbConnection.Execute(
-                $"UPDATE target_states SET id = id - {(minId - 1)}, updatedAt = CURRENT_TIMESTAMP"
-            )
+            dbConnection.Execute($"UPDATE target_states SET id = id - {(minId - 1)}, updatedAt = CURRENT_TIMESTAMP")
             |> ignore
     }
 
@@ -307,7 +306,7 @@ let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
             //     for puzzleAnswer in puzzleAnswerTable do
             //         set (updatePuzzleAnswer puzzleAnswer)
             //     } |> ignore
-            Console.WriteLine($"Deleting {obsoletePuzzleAnswerCount} obsolete puzzle answers") 
+            Console.WriteLine($"Deleting {obsoletePuzzleAnswerCount} obsolete puzzle answers")
 
             dbConnection.Execute(
                 $"UPDATE target_states SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = CURRENT_TIMESTAMP"
@@ -330,9 +329,9 @@ let updatePuzzleAnswer (dbConnection: DbConnection) =
             states
             |> List.filter (fun state -> List.contains state.name unselectableTargetStateNames |> not)
 
-        let newState = List.item (rnd.Next(0, selectableStates.Length)) selectableStates //Why are the parenthesis needed?
-        Console.WriteLine($"Selected {newState.name} as the next puzzle answer") 
-        
+        let newState = List.item (rnd.Next(0, selectableStates.Length)) selectableStates
+        Console.WriteLine($"Selected {newState.name} as the next puzzle answer")
+
         let now = DateTime.Now
         let! id = getPuzzleAnswerCount dbConnection |> taskMap (fun x -> x + 1)
 
@@ -357,7 +356,7 @@ type DailyJob() =
         member this.Execute context =
 
             task {
-                
+
                 let dataMap = context.JobDetail.JobDataMap
                 let dbConnection = dataMap.GetString SQLITE_DB_FILE_NAME_KEY |> sqliteConnection
                 do! cleanPuzzleAnswers dbConnection
