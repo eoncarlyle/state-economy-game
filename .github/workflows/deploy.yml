@@ -18,7 +18,7 @@ jobs:
         run: dotnet build gdple-backend -c Release
 
       - name: Remove runtime directory
-        run: sudo rm -rf /home/iain/gdple-backend
+        run: sudo rm -rf /home/iain/gdple-backend/*
 
       - name: Copying new runtime directory
         run: cp -r gdple-backend/bin/Release/net8.0/* /home/iain/gdple-backend
