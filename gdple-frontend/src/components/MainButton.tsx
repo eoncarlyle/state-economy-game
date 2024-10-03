@@ -2,8 +2,8 @@ import Button from "@mui/material/Button";
 import { StateUpdater } from "preact/hooks";
 
 import { getGuessSubmitHandler, isGameOngoing, shareableResultClickHandler } from "../util/guess";
-import { MAX_GUESSES } from "state-economy-game-util/constants";
-import { GameState } from "state-economy-game-util/model";
+import { MAX_GUESSES } from "../../lib/constants";
+import { GameState } from "../../lib/model";
 
 export default function MainButton({
   gameState,

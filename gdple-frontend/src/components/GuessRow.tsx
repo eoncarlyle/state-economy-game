@@ -1,7 +1,7 @@
 import ConfettiExplosion from "react-confetti-explosion";
 
-import { getDistanceLabel } from "state-economy-game-util/util";
-import { Guess } from "state-economy-game-util/model";
+import { getDistanceLabel } from "../../lib/util";
+import { Guess } from "../../lib/model";
 import BearingIcon from "./BearingIcon";
 
 export default function GuessRow({ guess }: { guess?: Guess }) {

@@ -1,5 +1,4 @@
-import { GuessSubmissionResponse, PuzzleAnswerResponse, IPuzzleSession, StateEconomy } from "state-economy-game-util/model";
-import { GuessSubmissionRequest } from "state-economy-game-util/model";
+import { GuessSubmissionResponse, PuzzleAnswerResponse, IPuzzleSession, StateEconomy, GuessSubmissionRequest} from "../../lib/model.ts"
 
 export function getBaseUrl() {
   return import.meta.env.VITE_API_DOMAIN;

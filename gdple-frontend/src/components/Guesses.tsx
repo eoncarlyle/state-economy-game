@@ -4,12 +4,12 @@ import TextField from "@mui/material/TextField";
 import { useMediaQuery } from "@mui/material";
 
 import GuessRow from "./GuessRow";
-import { StateRecord, GameState, Guess } from "state-economy-game-util/model";
+import { StateRecord, GameState, Guess } from "../../lib/model";
 import { getStoredGameState, guessableStateRecords, isGameOngoing } from "../util/guess";
 import TargetStateSnackbar from "./TargetStateSnackbar";
 import ShareableResultSnackbar from "./ShareableResultSnackbar";
 import MainButton from "./MainButton";
-import { MAX_GUESSES } from "state-economy-game-util/constants";
+import { MAX_GUESSES } from "../../lib/constants";
 
 export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);

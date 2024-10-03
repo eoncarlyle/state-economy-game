@@ -1,9 +1,9 @@
 import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
-import { StateRecord, GameState, PuzzleHistory, IPuzzleSession, Guess } from "state-economy-game-util/model";
-import { getUsStateRecords } from "state-economy-game-util/util";
-import { MAX_GUESSES } from "state-economy-game-util/constants";
+import { StateRecord, GameState, PuzzleHistory, IPuzzleSession, Guess } from "../../lib/model";
+import { getUsStateRecords } from "../../lib/util";
+import { MAX_GUESSES } from "../../lib/constants";
 import { postGuessSubmission, postPuzzleSession } from "./rest";
 import { useEffect } from "react";
 

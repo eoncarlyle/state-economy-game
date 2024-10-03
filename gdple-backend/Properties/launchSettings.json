@@ -9,14 +9,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "commandLineArgs": "/Users/iain/code/state-economy-game/giraffe-backend/app.db"
+      "commandLineArgs": "/Users/iain/code/state-economy-game/gdple-backend/app.db"
     },
     "giraffe-backend-linux": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "commandLineArgs": "/home/iain/code/state-economy-game/giraffe-backend/app.db"
+      "commandLineArgs": "/home/iain/code/state-economy-game/gdple-backend/app.db"
     }
   }
 }
