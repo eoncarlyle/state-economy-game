@@ -39,6 +39,10 @@ jobs:
 
       - name: Build application
         run: cd gdple-frontend && npm i && npm run prebuild
-
+    
+      - name: Cleaning hosting directory
+        run: rm -r /home/iain/gdple-frontend-dist/*
+  
       - name: Copying new runtime directory
-        run: cp -r dist /home/iain/gdple-frontend-dist
+        run: cp -r dist/* /home/iain/gdple-frontend-dist/*
+  

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "vite build",
+    "prebuild": "vite build --max-old-space=512",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
