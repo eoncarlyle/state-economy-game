@@ -1,8 +1,7 @@
-import { render } from 'preact'
+import { render } from "preact";
 
-import { App } from './app.tsx'
-import './style/app.css'
+import { App } from "./app.tsx";
+import "./style/app.css";
 
 // @ts-ignore
-render(<App />, document.getElementById('app'))
-
+render(<App />, document.getElementById("app"));

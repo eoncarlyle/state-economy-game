@@ -1,7 +1,11 @@
 import Button from "@mui/material/Button";
 import { StateUpdater } from "preact/hooks";
 
-import { getGuessSubmitHandler, isGameOngoing, shareableResultClickHandler } from "../util/guess";
+import {
+  getGuessSubmitHandler,
+  isGameOngoing,
+  shareableResultClickHandler,
+} from "../util/guess";
 import { MAX_GUESSES } from "../../lib/constants";
 import { GameState } from "../../lib/model";
 

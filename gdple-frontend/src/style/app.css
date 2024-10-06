@@ -1,5 +1,7 @@
 :root {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  --black: rgb(50, 50, 50);
+  --white: rgb(255, 255, 255);
 }
 
 .landing-copy {
@@ -10,7 +12,7 @@
 .guesses {
   flex-direction: column;
   display: flex;
-  margin: 1.5rem auto 2.5rem auto; 
+  margin: 1.5rem auto 2.5rem auto;
   align-items: center;
   justify-content: center;
   width: 20rem;
@@ -76,7 +78,7 @@
 }
 
 .distance-label {
-  width: 20%
+  width: 20%;
 }
 
 .end-guess-row-item {
@@ -103,11 +105,11 @@
 
 .tooltip-container {
   background-color: #ffffff;
-  font-family: sans-serif; 
+  font-family: sans-serif;
   font-size: 14px;
   padding: 4px;
   border: none;
-  box-shadow: 0px 0px 3px 0px #E6E6E6;
+  box-shadow: 0px 0px 3px 0px #e6e6e6;
   list-style-type: none;
   max-width: 200px;
   position: absolute;
@@ -131,3 +133,26 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+.icon-svg {
+  user-select: none;
+  width: 24px;
+  height: 24px;
+}
+
+.black-icon-background {
+  user-select: none;
+  width: 24px;
+  height: 24px;
+  background: var(--black);
+}
+
+.white-icon {
+  fill: var(--white); 
+}
+
+.black-background {
+  background-color: var(--black);
+  border: none;
+}
+

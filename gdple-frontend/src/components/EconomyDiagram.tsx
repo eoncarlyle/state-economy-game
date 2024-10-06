@@ -1,14 +1,16 @@
 import { useEffect, useState } from "preact/hooks";
-import { EconomyResponse } from "state-economy-game-util/model";
+import { StateEconomy } from "../../lib/model";
 import { getTargetStateEconomy } from "../util/rest";
 import { priceNumberFormat } from "../util/format";
 import { EconomyTreemap } from "./EconomyTreemap";
 
 export default function EconomyDiagram() {
-  const [economyResponse, setEconomyResponse] = useState<EconomyResponse | null>(null);
+  const [economyResponse, setEconomyResponse] = useState<StateEconomy | null>(
+    null,
+  );
 
   useEffect(() => {
-    getTargetStateEconomy().then((response: EconomyResponse | null) => {
+    getTargetStateEconomy().then((response: StateEconomy | null) => {
       if (response) setEconomyResponse(response);
       else {
         console.log("Failure to fetch state economy");
