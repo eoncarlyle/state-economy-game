@@ -14,8 +14,7 @@ import TargetStateSnackbar from "./TargetStateSnackbar";
 import ShareableResultSnackbar from "./ShareableResultSnackbar";
 import MainButton from "./MainButton";
 import { MAX_GUESSES } from "../../lib/constants";
-import Snackbar from "@mui/material/Snackbar";
-import BaseIcon from "./BaseIcon.tsx";
+import { Button } from "react-aria-components";
 
 export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -46,19 +45,6 @@ export default function Guesses() {
   //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={true}
-        onClick={() => {}}
-        message={`Correct answer: targetStateName`}
-        action={
-            (<button className={"black-background"} onClick={() => {}}>
-            <BaseIcon className={"black-icon-background"}>
-              <path className={"white-icon"} d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-            </BaseIcon>
-          </button>)
-        }
-      />
       <div className="guesses">
         {/* @ts-ignore */}
         {closedGuesses}

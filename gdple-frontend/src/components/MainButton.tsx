@@ -1,4 +1,4 @@
-import Button from "@mui/material/Button";
+import { Button } from "react-aria-components";
 import { StateUpdater } from "preact/hooks";
 
 import {
@@ -20,10 +20,9 @@ export default function MainButton({
   if (gameOngoing)
     return (
       <Button
-        className="guess-button"
-        variant="contained"
-        disabled={!gameOngoing}
-        onClick={getGuessSubmitHandler(MAX_GUESSES, gameState, setGameState)}
+        className="new-button new-guess-button"
+        isDisabled={!gameOngoing}
+        onPress={getGuessSubmitHandler(MAX_GUESSES, gameState, setGameState)}
       >
         Guess
       </Button>
@@ -31,7 +30,7 @@ export default function MainButton({
   else
     return (
       <Button
-        className="guess-button"
+        className="new-button new-share-button"
         variant="contained"
         color="warning"
         onClick={shareableResultClickHandler(gameState, setGameState)}

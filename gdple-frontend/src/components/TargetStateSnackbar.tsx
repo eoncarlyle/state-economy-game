@@ -1,6 +1,8 @@
 import Snackbar from "@mui/material/Snackbar";
 import { StateUpdater, useEffect, useState } from "preact/hooks";
 
+import { Modal, Dialog, Heading } from "react-aria-components";
+
 import { GameState, PuzzleAnswerResponse } from "../../lib/model";
 import { getPuzzleAnswer } from "../util/rest";
 import BaseIcon from "./BaseIcon.tsx";
@@ -33,19 +35,18 @@ export default function TargetStateSnackbar(
 
   if (targetStateName) {
     return (
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={gameState.showAnswer}
-        onClick={closeAnswerHandler}
-        message={`Correct answer: ${targetStateName}`}
-        action={
-          <button className={"black-background"} onClick={closeAnswerHandler}>
-            <BaseIcon className={"black-icon-background"}>
-              <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-            </BaseIcon>
-          </button>
-        }
-      />
+      <Modal
+        isDismissable
+        isOpen={gameState.showAnswer}
+        onOpenChange={closeAnswerHandler}
+      >
+        <Dialog>
+          <div className={"dialog"}>
+            Correct answer: {targetStateName}
+            <div className={"close-button-row"}></div>
+          </div>
+        </Dialog>
+      </Modal>
     ) as React.ReactNode;
   } else return <></>;
 }
