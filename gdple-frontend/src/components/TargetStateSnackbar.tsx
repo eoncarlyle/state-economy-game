@@ -1,7 +1,6 @@
-import Snackbar from "@mui/material/Snackbar";
 import { StateUpdater, useEffect, useState } from "preact/hooks";
 
-import { Modal, Dialog, Heading } from "react-aria-components";
+import { Modal, Dialog, Heading, Button } from "react-aria-components";
 
 import { GameState, PuzzleAnswerResponse } from "../../lib/model";
 import { getPuzzleAnswer } from "../util/rest";
@@ -42,8 +41,13 @@ export default function TargetStateSnackbar(
       >
         <Dialog>
           <div className={"dialog"}>
-            Correct answer: {targetStateName}
-            <div className={"close-button-row"}></div>
+            <h3>Correct answer: {targetStateName}</h3>
+            <Button
+              className="new-button new-close-button"
+              onPress={closeAnswerHandler}
+            >
+              Close
+            </Button>
           </div>
         </Dialog>
       </Modal>

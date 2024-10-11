@@ -4,6 +4,10 @@
     --white: rgb(255, 255, 255);
 }
 
+*:focus {
+    outline: none;
+}
+
 .landing-copy {
     margin: auto;
     max-width: 30rem;
@@ -167,16 +171,17 @@
         background-color 0.3s ease,
         transform 0.1s ease;
     width: 50%;
+    border: none;
+    outline: none;
 }
 
 .new-button:[active] {
     transform: scale(0.98);
 }
 
-.new-button[data-focused] {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
-}
+//.new-button[data-focused] {
+//    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+//}
 
 .new-guess-button {
     background-color: #007bff;
@@ -201,8 +206,6 @@
 .new-share-button:[active] {
     background-color: #c56900;
 }
-
-@import "@react-aria/example-theme";
 
 .react-aria-ModalOverlay {
     position: fixed;
@@ -231,6 +234,7 @@
     background: var(--black);
     color: var(--white);
     outline: none;
+    border: none;
     text-align: center;
     min-width: 288px;
 
@@ -274,4 +278,9 @@
 
 .dialog {
     margin: 1rem;
+    border: none;
+}
+
+.new-close-button {
+    background-color: #e63946;
 }
