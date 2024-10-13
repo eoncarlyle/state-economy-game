@@ -109,7 +109,7 @@ export function getStoredGameState(
         showAnswer:
           !puzzleHistoryEntry.isWin &&
           puzzleHistoryEntry.guesses.length >= MAX_GUESSES,
-        showShareableResultMessage: false,
+        showShareResultToast: false,
       });
     } else {
       postPuzzleSession().then((puzzleSession: IPuzzleSession | null) => {
@@ -165,7 +165,7 @@ export function shareableResultClickHandler(
         }),
       ];
       await navigator.clipboard.write(data);
-      setGameState({ ...gameState, showShareableResultMessage: true });
+      setGameState({ ...gameState, showShareResultToast: true });
     }
   };
 }

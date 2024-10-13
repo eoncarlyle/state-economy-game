@@ -1,7 +1,8 @@
-import { useState } from "preact/hooks";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import { useState, useEffect } from "preact/hooks";
+import CustomAutocomplete from "./autocomplete/CustomAutcomplete";
+
 import { useMediaQuery } from "@mui/material";
+import { ReactNode } from "preact/compat";
 
 import GuessRow from "./GuessRow";
 import { GameState, Guess, StateRecord } from "../../lib/model";
@@ -10,11 +11,11 @@ import {
   guessableStateRecords,
   isGameOngoing,
 } from "../util/guess";
-import TargetStateSnackbar from "./TargetStateSnackbar";
-import ShareableResultSnackbar from "./ShareableResultSnackbar";
+import PuzzleAnswerModal from "./PuzzleAnswerModal";
 import MainButton from "./MainButton";
 import { MAX_GUESSES } from "../../lib/constants";
-import { Button } from "react-aria-components";
+import { ToastContainer } from "react-tiny-toast";
+import ShareResultToast from "./ShareStateToast";
 
 export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -42,6 +43,18 @@ export default function Guesses() {
         },
       };
 
+  function suggest(query: string, populateResults: any) {
+    const results = gameState
+      ? guessableStateRecords(gameState).map(
+          (stateRecord: StateRecord) => stateRecord.name,
+        )
+      : [];
+    const filteredResults = results.filter(
+      (result) => result.toLowerCase().indexOf(query.toLowerCase()) !== -1,
+    );
+    populateResults(filteredResults);
+  }
+
   //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
   return (
     <>
@@ -49,6 +62,7 @@ export default function Guesses() {
         {/* @ts-ignore */}
         {closedGuesses}
         {openGuesses}
+        {/*
         <Autocomplete
           disablePortal
           value={gameState.currentGuessName}
@@ -59,18 +73,25 @@ export default function Guesses() {
           )}
           onInputChange={inputChangeHandler}
           renderInput={(params) =>
-            (<TextField {...params} label="Guess a state" />) as React.ReactNode
+            (<TextField {...params} label="Guess a state" />) as ReactNode
           }
           disabled={!isGameOngoing(gameState)}
           componentsProps={autocompoleteComponentProps}
         />
+        */}
+        <CustomAutocomplete
+          display="overview"
+          id="us-state-autocomplete"
+          source={suggest}
+          disabled={true}
+        />
         <MainButton gameState={gameState} setGameState={setGameState} />
       </div>
-      <TargetStateSnackbar gameState={gameState} setGameState={setGameState} />
-      <ShareableResultSnackbar
-        gameState={gameState}
-        setGameState={setGameState}
-      />
+      <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
+      <ToastContainer />
+      {gameState.showShareResultToast && (
+        <ShareResultToast gameState={gameState} setGameState={setGameState} />
+      )}
     </>
   );
 }

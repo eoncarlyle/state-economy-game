@@ -1,5 +1,6 @@
 import { Button } from "react-aria-components";
 import { StateUpdater } from "preact/hooks";
+import { ReactNode } from "preact/compat";
 
 import {
   getGuessSubmitHandler,
@@ -26,14 +27,14 @@ export default function MainButton({
       >
         Guess
       </Button>
-    );
+    ) as ReactNode;
   else
     return (
       <Button
         className="new-button new-share-button"
         variant="contained"
         color="warning"
-        onClick={shareableResultClickHandler(gameState, setGameState)}
+        onPress={shareableResultClickHandler(gameState, setGameState)}
       >
         Share Result
       </Button>

@@ -1,18 +1,17 @@
 import { StateUpdater, useEffect, useState } from "preact/hooks";
 
-import { Modal, Dialog, Heading, Button } from "react-aria-components";
+import { Modal, Dialog, Button } from "react-aria-components";
 
 import { GameState, PuzzleAnswerResponse } from "../../lib/model";
 import { getPuzzleAnswer } from "../util/rest";
-import BaseIcon from "./BaseIcon.tsx";
 
-type TargetStateSnackbarProps = {
+type PuzzleAnswerModalProps = {
   gameState: GameState;
   setGameState: StateUpdater<GameState | null>;
 };
 
-export default function TargetStateSnackbar(
-  props: TargetStateSnackbarProps,
+export default function PuzzleAnswerModal(
+  props: PuzzleAnswerModalProps,
 ): React.ReactNode {
   const { gameState, setGameState } = props;
   if (!gameState.showAnswer) return <></>;

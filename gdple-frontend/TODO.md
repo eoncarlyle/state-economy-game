@@ -1,3 +1,6 @@
+- Follow this toast guide https://react-spectrum.adobe.com/react-aria/useToast.html
+- Replace mui autocomplete with the UK Gov one
+- Extra swap space on the VPS?
+- Switch over to some react-spectrum components
 - Clean up the usage of z-index
-- Convert useState to signal invocation
 - Editing copy above the diagram and some background art

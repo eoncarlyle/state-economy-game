@@ -2,7 +2,6 @@ import EconomyDiagram from "./components/EconomyDiagram";
 import Guesses from "./components/Guesses";
 
 import "./style/app.css";
-import TargetStateSnackbar from "./components/TargetStateSnackbar.tsx";
 
 export function App() {
   return (

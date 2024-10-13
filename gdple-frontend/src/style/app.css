@@ -1,3 +1,5 @@
+@import url("autocomplete.css");
+
 :root {
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     --black: rgb(50, 50, 50);
@@ -179,10 +181,6 @@
     transform: scale(0.98);
 }
 
-//.new-button[data-focused] {
-//    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
-//}
-
 .new-guess-button {
     background-color: #007bff;
 }
@@ -283,4 +281,9 @@
 
 .new-close-button {
     background-color: #e63946;
+}
+
+.custom-toast {
+    background-color: var(--black);
+    color: var(--white);
 }

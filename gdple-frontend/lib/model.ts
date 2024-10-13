@@ -61,7 +61,7 @@ export interface GameState {
   currentGuessName: string | null;
   isWin: boolean;
   showAnswer: boolean;
-  showShareableResultMessage: boolean;
+  showShareResultToast: boolean;
 }
 
 export interface PuzzleHistoryEntry {
