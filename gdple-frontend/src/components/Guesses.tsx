@@ -1,8 +1,9 @@
 import { useState, useEffect } from "preact/hooks";
 
 import { ReactNode } from "preact/compat";
+import "@mantine/core/styles/global.css";
 
-import { MyComboBox, MyItem } from "./MyComboBox";
+import "@mantine/core/styles/Combobox.css";
 import GuessRow from "./GuessRow";
 import { GameState, Guess, StateRecord } from "../../lib/model";
 import {
@@ -15,6 +16,7 @@ import MainButton from "./MainButton";
 import { MAX_GUESSES } from "../../lib/constants";
 import { ToastContainer } from "react-tiny-toast";
 import ShareResultToast from "./ShareStateToast";
+import { Autocomplete } from "@mantine/core";
 
 export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -70,9 +72,11 @@ export default function Guesses() {
           componentsProps={autocompoleteComponentProps}
         />
         */}
-        <MyComboBox label="Ice cream flavor">
-          <MyItem> a </MyItem>
-        </MyComboBox>
+        <Autocomplete
+          label="Your favorite library"
+          placeholder="Pick value or enter anything"
+          data={["React", "Angular", "Vue", "Svelte"]}
+        />
         <MainButton gameState={gameState} setGameState={setGameState} />
       </div>
       <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
