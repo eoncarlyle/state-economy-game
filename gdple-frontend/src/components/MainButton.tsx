@@ -32,7 +32,6 @@ export default function MainButton({
     return (
       <Button
         className="new-button new-share-button"
-        variant="contained"
         color="warning"
         onPress={shareableResultClickHandler(gameState, setGameState)}
       >

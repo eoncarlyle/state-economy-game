@@ -10,16 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^7.13.2",
     "@mui/material": "^5.15.1",
     "@mui/x-charts": "^6.18.7",
     "@types/haversine": "^1.1.8",
     "@types/react": "^18.2.47",
-    "accessible-autocomplete": "^3.0.1",
     "d3": "^7.8.5",
     "luxon": "^3.4.4",
     "preact": "^10.16.0",
+    "react": "^18.3.1",
     "react-aria-components": "^1.4.0",
     "react-confetti-explosion": "^2.1.2",
+    "react-dom": "^18.3.1",
     "react-tiny-toast": "^2.1.2",
     "shadcn": "^2.1.0"
   },

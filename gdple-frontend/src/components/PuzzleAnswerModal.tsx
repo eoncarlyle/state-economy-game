@@ -5,6 +5,7 @@ import { Modal, Dialog, Button } from "react-aria-components";
 import { GameState, PuzzleAnswerResponse } from "../../lib/model";
 import { getPuzzleAnswer } from "../util/rest";
 
+// TODO extract this out to dedicated type
 type PuzzleAnswerModalProps = {
   gameState: GameState;
   setGameState: StateUpdater<GameState | null>;
