@@ -1,5 +1,5 @@
-- Replace mui autocomplete with this one https://github.com/denis-taran/autocomplete/tree/master
-- Extra swap space on the VPS?
-- Switch over to some react-spectrum components
-- Clean up the usage of z-index
+- Clean up CSS
+  - Now that we're not doing state distance this needs to be removed, flexbox moved around
+  - Guess button is also broken
+- Remove distance from backend responses
 - Editing copy above the diagram and some background art

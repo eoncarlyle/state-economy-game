@@ -1,9 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 
 import { ReactNode } from "preact/compat";
-import "@mantine/core/styles/global.css";
-
-import "@mantine/core/styles/Combobox.css";
 import GuessRow from "./GuessRow";
 import { GameState, Guess, StateRecord } from "../../lib/model";
 import {
@@ -32,22 +29,11 @@ export default function Guesses() {
     .fill(undefined)
     .map(() => <GuessRow />);
 
-  const inputChangeHandler = (_event: any, newInputValue: string | null) => {
+  const inputChangeHandler = (newInputValue: string | null) => {
     setGameState({ ...gameState, currentGuessName: newInputValue });
   };
 
-  // function suggest(query: string, populateResults: any) {
-  //   const results = gameState
-  //     ? guessableStateRecords(gameState).map(
-  //         (stateRecord: StateRecord) => stateRecord.name,
-  //       )
-  //     : [];
-  //   const filteredResults = results.filter(
-  //     (result) => result.toLowerCase().indexOf(query.toLowerCase()) !== -1,
-  //   );
-  //   populateResults(filteredResults);
-  // }
-
+  console.log(gameState.currentGuessName);
   //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
   return (
     <>
@@ -55,29 +41,24 @@ export default function Guesses() {
         {/* @ts-ignore */}
         {closedGuesses}
         {openGuesses}
-        {/*
-        <Autocomplete
-          disablePortal
-          value={gameState.currentGuessName}
-          id="us-state-autocomplete"
-          className="us-state-autocomplete"
-          options={guessableStateRecords(gameState).map(
-            (stateRecord: StateRecord) => stateRecord.name,
-          )}
-          onInputChange={inputChangeHandler}
-          renderInput={(params) =>
-            (<TextField {...params} label="Guess a state" />) as ReactNode
-          }
-          disabled={!isGameOngoing(gameState)}
-          componentsProps={autocompoleteComponentProps}
-        />
-        */}
-        <Autocomplete
-          label="Your favorite library"
-          placeholder="Pick value or enter anything"
-          data={["React", "Angular", "Vue", "Svelte"]}
-        />
-        <MainButton gameState={gameState} setGameState={setGameState} />
+        <div className="lowerbox">
+          <Autocomplete
+            label="Guess a state"
+            data={guessableStateRecords(gameState).map(
+              (stateRecord: StateRecord) => stateRecord.name,
+            )}
+            onChange={inputChangeHandler}
+            disabled={!isGameOngoing(gameState)}
+            limit={5}
+            className="lowerbox-item"
+            value={gameState.currentGuessName ? gameState.currentGuessName : ""}
+          />
+          <MainButton
+            gameState={gameState}
+            setGameState={setGameState}
+            className="lowerbox-item"
+          />
+        </div>
       </div>
       <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
       <ToastContainer />

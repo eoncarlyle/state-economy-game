@@ -24,9 +24,9 @@ export default function GuessRow({ guess }: { guess?: Guess }) {
           <div className="state-name end-guess-row-item">
             {guess.stateRecord.name}
           </div>
-          <div className="distance-label">
+          {/*<div className="distance-label">
             {getDistanceLabel(guess.distance)}
-          </div>
+          </div> */}
           <div className="end-guess-row-item"> {guess.percentileScore}%</div>
           <div className="end-guess-row-item">
             <BearingIcon bearing={guess.bearing} />
