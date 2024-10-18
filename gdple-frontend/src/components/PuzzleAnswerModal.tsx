@@ -43,7 +43,7 @@ export default function PuzzleAnswerModal(
           <div className={"dialog"}>
             <h3>Correct answer: {targetStateName}</h3>
             <Button
-              className="new-button new-close-button"
+              className="button close-button"
               onPress={closeAnswerHandler}
             >
               Close

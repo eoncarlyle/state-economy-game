@@ -10,13 +10,14 @@
 
 .landing-copy {
     margin: auto;
+    padding: 0.5rem;
     max-width: 30rem;
 }
 
 .guesses {
     flex-direction: column;
     display: flex;
-    margin: 1.5rem auto 2.5rem auto;
+    margin: 0.5rem auto 0.5rem auto;
     align-items: center;
     justify-content: center;
     width: 20rem;
@@ -70,22 +71,20 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    max-width: 100%;
-}
-
-.guess-button {
-    width: 50%;
+    max-width: 90%;
+    margin: auto;
 }
 
 .state-name {
     width: 45%;
+    flex: 2 1 auto;
 }
 
 .distance-label {
     width: 20%;
 }
 
-.end-guess-row-item {
+.guess-row-item {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 }
@@ -160,7 +159,7 @@
     border: none;
 }
 
-.new-button {
+.button {
     color: white;
     border: none;
     padding: 10px 20px;
@@ -170,36 +169,36 @@
     transition:
         background-color 0.3s ease,
         transform 0.1s ease;
-    width: 50%;
+    width: 75%;
     border: none;
     outline: none;
 }
 
-.new-button:[active] {
+.button:[active] {
     transform: scale(0.98);
 }
 
-.new-guess-button {
+.guess-button {
     background-color: #007bff;
 }
 
-.new-guess-button[data-hovered] {
+.guess-button[data-hovered] {
     background-color: #0056b3;
 }
 
-.new-guess-button[active] {
+.guess-button[active] {
     background-color: #004085;
 }
 
-.new-share-button {
+.share-button {
     background-color: #ff8c00;
 }
 
-.new-share-button[data-hovered] {
+.share-button[data-hovered] {
     background-color: #e07a00;
 }
 
-.new-share-button:[active] {
+.share-button:[active] {
     background-color: #c56900;
 }
 
@@ -277,7 +276,7 @@
     border: none;
 }
 
-.new-close-button {
+.close-button {
     background-color: #e63946;
 }
 
@@ -294,5 +293,20 @@
 
 .lowerbox-item {
     margin-top: 1rem;
-    margin-bottom: 1rem;
+}
+
+h1 {
+    margin: 0;
+}
+
+h4 {
+    margin: 0.5rem;
+}
+
+.center-link,
+.center-link:visited {
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    color: #004085;
 }

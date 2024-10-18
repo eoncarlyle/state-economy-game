@@ -11,25 +11,24 @@ export default function GuessRow({ guess }: { guess?: Guess }) {
         <>
           <ConfettiExplosion />
           <div className="filled-guess-row guess-row animate-pop correct-guess-row">
-            <div className="state-name end-guess-row-item">
+            <div className="state-name guess-row-item">
               {guess.stateRecord.name}
             </div>
-            <div className="end-guess-row-item">🎉</div>
+            <div className="guess-row-item">🎉</div>
           </div>
         </>
       );
     else
       return (
         <div className="filled-guess-row guess-row animate-pop incorrect-guess-color">
-          <div className="state-name end-guess-row-item">
+          <div className="state-name guess-row-item">
             {guess.stateRecord.name}
           </div>
-          {/*<div className="distance-label">
-            {getDistanceLabel(guess.distance)}
-          </div> */}
-          <div className="end-guess-row-item"> {guess.percentileScore}%</div>
-          <div className="end-guess-row-item">
-            <BearingIcon bearing={guess.bearing} />
+          <div className="filled-guess-row">
+            <div className="guess-row-item"> {guess.percentileScore}%</div>
+            <div className="guess-row-item">
+              <BearingIcon bearing={guess.bearing} />
+            </div>
           </div>
         </div>
       );

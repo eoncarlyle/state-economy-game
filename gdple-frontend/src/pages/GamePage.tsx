@@ -1,3 +1,6 @@
+import EconomyDiagram from "../components/EconomyDiagram";
+import Guesses from "../components/Guesses";
+
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles/ScrollArea.css";
 import "@mantine/core/styles/UnstyledButton.css";
@@ -14,22 +17,14 @@ import "@mantine/core/styles/InlineInput.css";
 import "@mantine/core/styles/Flex.css";
 import "@mantine/core/styles/Combobox.css";
 
-import { Switch, Route } from "wouter";
-import { createTheme, MantineProvider } from "@mantine/core";
-
-import "./style/app.css";
-import GamePage from "./pages/GamePage";
-import AboutPage from "./pages/AboutPage";
-
-export function App() {
+export default function GamePage() {
   return (
-    <MantineProvider
-      theme={createTheme({ fontFamily: "Helvetica, sans-serrif" })}
-    >
-      <Switch>
-        <Route path="/about" component={AboutPage} />
-        <Route path="/" component={GamePage} />
-      </Switch>
-    </MantineProvider>
+    <>
+      <h1 className="gdple-heading">
+        GDP<span style={{ color: "#ffc107" }}>LE</span>
+      </h1>
+      <EconomyDiagram />
+      <Guesses />
+    </>
   );
 }
