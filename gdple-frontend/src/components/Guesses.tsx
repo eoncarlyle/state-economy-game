@@ -61,9 +61,6 @@ export default function Guesses() {
       {gameState.showShareResultToast && (
         <ShareResultToast gameState={gameState} setGameState={setGameState} />
       )}
-      <Link href="/about" className="center-link">
-        About this project
-      </Link>
     </>
   );
 }

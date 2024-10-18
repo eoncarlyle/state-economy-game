@@ -17,6 +17,8 @@ import "@mantine/core/styles/InlineInput.css";
 import "@mantine/core/styles/Flex.css";
 import "@mantine/core/styles/Combobox.css";
 
+import { Link } from "wouter";
+
 export default function GamePage() {
   return (
     <>
@@ -25,6 +27,9 @@ export default function GamePage() {
       </h1>
       <EconomyDiagram />
       <Guesses />
+      <Link href="/about" className="center-link">
+        How to play/about this project
+      </Link>
     </>
   );
 }
