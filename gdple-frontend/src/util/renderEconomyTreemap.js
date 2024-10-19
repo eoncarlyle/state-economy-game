@@ -15,7 +15,7 @@ export default function renderTreemap(data) {
   );
 
   const width = 500;
-  const height = 400;
+  const height = 370;
   const defaultFontSize = 10;
   const clippingCutoffWidth = 125;
   const unclippedTooltipWidth = 150;

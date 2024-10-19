@@ -45,7 +45,6 @@ type DtoInGuessSubmission =
 
 type DtoOutGuessSubmission =
     { id: string
-      distance: float
       bearing: int
       percentileScore: float }
 
@@ -58,7 +57,6 @@ type PuzzleAnswer =
 
 type PuzzleSession =
     { id: string
-      //lastRequestTimestamp: int64 option
       lastRequestTimestamp: int64
       createdAt: DateTime
       updatedAt: DateTime }

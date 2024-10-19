@@ -40,7 +40,6 @@ export function getGuessSubmitHandler(
       if (guessSubmissionResponse) {
         const submittedGuess: Guess = {
           stateRecord: guessedStateRecord,
-          distance: guessSubmissionResponse.distance,
           bearing: guessSubmissionResponse.bearing,
           percentileScore: guessSubmissionResponse.percentileScore,
         };

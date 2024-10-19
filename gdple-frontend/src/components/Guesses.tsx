@@ -1,8 +1,5 @@
 import { useState } from "preact/hooks";
 
-import { ReactNode } from "preact/compat";
-import { Link } from "wouter";
-
 import GuessRow from "./GuessRow";
 import { GameState, Guess, StateRecord } from "../../lib/model";
 import {
@@ -51,14 +48,13 @@ export default function Guesses() {
           onChange={inputChangeHandler}
           disabled={!isGameOngoing(gameState)}
           limit={5}
-          className="lowerbox-item"
           value={gameState.currentGuessName ? gameState.currentGuessName : ""}
         />
         <MainButton gameState={gameState} setGameState={setGameState} />
       </div>
       <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
       <ToastContainer />
-      {gameState.showShareResultToast && (
+      {gameState.showShareableResultMessage && (
         <ShareResultToast gameState={gameState} setGameState={setGameState} />
       )}
     </>

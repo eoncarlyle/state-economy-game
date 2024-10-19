@@ -50,7 +50,6 @@ export interface StateEconomy {
 
 export interface Guess {
   stateRecord: StateRecord;
-  distance: number;
   bearing: number;
   percentileScore: number;
 }
@@ -61,7 +60,7 @@ export interface GameState {
   currentGuessName: string | null;
   isWin: boolean;
   showAnswer: boolean;
-  showShareResultToast: boolean;
+  showShareableResultMessage: boolean;
 }
 
 export interface PuzzleHistoryEntry {
