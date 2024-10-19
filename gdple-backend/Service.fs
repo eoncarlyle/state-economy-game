@@ -236,7 +236,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
 
                 Ok
                     { id = session.id
-                      distance = distance
+                      bearing = haversineBearing guesses answer
                       percentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
             | _, _, _, Some validationError -> Error validationError
             | _ -> Error internalErrorDto
