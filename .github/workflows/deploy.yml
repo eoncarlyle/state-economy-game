@@ -28,21 +28,20 @@ jobs:
 
       - name: Restarting service
         run: sudo systemctl restart gdple-backend.service
-  
+
   deploy-frontend:
     name: Deploy frontend on new-york-0
     runs-on: self-hosted
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build application
         run: cd gdple-frontend && npm i && npm run prebuild
-    
-      - name: Cleaning hosting directory
-        run: rm -r /home/iain/gdple-frontend-dist/*
-  
+
+      - name: Remove runtime directory
+        run: rm -r /home/iain/gdple-frontend-dist
+
       - name: Copying new runtime directory
-        run: cp -r dist/* /home/iain/gdple-frontend-dist/*
-  
+        run: cp -r dist /home/iain/gdple-frontend-dist
