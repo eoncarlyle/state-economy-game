@@ -44,4 +44,4 @@ jobs:
         run: rm -r /home/iain/gdple-frontend-dist
 
       - name: Copying new runtime directory
-        run: cp -r dist /home/iain/gdple-frontend-dist
+        run: cp -r dist/* /home/iain/gdple-frontend-dist
