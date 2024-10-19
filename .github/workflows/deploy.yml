@@ -41,7 +41,7 @@ jobs:
         run: cd gdple-frontend && npm i && npm run prebuild
 
       - name: Remove runtime directory
-        run: rm -r /home/iain/gdple-frontend-dist
+        run: rm -rf /home/iain/gdple-frontend-dist
 
       - name: Recreate runtime directory
         run: mkdir /home/iain/gdple-frontend-dist
