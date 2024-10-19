@@ -41,7 +41,7 @@ jobs:
         run: npm --prefix gdple-frontend install && npm --prefix gdple-frontend run prebuild
 
       - name: Remove runtime directory
-        run: rm -rf /opt/gdple-frontend-dist
+        run: sudo rm -rf /opt/gdple-frontend-dist
 
       - name: Recreate runtime directory
         run: sudo mkdir /opt/gdple-frontend-dist
