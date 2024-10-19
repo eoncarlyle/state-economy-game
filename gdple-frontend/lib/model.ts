@@ -85,7 +85,6 @@ export interface GuessSubmissionRequest {
 
 export interface GuessSubmissionResponse {
   id: string;
-  distance: number;
   bearing: number;
   percentileScore: number;
 }

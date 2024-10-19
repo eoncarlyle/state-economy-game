@@ -6,7 +6,7 @@ import BearingIcon from "./BearingIcon";
 
 export default function GuessRow({ guess }: { guess?: Guess }) {
   if (guess) {
-    if (guess.distance === 0)
+    if (guess.percentileScore === 100)
       return (
         <>
           <ConfettiExplosion />

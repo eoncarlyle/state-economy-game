@@ -32,7 +32,6 @@ export default function Guesses() {
     setGameState({ ...gameState, currentGuessName: newInputValue });
   };
 
-  console.log(gameState.currentGuessName);
   //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
   return (
     <>

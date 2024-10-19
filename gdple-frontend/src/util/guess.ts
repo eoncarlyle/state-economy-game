@@ -48,7 +48,7 @@ export function getGuessSubmitHandler(
           guesses: gameState.guesses.concat(submittedGuess),
           currentGuessName: null,
         };
-        if (guessSubmissionResponse.distance === 0) {
+        if (guessSubmissionResponse.percentileScore === 100) {
           updatedState = {
             ...updatedState,
             isWin: true,
