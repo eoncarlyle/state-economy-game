@@ -164,7 +164,7 @@ export function shareableResultClickHandler(
         }),
       ];
       await navigator.clipboard.write(data);
-      setGameState({ ...gameState, showShareResultToast: true });
+      setGameState({ ...gameState, showShareableResultMessage: true });
     }
   };
 }
