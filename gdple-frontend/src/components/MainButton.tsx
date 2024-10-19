@@ -21,7 +21,7 @@ export default function MainButton({
   if (gameOngoing)
     return (
       <Button
-        className="new-button new-guess-button"
+        className="button guess-button lowerbox-item"
         isDisabled={!gameOngoing}
         onPress={getGuessSubmitHandler(MAX_GUESSES, gameState, setGameState)}
       >
@@ -31,7 +31,7 @@ export default function MainButton({
   else
     return (
       <Button
-        className="new-button new-share-button"
+        className="button share-button lowerbox-item"
         color="warning"
         onPress={shareableResultClickHandler(gameState, setGameState)}
       >
