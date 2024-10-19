@@ -44,7 +44,7 @@ jobs:
         run: rm -rf /opt/gdple-frontend-dist
 
       - name: Recreate runtime directory
-        run: mkdir /opt/gdple-frontend-dist
+        run: sudo mkdir /opt/gdple-frontend-dist
 
       - name: Copying new runtime directory
-        run: cp -r gdple-frontend/dist/* /opt/gdple-frontend-dist
+        run: sudo cp -r gdple-frontend/dist/* /opt/gdple-frontend-dist
