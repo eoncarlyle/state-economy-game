@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build application
-        run: cd gdple-frontend && npm i && npm run prebuild
+        run: npm --prefix gdple-frontend install && npm --prefix gdple-frontend run prebuild
 
       - name: Remove runtime directory
         run: rm -rf /home/iain/gdple-frontend-dist
@@ -47,4 +47,4 @@ jobs:
         run: mkdir /home/iain/gdple-frontend-dist
 
       - name: Copying new runtime directory
-        run: cp -r dist/* /home/iain/gdple-frontend-dist
+        run: cp -r gdple-frontend/dist/* /home/iain/gdple-frontend-dist
