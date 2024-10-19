@@ -43,5 +43,8 @@ jobs:
       - name: Remove runtime directory
         run: rm -r /home/iain/gdple-frontend-dist
 
+      - name: Recreate runtime directory
+        run: mkdir /home/iain/gdple-frontend-dist
+
       - name: Copying new runtime directory
         run: cp -r dist/* /home/iain/gdple-frontend-dist
