@@ -310,3 +310,8 @@ h4 {
     justify-content: center;
     color: #004085;
 }
+
+a,
+a:visited {
+    color: #004085;
+}

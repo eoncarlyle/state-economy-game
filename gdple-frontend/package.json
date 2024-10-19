@@ -25,6 +25,7 @@
     "@preact/preset-vite": "^2.5.0",
     "@types/luxon": "^3.4.0",
     "@types/material-ui": "^0.21.16",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "vite-bundle-visualizer": "^1.2.1"
   }
 }
