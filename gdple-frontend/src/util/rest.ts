@@ -3,8 +3,8 @@ import {
   GuessSubmissionResponse,
   IPuzzleSession,
   PuzzleAnswerResponse,
-  StateEconomy,
-} from "../../lib/model.ts";
+  StateEconomy
+} from "./model.ts";
 
 export function getBaseUrl() {
   return import.meta.env.VITE_API_DOMAIN;

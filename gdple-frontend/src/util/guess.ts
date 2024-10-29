@@ -1,17 +1,11 @@
 import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
-import {
-  GameState,
-  Guess,
-  IPuzzleSession,
-  PuzzleHistory,
-  StateRecord,
-} from "../../lib/model";
-import { getUsStateRecords } from "../../lib/util";
-import { MAX_GUESSES } from "../../lib/constants";
+import { getUsStateRecords } from "./util.ts";
+import { MAX_GUESSES } from "./constants.ts";
 import { postGuessSubmission, postPuzzleSession } from "./rest";
 import { useEffect } from "react";
+import {GameState, Guess, IPuzzleSession, PuzzleHistory, StateRecord} from "./model.ts";
 
 const GAME_HISTORY = "gameHistory";
 const GREEN_SQUARE_VALUE = 20;

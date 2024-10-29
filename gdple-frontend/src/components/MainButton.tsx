@@ -7,8 +7,9 @@ import {
   isGameOngoing,
   shareableResultClickHandler,
 } from "../util/guess";
-import { MAX_GUESSES } from "../../lib/constants";
-import { GameState } from "../../lib/model";
+import { MAX_GUESSES } from "../util/constants.ts";
+
+import {GameState} from "../util/model.ts"
 
 export default function MainButton({
   gameState,

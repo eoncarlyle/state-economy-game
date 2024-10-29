@@ -1,6 +1,7 @@
 import { useEffect, StateUpdater } from "preact/hooks";
 import { toast } from "react-tiny-toast";
-import { GameState } from "../../lib/model";
+
+import {GameState} from "../util/model.ts";
 
 export default function ShareResultToast(props: {
   gameState: GameState;

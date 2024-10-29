@@ -1,8 +1,8 @@
 import ConfettiExplosion from "react-confetti-explosion";
 
-import { getDistanceLabel } from "../../lib/util";
-import { Guess } from "../../lib/model";
 import BearingIcon from "./BearingIcon";
+import {getDistanceLabel} from "../util/format.ts";
+import {Guess} from "../util/model.ts";
 
 export default function GuessRow({ guess }: { guess?: Guess }) {
   if (guess) {

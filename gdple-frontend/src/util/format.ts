@@ -7,3 +7,7 @@ export function priceNumberFormat(argument: number) {
     return `\$${Number(argument).toFixed(1)} M`;
   }
 }
+
+export const getDistanceLabel = (distance: number) => {
+  return `${Math.round(distance)} mi`;
+};

@@ -1,4 +1,4 @@
-import { StateRecord } from "./model";
+import {StateRecord} from "../src/util/model.ts";
 
 const stateRecords: Array<StateRecord> = [
   {

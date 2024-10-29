@@ -2,8 +2,8 @@ import { StateUpdater, useEffect, useState } from "preact/hooks";
 
 import { Modal, Dialog, Button } from "react-aria-components";
 
-import { GameState, PuzzleAnswerResponse } from "../../lib/model";
 import { getPuzzleAnswer } from "../util/rest";
+import {GameState, PuzzleAnswerResponse} from "../util/model.ts";
 
 // TODO extract this out to dedicated type
 type PuzzleAnswerModalProps = {

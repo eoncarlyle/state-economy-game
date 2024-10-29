@@ -167,27 +167,28 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
             | _ -> Error internalErrorDto
     }
 
+
 let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmission) =
 
     task {
-        let! puzzleSession = getPuzzleSession dbConnection guessSubmission.id
+        let! sessionResult = getPuzzleSession dbConnection guessSubmission.id
 
-        let guessState =
+        let guessStateResult =
             StateName.create guessSubmission.guessStateName |> Result.map getState
 
         let sessionGuesses =
-            puzzleSession
+            sessionResult
             |> Result.map (fun session -> getGuesses dbConnection session.id |> taskGet)
 
-        let! puzzleAnswerState = getPuzzleAnswerState dbConnection
+        let! answerStateResult = getPuzzleAnswerState dbConnection
 
         // 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`
         // 2) Can be difficult to know when you're whitespacing correctly on long statements
-        let validationErrors =
-            puzzleSession
+        let maybeValidationErrors =
+            sessionResult
             |> validationAppResultOption 404 "`puzzleSession` not found"
             |> Option.orElseWith (fun _ ->
-                guessState
+                guessStateResult
                 |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
             |> Option.orElseWith (fun _ ->
                 validationBoolOption
@@ -204,13 +205,14 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                     (getAppErrorDto 422 "Duplicate of previous request"))
 
         return
-            match puzzleSession, guessState, puzzleAnswerState, validationErrors with
-            | Ok session, Ok guesses, Ok answer, None ->
-                let distance = haversineDistance guesses answer
+            match sessionResult, guessStateResult, answerStateResult, maybeValidationErrors with
+            | Ok session, Ok guessState, Ok answerState, None ->
+                let distance = haversineDistance guessState answerState
 
                 let maxDistance =
-                    states |> List.map (fun state -> haversineDistance guesses state) |> List.max
+                    states |> List.map (haversineDistance guessState) |> List.max
 
+                
                 update {
                     for puzzleSession in puzzleSessionTable do
                         setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp
@@ -227,17 +229,22 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                     value
                         { id = Guid.NewGuid().ToString()
                           puzzleSessionId = session.id
-                          stateName = guesses.name
+                          stateName = guessState.name
                           createdAt = time
                           updatedAt = time }
                 }
                 |> dbConnection.InsertAsync
                 |> _.Wait()
 
+                let guessStateGdp = getTotalGdp guessState |> float
+                let answerStateGdp = getTotalGdp answerState |> float
+                 
+                 
                 Ok
                     { id = session.id
-                      bearing = haversineBearing guesses answer
-                      percentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
+                      bearing = haversineBearing guessState answerState
+                      gdpPercentileScore = ((guessStateGdp - answerStateGdp) / answerStateGdp) |> Math.Round
+                      distancePercentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
             | _, _, _, Some validationError -> Error validationError
             | _ -> Error internalErrorDto
     }
@@ -298,13 +305,6 @@ let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
             |> dbConnection.DeleteAsync
             |> taskGet
             |> ignore
-            // The commented pieces aren't possible, this is a sign I don't understand something!
-            // let updatePuzzleAnswer (puzzleAnswer: PuzzleAnswer) =
-            //     {id=puzzleAnswer.id-obsoletePuzzleAnswerCount; name=puzzleAnswer.name; gdp=puzzleAnswer.gdp}
-            // update {
-            //     for puzzleAnswer in puzzleAnswerTable do
-            //         set (updatePuzzleAnswer puzzleAnswer)
-            //     } |> ignore
             Console.WriteLine($"Deleting {obsoletePuzzleAnswerCount} obsolete puzzle answers")
 
             dbConnection.Execute(
