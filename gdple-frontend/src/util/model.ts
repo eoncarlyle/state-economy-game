@@ -1,4 +1,4 @@
-import { getUsStateRecord } from "./util";
+import { getUsStateRecord } from "./util.ts";
 
 export interface Coordinates {
   latitude: number;
@@ -23,10 +23,6 @@ export class StateRecord {
   }
 }
 
-export interface StateEconomies {
-  [key: string]: NonLeafEconomyNode;
-}
-
 export interface NonLeafEconomyNode {
   gdpCategory: string;
   children: Array<NonLeafEconomyNode | LeafEconomyNode>;
@@ -37,12 +33,6 @@ export interface LeafEconomyNode {
   gdp: number;
 }
 
-export interface InternalEconomyNode {
-  gdpCategory: string;
-  gdp?: number;
-  children?: Array<InternalEconomyNode>;
-}
-
 export interface StateEconomy {
   economy: NonLeafEconomyNode;
   totalGdp: number;
@@ -51,7 +41,8 @@ export interface StateEconomy {
 export interface Guess {
   stateRecord: StateRecord;
   bearing: number;
-  percentileScore: number;
+  gdpRatio: number;
+  isWin: number;
 }
 
 export interface GameState {
@@ -86,7 +77,8 @@ export interface GuessSubmissionRequest {
 export interface GuessSubmissionResponse {
   id: string;
   bearing: number;
-  percentileScore: number;
+  gdpRatio: number;
+  isWin: boolean;
 }
 
 export interface PuzzleAnswerRequest {
@@ -96,9 +88,4 @@ export interface PuzzleAnswerRequest {
 export interface PuzzleAnswerResponse {
   id: string;
   targetStateName: string;
-}
-
-export interface UncheckedHttpErrorResponse {
-  message: string;
-  httpCode?: number;
 }

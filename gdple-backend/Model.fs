@@ -46,7 +46,8 @@ type DtoInGuessSubmission =
 type DtoOutGuessSubmission =
     { id: string
       bearing: int
-      percentileScore: float }
+      gdpRatio: float
+      isWin: bool }
 
 type PuzzleAnswer =
     { id: int

@@ -1,12 +1,17 @@
 import ConfettiExplosion from "react-confetti-explosion";
 
-import { getDistanceLabel } from "../../lib/util";
-import { Guess } from "../../lib/model";
 import BearingIcon from "./BearingIcon";
+import { Guess } from "../util/model.ts";
 
-export default function GuessRow({ guess }: { guess?: Guess }) {
+export default function GuessRow({
+  guess,
+  isDisplay,
+}: {
+  guess?: Guess;
+  isDisplay?: boolean;
+}) {
   if (guess) {
-    if (guess.percentileScore === 100)
+    if (guess.isWin)
       return (
         <>
           <ConfettiExplosion />
@@ -20,12 +25,16 @@ export default function GuessRow({ guess }: { guess?: Guess }) {
       );
     else
       return (
-        <div className="filled-guess-row guess-row animate-pop incorrect-guess-color">
+        <div
+          className={`filled-guess-row guess-row incorrect-guess-color ${!isDisplay && "animate-pop"}`}
+        >
           <div className="state-name guess-row-item">
             {guess.stateRecord.name}
           </div>
-          <div className="filled-guess-row">
-            <div className="guess-row-item"> {guess.percentileScore}%</div>
+          <div
+            className={`filled-guess-row ${!isDisplay && "filled-guess-row-animation"}`}
+          >
+            <div className="guess-row-item"> {guess.gdpRatio} x</div>
             <div className="guess-row-item">
               <BearingIcon bearing={guess.bearing} />
             </div>

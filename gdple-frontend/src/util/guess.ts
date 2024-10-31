@@ -1,17 +1,18 @@
 import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
 
+import { getUsStateRecords } from "./util.ts";
+import { MAX_GUESSES } from "./constants.ts";
+import { postGuessSubmission, postPuzzleSession } from "./rest";
+import { useEffect } from "react";
 import {
   GameState,
   Guess,
   IPuzzleSession,
   PuzzleHistory,
   StateRecord,
-} from "../../lib/model";
-import { getUsStateRecords } from "../../lib/util";
-import { MAX_GUESSES } from "../../lib/constants";
-import { postGuessSubmission, postPuzzleSession } from "./rest";
-import { useEffect } from "react";
+} from "./model.ts";
+import { getBearingEmoji } from "../components/BearingIcon.tsx";
 
 const GAME_HISTORY = "gameHistory";
 const GREEN_SQUARE_VALUE = 20;
@@ -41,14 +42,15 @@ export function getGuessSubmitHandler(
         const submittedGuess: Guess = {
           stateRecord: guessedStateRecord,
           bearing: guessSubmissionResponse.bearing,
-          percentileScore: guessSubmissionResponse.percentileScore,
+          gdpRatio: guessSubmissionResponse.gdpRatio,
+          isWin: guessSubmissionResponse.isWin,
         };
         let updatedState: GameState = {
           ...gameState,
           guesses: gameState.guesses.concat(submittedGuess),
           currentGuessName: null,
         };
-        if (guessSubmissionResponse.percentileScore === 100) {
+        if (guessSubmissionResponse.isWin) {
           updatedState = {
             ...updatedState,
             isWin: true,
@@ -129,21 +131,21 @@ export function getStoredGameState(
   }, [setGameState]);
 }
 
+function getResultRow(guess: Guess) {
+  if (guess.isWin) return "🟩🟩";
+  else {
+    if (guess.gdpRatio > 1) {
+      return "📈" + getBearingEmoji(guess.bearing);
+    } else if (guess.gdpRatio < 1) {
+      return "📉" + getBearingEmoji(guess.bearing);
+    } else {
+      return "🟰" + getBearingEmoji(guess.bearing);
+    }
+  }
+}
+
 export function getShareableResult(gameState: GameState) {
-  const emojiResult = gameState.guesses
-    .map((guess: Guess) => {
-      const greenCount = Math.floor(guess.percentileScore / GREEN_SQUARE_VALUE);
-      const yellowCount = Math.floor(
-        (guess.percentileScore - GREEN_SQUARE_VALUE * greenCount) /
-          YELLOW_SQUARE_VALUE,
-      );
-      return Array(greenCount)
-        .fill("🟩")
-        .concat(Array(yellowCount).fill("🟨"))
-        .concat(Array(MAX_GUESSES - greenCount - yellowCount).fill("⬜"))
-        .join("");
-    })
-    .join("\n");
+  const emojiResult = gameState.guesses.map(getResultRow).join("\n");
   const numericResult = gameState.isWin
     ? String(gameState.guesses.length)
     : "X";

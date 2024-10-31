@@ -1,7 +1,6 @@
 import { useState } from "preact/hooks";
 
 import GuessRow from "./GuessRow";
-import { GameState, Guess, StateRecord } from "../../lib/model";
 import {
   getStoredGameState,
   guessableStateRecords,
@@ -9,10 +8,11 @@ import {
 } from "../util/guess";
 import PuzzleAnswerModal from "./PuzzleAnswerModal";
 import MainButton from "./MainButton";
-import { MAX_GUESSES } from "../../lib/constants";
+import { MAX_GUESSES } from "../util/constants.ts";
 import { ToastContainer } from "react-tiny-toast";
 import ShareResultToast from "./ShareStateToast";
 import { Autocomplete } from "@mantine/core";
+import { GameState, Guess, StateRecord } from "../util/model.ts";
 
 export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -40,6 +40,7 @@ export default function Guesses() {
         {closedGuesses}
         {openGuesses}
         <Autocomplete
+          size={"md"}
           label="Guess a state"
           data={guessableStateRecords(gameState).map(
             (stateRecord: StateRecord) => stateRecord.name,

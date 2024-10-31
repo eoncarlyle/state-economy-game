@@ -51,6 +51,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.filled-guess-row-animation {
   animation: animate-pop 0.3s forwards;
 }
 

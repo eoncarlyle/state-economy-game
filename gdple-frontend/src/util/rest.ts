@@ -4,7 +4,7 @@ import {
   IPuzzleSession,
   PuzzleAnswerResponse,
   StateEconomy,
-} from "../../lib/model.ts";
+} from "./model.ts";
 
 export function getBaseUrl() {
   return import.meta.env.VITE_API_DOMAIN;
