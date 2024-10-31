@@ -209,10 +209,6 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
             | Ok session, Ok guessState, Ok answerState, None ->
                 let distance = haversineDistance guessState answerState
 
-                let maxDistance =
-                    states |> List.map (haversineDistance guessState) |> List.max
-
-                
                 update {
                     for puzzleSession in puzzleSessionTable do
                         setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp
@@ -239,12 +235,12 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                 let guessStateGdp = getTotalGdp guessState |> float
                 let answerStateGdp = getTotalGdp answerState |> float
                  
-                 
                 Ok
                     { id = session.id
                       bearing = haversineBearing guessState answerState
-                      gdpPercentileScore = ((guessStateGdp - answerStateGdp) / answerStateGdp) |> Math.Round
-                      distancePercentileScore = (100.0 * (1.0 - distance / maxDistance)) |> Math.Round }
+                      gdpRatio = Math.Round(answerStateGdp/guessStateGdp, 2)
+                      isWin = guessState.name = answerState.name 
+                      }
             | _, _, _, Some validationError -> Error validationError
             | _ -> Error internalErrorDto
     }

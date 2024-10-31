@@ -90,3 +90,16 @@ export default function BearingIcon({ bearing }: { bearing: number }) {
     return <SvgNorthWest />;
   else return <SvgNorth />;
 }
+
+export function getBearingEmoji( bearing: number) {
+  const cutoff = 45 / 2;
+  if (0 <= bearing && bearing < cutoff) return "⬆️";
+  else if (cutoff <= bearing && bearing < 90 - cutoff) return "↗️";
+  else if (90 - cutoff <= bearing && bearing < 90 + cutoff) return "➡️";
+  else if (90 + cutoff <= bearing && bearing < 180 - cutoff) return "↘️";
+  else if (180 - cutoff <= bearing && bearing < 180 + cutoff) return "⬇️";
+  else if (180 + cutoff <= bearing && bearing < 270 - cutoff) return "↙️";
+  else if (270 - cutoff <= bearing && bearing < 270 + cutoff) return "⬅️";
+  else if (270 + cutoff <= bearing && bearing < 360 - cutoff) return "↖️";
+  else return "⬆️";
+}

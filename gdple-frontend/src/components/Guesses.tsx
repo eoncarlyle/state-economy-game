@@ -40,7 +40,8 @@ export default function Guesses() {
         {closedGuesses}
         {openGuesses}
         <Autocomplete
-          label="Guess a state"
+          size={"md"}
+            label="Guess a state"
           data={guessableStateRecords(gameState).map(
             (stateRecord: StateRecord) => stateRecord.name,
           )}
