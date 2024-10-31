@@ -91,7 +91,7 @@ export default function BearingIcon({ bearing }: { bearing: number }) {
   else return <SvgNorth />;
 }
 
-export function getBearingEmoji( bearing: number) {
+export function getBearingEmoji(bearing: number) {
   const cutoff = 45 / 2;
   if (0 <= bearing && bearing < cutoff) return "⬆️";
   else if (cutoff <= bearing && bearing < 90 - cutoff) return "↗️";

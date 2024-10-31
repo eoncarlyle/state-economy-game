@@ -3,7 +3,7 @@ import {
   GuessSubmissionResponse,
   IPuzzleSession,
   PuzzleAnswerResponse,
-  StateEconomy
+  StateEconomy,
 } from "./model.ts";
 
 export function getBaseUrl() {

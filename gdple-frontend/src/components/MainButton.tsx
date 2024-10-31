@@ -9,7 +9,7 @@ import {
 } from "../util/guess";
 import { MAX_GUESSES } from "../util/constants.ts";
 
-import {GameState} from "../util/model.ts"
+import { GameState } from "../util/model.ts";
 
 export default function MainButton({
   gameState,

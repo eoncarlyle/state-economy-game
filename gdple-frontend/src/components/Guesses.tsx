@@ -8,11 +8,11 @@ import {
 } from "../util/guess";
 import PuzzleAnswerModal from "./PuzzleAnswerModal";
 import MainButton from "./MainButton";
-import { MAX_GUESSES } from "../util/constants.ts"
+import { MAX_GUESSES } from "../util/constants.ts";
 import { ToastContainer } from "react-tiny-toast";
 import ShareResultToast from "./ShareStateToast";
 import { Autocomplete } from "@mantine/core";
-import {GameState, Guess, StateRecord} from "../util/model.ts";
+import { GameState, Guess, StateRecord } from "../util/model.ts";
 
 export default function Guesses() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -41,7 +41,7 @@ export default function Guesses() {
         {openGuesses}
         <Autocomplete
           size={"md"}
-            label="Guess a state"
+          label="Guess a state"
           data={guessableStateRecords(gameState).map(
             (stateRecord: StateRecord) => stateRecord.name,
           )}

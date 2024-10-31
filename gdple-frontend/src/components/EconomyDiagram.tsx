@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { getTargetStateEconomy } from "../util/rest";
 import { priceNumberFormat } from "../util/format";
 import { EconomyTreemap } from "./EconomyTreemap";
-import {StateEconomy} from "../util/model.ts";
+import { StateEconomy } from "../util/model.ts";
 
 export default function EconomyDiagram() {
   const [economyResponse, setEconomyResponse] = useState<StateEconomy | null>(

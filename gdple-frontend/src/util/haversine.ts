@@ -1,6 +1,6 @@
 import { R_MILE } from "./constants";
 
-import {Coordinates} from "./model";
+import { Coordinates } from "./model";
 
 // convert to radians
 const toRad = function (num: number) {

@@ -3,7 +3,7 @@ import { StateUpdater, useEffect, useState } from "preact/hooks";
 import { Modal, Dialog, Button } from "react-aria-components";
 
 import { getPuzzleAnswer } from "../util/rest";
-import {GameState, PuzzleAnswerResponse} from "../util/model.ts";
+import { GameState, PuzzleAnswerResponse } from "../util/model.ts";
 
 // TODO extract this out to dedicated type
 type PuzzleAnswerModalProps = {
