@@ -48,6 +48,7 @@ let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
 let puzzleAnswerTable = table'<PuzzleAnswer> "target_states"
 let puzzleSessionTable = table'<PuzzleSession> "puzzle_sessions"
 let guessTable = table'<Guess> "guesses"
+let puzzleAnswerHistoryTable = table'<PuzzleAnswerHistory> "puzzle_answer_history"
 
 let getTotalGdp (economyNode: State) =
     let rec loop (economyNode: EconomyNode) =
@@ -76,11 +77,10 @@ let getPuzzleAnswer (dbConnection: DbConnection) =
         | None -> Error "Puzzle answer not found")
 
 
-let getState (stateName: StateName) = //! Type inference legitimately didn't work on this until I used the pipeline operator
+let getState (stateName: StateName) =
     states |> List.find (fun state -> state.name = StateName.toString stateName)
 
 let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
-    //! b6053e8: semi-interesting type error
     task {
         let! puzzleAnswer = getPuzzleAnswer dbConnection
 
@@ -234,13 +234,12 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
 
                 let guessStateGdp = getTotalGdp guessState |> float
                 let answerStateGdp = getTotalGdp answerState |> float
-                 
+
                 Ok
                     { id = session.id
                       bearing = haversineBearing guessState answerState
-                      gdpRatio = Math.Round(answerStateGdp/guessStateGdp, 2)
-                      isWin = guessState.name = answerState.name 
-                      }
+                      gdpRatio = Math.Round(answerStateGdp / guessStateGdp, 2)
+                      isWin = guessState.name = answerState.name }
             | _, _, _, Some validationError -> Error validationError
             | _ -> Error internalErrorDto
     }
@@ -268,6 +267,23 @@ let getPuzzleAnswerCount (dbConnection: DbConnection) =
             }
             |> dbConnection.SelectAsync<PuzzleAnswer>
             |> taskMap Seq.length
+    }
+
+let updatePuzzleAnswerHistory (dbConnection: DbConnection) =
+    task {
+        let! puzzleAnswer = getPuzzleAnswer dbConnection
+
+        puzzleAnswer
+        |> Result.map _.name
+        |> Result.iter (fun puzzleAnswer ->
+            insert {
+                into puzzleAnswerHistoryTable
+
+                value
+                    { name = puzzleAnswer
+                      puzzleDate = DateTime.Today.AddDays -1 }
+            }
+            |> dbConnection.InsertAsync |> ignore)
     }
 
 let cleanPuzzleAnswers (dbConnection: DbConnection) =
@@ -351,11 +367,9 @@ type DailyJob() =
         member this.Execute context =
 
             task {
-
                 let dataMap = context.JobDetail.JobDataMap
                 let dbConnection = dataMap.GetString SQLITE_DB_FILE_NAME_KEY |> sqliteConnection
+                do! updatePuzzleAnswerHistory dbConnection
                 do! cleanPuzzleAnswers dbConnection
-                do! deleteObsoletePuzzleSessions dbConnection
-                do! deleteObsoletePuzzleAnswers dbConnection
                 do! updatePuzzleAnswer dbConnection
             }

@@ -62,6 +62,9 @@ type PuzzleSession =
       createdAt: DateTime
       updatedAt: DateTime }
 
+type PuzzleAnswerHistory = { name: string; puzzleDate: DateTime }
+
+
 let states =
     File.ReadAllText "./states.json" |> JsonSerializer.Deserialize<State list>
 
