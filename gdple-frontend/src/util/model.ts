@@ -1,3 +1,5 @@
+import { StateUpdater, Dispatch } from "preact/hooks";
+
 import { getUsStateRecord } from "./util.ts";
 
 export interface Coordinates {
@@ -42,7 +44,7 @@ export interface Guess {
   stateRecord: StateRecord;
   bearing: number;
   gdpRatio: number;
-  isWin: number;
+  isWin: boolean;
 }
 
 export interface GameState {
@@ -88,4 +90,21 @@ export interface PuzzleAnswerRequest {
 export interface PuzzleAnswerResponse {
   id: string;
   targetStateName: string;
+}
+
+export interface GoneResponse {
+  message: string;
+  statusCode: number;
+}
+
+export interface GlobalState {
+  gameState: GameState | null;
+  setGameState: Dispatch<StateUpdater<GameState | null>>;
+  economyResponse: StateEconomy | null;
+  setEconomyResponse: Dispatch<StateUpdater<StateEconomy | null>>;
+}
+
+export interface CachedEconomy {
+  stateEconomy: StateEconomy;
+  referenceDateString: string;
 }

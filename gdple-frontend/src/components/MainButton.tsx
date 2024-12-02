@@ -1,5 +1,4 @@
 import { Button } from "react-aria-components";
-import { StateUpdater } from "preact/hooks";
 import { ReactNode } from "preact/compat";
 
 import {
@@ -8,23 +7,17 @@ import {
   shareableResultClickHandler,
 } from "../util/guess";
 import { MAX_GUESSES } from "../util/constants.ts";
+import { GlobalState } from "../util/model.ts";
 
-import { GameState } from "../util/model.ts";
-
-export default function MainButton({
-  gameState,
-  setGameState,
-}: {
-  gameState: GameState;
-  setGameState: StateUpdater<GameState | null>;
-}) {
+export default function MainButton(props: GlobalState) {
+  const { gameState, setGameState } = props;
   const gameOngoing = isGameOngoing(gameState);
   if (gameOngoing)
     return (
       <Button
         className="button guess-button lowerbox-item"
         isDisabled={!gameOngoing}
-        onPress={getGuessSubmitHandler(MAX_GUESSES, gameState, setGameState)}
+        onPress={getGuessSubmitHandler(props, MAX_GUESSES)}
       >
         Guess
       </Button>

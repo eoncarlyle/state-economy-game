@@ -1,22 +1,15 @@
-import { useState } from "preact/hooks";
-
 import GuessRow from "./GuessRow";
-import {
-  getStoredGameState,
-  guessableStateRecords,
-  isGameOngoing,
-} from "../util/guess";
+import { guessableStateRecords, isGameOngoing } from "../util/guess";
 import PuzzleAnswerModal from "./PuzzleAnswerModal";
 import MainButton from "./MainButton";
 import { MAX_GUESSES } from "../util/constants.ts";
 import { ToastContainer } from "react-tiny-toast";
-import ShareResultToast from "./ShareStateToast";
+import shareResultToast from "../util/shareStateToast.ts";
 import { Autocomplete } from "@mantine/core";
-import { GameState, Guess, StateRecord } from "../util/model.ts";
+import { Guess, StateRecord, GlobalState } from "../util/model.ts";
 
-export default function Guesses() {
-  const [gameState, setGameState] = useState<GameState | null>(null);
-  getStoredGameState(setGameState);
+export default function Guesses(props: GlobalState) {
+  const { gameState, setGameState } = props;
 
   //TODO Not proud of this Issue #22
   if (!gameState) return <></>;
@@ -33,6 +26,9 @@ export default function Guesses() {
   };
 
   //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
+
+  gameState.showShareableResultMessage &&
+    shareResultToast(gameState, setGameState);
   return (
     <>
       <div className="guesses">
@@ -50,13 +46,11 @@ export default function Guesses() {
           limit={5}
           value={gameState.currentGuessName ? gameState.currentGuessName : ""}
         />
-        <MainButton gameState={gameState} setGameState={setGameState} />
+        <MainButton {...props} />
       </div>
-      <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
+      {/* Todo: there has to be some better way to do this */}
+      <PuzzleAnswerModal {...props} />
       <ToastContainer />
-      {gameState.showShareableResultMessage && (
-        <ShareResultToast gameState={gameState} setGameState={setGameState} />
-      )}
     </>
   );
 }

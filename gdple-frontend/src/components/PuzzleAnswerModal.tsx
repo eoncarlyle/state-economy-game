@@ -1,29 +1,31 @@
-import { StateUpdater, useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 import { Modal, Dialog, Button } from "react-aria-components";
 
 import { getPuzzleAnswer } from "../util/rest";
-import { GameState, PuzzleAnswerResponse } from "../util/model.ts";
+import {
+  PuzzleAnswerResponse,
+  GoneResponse,
+  GlobalState,
+} from "../util/model.ts";
+import { resetGlobalState } from "../util/util.ts";
 
 // TODO extract this out to dedicated type
-type PuzzleAnswerModalProps = {
-  gameState: GameState;
-  setGameState: StateUpdater<GameState | null>;
-};
 
-export default function PuzzleAnswerModal(
-  props: PuzzleAnswerModalProps,
-): React.ReactNode {
+export default function PuzzleAnswerModal(props: GlobalState): React.ReactNode {
   const { gameState, setGameState } = props;
-  if (!gameState.showAnswer) return <></>;
+  if (!gameState || !gameState.showAnswer) return <></>;
   const [targetStateName, setTargetStateName] = useState<String | null>(null);
 
   //TODO: Retry logic, Issue #21
   useEffect(() => {
     getPuzzleAnswer(gameState.id).then(
-      (response: PuzzleAnswerResponse | null) => {
-        if (response) setTargetStateName(response.targetStateName);
-        else setTargetStateName(null);
+      (response: PuzzleAnswerResponse | GoneResponse | null) => {
+        if (response && "targetStateName" in response) {
+          setTargetStateName(response.targetStateName);
+        } else if (response && "statusCode" in response) {
+          resetGlobalState(props, true);
+        } else setTargetStateName(null);
       },
     );
   }, [setTargetStateName]);

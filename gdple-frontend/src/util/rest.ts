@@ -1,4 +1,5 @@
 import {
+  GoneResponse,
   GuessSubmissionRequest,
   GuessSubmissionResponse,
   IPuzzleSession,
@@ -25,12 +26,16 @@ export async function postGuessSubmission(
   guessSubmissionRequest: GuessSubmissionRequest,
 ) {
   const response = await getResponse("/guess", "POST", guessSubmissionRequest);
-  return await handleResponse<GuessSubmissionResponse>(response);
+  return await handleDaySpecificResponse<GuessSubmissionResponse, GoneResponse>(
+    response,
+  );
 }
 
 export async function getPuzzleAnswer(id: string) {
   const response = await getResponse(`/answer/${id}`, "GET");
-  return await handleResponse<PuzzleAnswerResponse>(response);
+  return await handleDaySpecificResponse<PuzzleAnswerResponse, GoneResponse>(
+    response,
+  );
 }
 
 async function handleResponse<T>(response: Response | null) {
@@ -44,6 +49,27 @@ async function handleResponse<T>(response: Response | null) {
       console.log(`Bad JSON payload recieved: ${response}`);
       return null;
     }
+  } else {
+    console.log(`Bad response recieved: ${response}`);
+    return null;
+  }
+}
+
+//TODO Roll both responses together
+async function handleDaySpecificResponse<T, E>(response: Response | null) {
+  if (!response) {
+    return response;
+  } else if (response.ok) {
+    try {
+      const responseBody: T = await response.json();
+      return responseBody;
+    } catch (e: any) {
+      console.log(`Bad JSON payload recieved: ${response}`);
+      return null;
+    }
+  } else if (response.status === 410) {
+    const goneResponse: E = await response.json();
+    return goneResponse;
   } else {
     console.log(`Bad response recieved: ${response}`);
     return null;
