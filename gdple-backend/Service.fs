@@ -283,7 +283,8 @@ let updatePuzzleAnswerHistory (dbConnection: DbConnection) =
                     { name = puzzleAnswer
                       puzzleDate = DateTime.Today.AddDays -1 }
             }
-            |> dbConnection.InsertAsync |> ignore)
+            |> dbConnection.InsertAsync
+            |> ignore)
     }
 
 let cleanPuzzleAnswers (dbConnection: DbConnection) =
@@ -317,6 +318,7 @@ let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
             |> dbConnection.DeleteAsync
             |> taskGet
             |> ignore
+
             Console.WriteLine($"Deleting {obsoletePuzzleAnswerCount} obsolete puzzle answers")
 
             dbConnection.Execute(
@@ -334,7 +336,8 @@ let updatePuzzleAnswer (dbConnection: DbConnection) =
             } // What is done below should really be done by the type mapper instead
             |> dbConnection.SelectAsync<PuzzleAnswer>
             |> taskMap (Seq.map _.name)
-            |> taskMap Seq.toList
+            |> taskMap (fun puzzleAnswers ->
+                puzzleAnswers |> Seq.rev |> Seq.truncate PUZZLE_ANSWER_RETENTION |> Seq.toList)
 
         let selectableStates =
             states
