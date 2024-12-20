@@ -345,7 +345,8 @@ let updatePuzzleAnswer (dbConnection: DbConnection) =
             } // What is done below should really be done by the type mapper instead
             |> dbConnection.SelectAsync<PuzzleAnswer>
             |> taskMap (Seq.map _.name)
-            |> taskMap Seq.toList
+            |> taskMap (fun puzzleAnswers ->
+                puzzleAnswers |> Seq.rev |> Seq.truncate PUZZLE_ANSWER_RETENTION |> Seq.toList)
 
         let selectableStates =
             states
