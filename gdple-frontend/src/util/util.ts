@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import { Dispatch, StateUpdater, useEffect } from "preact/hooks";
-
 import { getTargetStateEconomy, postPuzzleSession } from "../util/rest";
 import stateRecordList from "./UsStates.ts";
 import { MAX_GUESSES } from "./constants.ts";
@@ -62,14 +61,14 @@ export const updatePuzzleHistory = (updatedState: GameState) => {
 };
 
 export const getStoredGameState = (
-  economyResponse: StateEconomy | null,
+  stateEconomy: StateEconomy | null,
   setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   forceSessionRequery: boolean,
 ) => {
   if (!forceSessionRequery && getReferenceDateString() in getPuzzleHistory()) {
     const puzzleHistoryEntry = getPuzzleHistory()[getReferenceDateString()];
     setGlobalState({
-      economyResponse: economyResponse,
+      stateEconomy: stateEconomy,
       gameState: {
         id: puzzleHistoryEntry.id,
         guesses: puzzleHistoryEntry.guesses,
@@ -93,12 +92,11 @@ export const getStoredGameState = (
           showShareableResultMessage: false,
         };
         setGlobalState({
-          economyResponse: economyResponse,
+          stateEconomy: stateEconomy,
           gameState: gameState,
         });
         updatePuzzleHistory(gameState);
-      } else
-        setGlobalState({ economyResponse: economyResponse, gameState: null });
+      } else setGlobalState({ stateEconomy: stateEconomy, gameState: null });
     });
   }
 };
