@@ -1,11 +1,11 @@
-import { useEffect, StateUpdater, Dispatch } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect } from "preact/hooks";
 import { toast } from "react-tiny-toast";
 
 import { GameState } from "../util/model.ts";
 
 export default function shareResultToast(
   gameState: GameState | null,
-  setGameState: Dispatch<StateUpdater<GameState | null>>,
+  setGameState: (gameState: GameState | null) => void,
 ) {
   if (gameState) {
     useEffect(() => {

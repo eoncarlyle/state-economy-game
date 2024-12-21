@@ -1,8 +1,7 @@
 import { PureComponent } from "preact/compat";
 
-import renderTreemap from "../util/renderEconomyTreemap";
-
 import { NonLeafEconomyNode } from "../util/model.ts";
+import renderTreemap from "../util/renderEconomyTreemap";
 
 interface EconomyTreemapProps {
   data: NonLeafEconomyNode;

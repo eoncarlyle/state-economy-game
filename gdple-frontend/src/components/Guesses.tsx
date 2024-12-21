@@ -1,15 +1,25 @@
-import GuessRow from "./GuessRow";
-import { guessableStateRecords, isGameOngoing } from "../util/guess";
-import PuzzleAnswerModal from "./PuzzleAnswerModal";
-import MainButton from "./MainButton";
-import { MAX_GUESSES } from "../util/constants.ts";
-import { ToastContainer } from "react-tiny-toast";
-import shareResultToast from "../util/shareStateToast.ts";
 import { Autocomplete } from "@mantine/core";
-import { Guess, StateRecord, GlobalState } from "../util/model.ts";
+import { Dispatch, StateUpdater } from "preact/hooks";
+import { ToastContainer } from "react-tiny-toast";
 
-export default function Guesses(props: GlobalState) {
-  const { gameState, setGameState } = props;
+import { MAX_GUESSES } from "../util/constants.ts";
+import { guessableStateRecords, isGameOngoing } from "../util/guess";
+import { GameState, GlobalState, Guess, StateRecord } from "../util/model.ts";
+import shareResultToast from "../util/shareStateToast.ts";
+import GuessRow from "./GuessRow";
+import MainButton from "./MainButton";
+import PuzzleAnswerModal from "./PuzzleAnswerModal";
+
+export default function Guesses(props: {
+  globalState: GlobalState;
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>;
+}) {
+  const { globalState, setGlobalState } = props;
+
+  const gameState = globalState.gameState;
+
+  const setGameState = (gameState: GameState | null) =>
+    setGlobalState({ ...globalState, gameState: gameState });
 
   //TODO Not proud of this Issue #22
   if (!gameState) return <></>;

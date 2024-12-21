@@ -1,4 +1,4 @@
-import { StateUpdater, Dispatch } from "preact/hooks";
+import { Dispatch, StateUpdater } from "preact/hooks";
 
 import { getUsStateRecord } from "./util.ts";
 
@@ -94,14 +94,13 @@ export interface PuzzleAnswerResponse {
 
 export interface GoneResponse {
   message: string;
-  statusCode: number;
+  statusCode: 410;
+  type: "GoneResponse";
 }
 
 export interface GlobalState {
   gameState: GameState | null;
-  setGameState: Dispatch<StateUpdater<GameState | null>>;
   economyResponse: StateEconomy | null;
-  setEconomyResponse: Dispatch<StateUpdater<StateEconomy | null>>;
 }
 
 export interface CachedEconomy {

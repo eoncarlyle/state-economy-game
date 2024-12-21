@@ -1,6 +1,5 @@
 //TODO there is a way to define a `svg` component and define children props but I've forgotten
 // How to do this and am on a plane
-
 import BaseIcon from "./BaseIcon.tsx";
 
 export const SvgNorth = () => {

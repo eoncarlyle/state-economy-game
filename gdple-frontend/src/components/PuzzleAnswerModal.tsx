@@ -1,19 +1,26 @@
-import { useEffect, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
+import { Button, Dialog, Modal } from "react-aria-components";
 
-import { Modal, Dialog, Button } from "react-aria-components";
-
-import { getPuzzleAnswer } from "../util/rest";
 import {
-  PuzzleAnswerResponse,
-  GoneResponse,
+  GameState,
   GlobalState,
+  GoneResponse,
+  PuzzleAnswerResponse,
 } from "../util/model.ts";
-import { resetGlobalState } from "../util/util.ts";
+import { getPuzzleAnswer } from "../util/rest";
+import { isGoneResponse, resetGlobalState } from "../util/util.ts";
 
 // TODO extract this out to dedicated type
 
-export default function PuzzleAnswerModal(props: GlobalState): React.ReactNode {
-  const { gameState, setGameState } = props;
+export default function PuzzleAnswerModal(props: {
+  globalState: GlobalState;
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>;
+}): React.ReactNode {
+  const { globalState, setGlobalState } = props;
+  const gameState = globalState.gameState;
+  const setGameState = (gameState: GameState | null) =>
+    setGlobalState({ ...globalState, gameState: gameState });
+
   if (!gameState || !gameState.showAnswer) return <></>;
   const [targetStateName, setTargetStateName] = useState<String | null>(null);
 
@@ -23,8 +30,8 @@ export default function PuzzleAnswerModal(props: GlobalState): React.ReactNode {
       (response: PuzzleAnswerResponse | GoneResponse | null) => {
         if (response && "targetStateName" in response) {
           setTargetStateName(response.targetStateName);
-        } else if (response && "statusCode" in response) {
-          resetGlobalState(props, true);
+        } else if (isGoneResponse(response)) {
+          resetGlobalState(setGlobalState, true);
         } else setTargetStateName(null);
       },
     );

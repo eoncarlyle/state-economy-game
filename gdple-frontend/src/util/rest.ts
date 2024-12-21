@@ -1,4 +1,5 @@
 import {
+  GlobalState,
   GoneResponse,
   GuessSubmissionRequest,
   GuessSubmissionResponse,
@@ -26,16 +27,12 @@ export async function postGuessSubmission(
   guessSubmissionRequest: GuessSubmissionRequest,
 ) {
   const response = await getResponse("/guess", "POST", guessSubmissionRequest);
-  return await handleDaySpecificResponse<GuessSubmissionResponse, GoneResponse>(
-    response,
-  );
+  return await handleDaySpecificResponse<GuessSubmissionResponse>(response);
 }
 
 export async function getPuzzleAnswer(id: string) {
   const response = await getResponse(`/answer/${id}`, "GET");
-  return await handleDaySpecificResponse<PuzzleAnswerResponse, GoneResponse>(
-    response,
-  );
+  return await handleDaySpecificResponse<PuzzleAnswerResponse>(response);
 }
 
 async function handleResponse<T>(response: Response | null) {
@@ -50,13 +47,15 @@ async function handleResponse<T>(response: Response | null) {
       return null;
     }
   } else {
-    console.log(`Bad response recieved: ${response}`);
+    console.log(`Bad response recieved: ${JSON.stringify(response)}`);
     return null;
   }
 }
 
 //TODO Roll both responses together
-async function handleDaySpecificResponse<T, E>(response: Response | null) {
+async function handleDaySpecificResponse<T>(
+  response: Response | null,
+): Promise<T | GoneResponse | null> {
   if (!response) {
     return response;
   } else if (response.ok) {
@@ -64,14 +63,17 @@ async function handleDaySpecificResponse<T, E>(response: Response | null) {
       const responseBody: T = await response.json();
       return responseBody;
     } catch (e: any) {
-      console.log(`Bad JSON payload recieved: ${response}`);
+      console.log(`Bad JSON payload recieved: ${JSON.stringify(response)}`);
       return null;
     }
   } else if (response.status === 410) {
-    const goneResponse: E = await response.json();
-    return goneResponse;
+    return {
+      message: "Target puzzle is now gone",
+      statusCode: 410,
+      type: "GoneResponse",
+    };
   } else {
-    console.log(`Bad response recieved: ${response}`);
+    console.log(`Bad response recieved: ${JSON.stringify(response)}`);
     return null;
   }
 }

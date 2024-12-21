@@ -1,24 +1,30 @@
-import { StateUpdater, Dispatch } from "preact/hooks";
 import { DateTime } from "luxon";
+import { Dispatch, StateUpdater } from "preact/hooks";
 
+import { getBearingEmoji } from "../components/BearingIcon.tsx";
+import { MAX_GUESSES } from "./constants.ts";
+import { GameState, GlobalState, Guess, StateRecord } from "./model.ts";
+import { postGuessSubmission } from "./rest";
 import {
-  getUsStateRecords,
-  resetGlobalState,
   getReferenceDate,
+  getUsStateRecords,
+  isGoneResponse,
+  resetGlobalState,
   updatePuzzleHistory,
 } from "./util.ts";
-import { MAX_GUESSES } from "./constants.ts";
-import { postGuessSubmission } from "./rest";
-import { GameState, GlobalState, Guess, StateRecord } from "./model.ts";
-import { getBearingEmoji } from "../components/BearingIcon.tsx";
 
 export function getGuessSubmitHandler(
   globalState: GlobalState,
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   maxGuesses: number,
 ) {
   return async () => {
     //TODO: reflect on if the 'don't update anything if you hit an error' makes sense, Issue #20
-    const { gameState, setGameState } = globalState;
+
+    const gameState = globalState.gameState;
+
+    const setGameState = (gameState: GameState | null) =>
+      setGlobalState({ ...globalState, gameState: gameState });
 
     if (
       gameState &&
@@ -59,11 +65,8 @@ export function getGuessSubmitHandler(
         }
         updatePuzzleHistory(updatedState);
         setGameState(updatedState);
-      } else if (
-        guessSubmissionResponse &&
-        "statusCode" in guessSubmissionResponse
-      ) {
-        resetGlobalState(globalState, true);
+      } else if (isGoneResponse(guessSubmissionResponse)) {
+        resetGlobalState(setGlobalState, true);
       }
     }
   };
@@ -93,7 +96,7 @@ export function getShareableResult(gameState: GameState) {
 
 export function shareableResultClickHandler(
   gameState: GameState | null,
-  setGameState: Dispatch<StateUpdater<GameState | null>>,
+  setGameState: (gameState: GameState | null) => void,
 ) {
   return async () => {
     if (gameState) {

@@ -1,18 +1,18 @@
-import { useEffect, Dispatch, StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
+import { Dispatch, StateUpdater, useEffect } from "preact/hooks";
 
+import { getTargetStateEconomy, postPuzzleSession } from "../util/rest";
 import stateRecordList from "./UsStates.ts";
+import { MAX_GUESSES } from "./constants.ts";
 import {
-  GlobalState,
-  StateRecord,
-  StateEconomy,
   CachedEconomy,
   GameState,
-  PuzzleHistory,
+  GlobalState,
   IPuzzleSession,
+  PuzzleHistory,
+  StateEconomy,
+  StateRecord,
 } from "./model.ts";
-import { getTargetStateEconomy, postPuzzleSession } from "../util/rest";
-import { MAX_GUESSES } from "./constants.ts";
 
 const CACHED_ECONOMY_KEY = "puzzleStateEconomy";
 const GAME_HISTORY = "gameHistory";
@@ -62,20 +62,24 @@ export const updatePuzzleHistory = (updatedState: GameState) => {
 };
 
 export const getStoredGameState = (
-  setGameState: Dispatch<StateUpdater<GameState | null>>,
+  economyResponse: StateEconomy | null,
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   forceSessionRequery: boolean,
 ) => {
   if (!forceSessionRequery && getReferenceDateString() in getPuzzleHistory()) {
     const puzzleHistoryEntry = getPuzzleHistory()[getReferenceDateString()];
-    setGameState({
-      id: puzzleHistoryEntry.id,
-      guesses: puzzleHistoryEntry.guesses,
-      currentGuessName: null,
-      isWin: puzzleHistoryEntry.isWin,
-      showAnswer:
-        !puzzleHistoryEntry.isWin &&
-        puzzleHistoryEntry.guesses.length >= MAX_GUESSES,
-      showShareableResultMessage: false,
+    setGlobalState({
+      economyResponse: economyResponse,
+      gameState: {
+        id: puzzleHistoryEntry.id,
+        guesses: puzzleHistoryEntry.guesses,
+        currentGuessName: null,
+        isWin: puzzleHistoryEntry.isWin,
+        showAnswer:
+          !puzzleHistoryEntry.isWin &&
+          puzzleHistoryEntry.guesses.length >= MAX_GUESSES,
+        showShareableResultMessage: false,
+      },
     });
   } else {
     postPuzzleSession().then((puzzleSession: IPuzzleSession | null) => {
@@ -88,9 +92,13 @@ export const getStoredGameState = (
           showAnswer: false,
           showShareableResultMessage: false,
         };
-        setGameState(gameState);
+        setGlobalState({
+          economyResponse: economyResponse,
+          gameState: gameState,
+        });
         updatePuzzleHistory(gameState);
-      } else setGameState(null);
+      } else
+        setGlobalState({ economyResponse: economyResponse, gameState: null });
     });
   }
 };
@@ -107,12 +115,10 @@ must refactor this before merging
 */
 
 export const resetGlobalState = (
-  globalState: GlobalState,
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   forceRequery: boolean,
 ) => {
   const cachedEconomy = getCachedEconomy();
-  globalState.setEconomyResponse(null);
-  globalState.setGameState(null);
   if (
     forceRequery ||
     !cachedEconomy ||
@@ -127,15 +133,13 @@ export const resetGlobalState = (
             referenceDateString: getReferenceDateString(),
           }),
         );
-        globalState.setEconomyResponse(response);
-        getStoredGameState(globalState.setGameState, true); // *
+        getStoredGameState(response, setGlobalState, true); // *
       } else {
         console.error("Failure to fetch state economy");
       }
     });
   } else {
-    globalState.setEconomyResponse(cachedEconomy.stateEconomy);
-    getStoredGameState(globalState.setGameState, false); // *
+    getStoredGameState(cachedEconomy.stateEconomy, setGlobalState, false); // *
     // * If these are instead replaced with a call at the end of the function, we get mutliple erroneous
     // calls to `/economy`, which does make sense when you walk through it
   }
@@ -143,9 +147,14 @@ export const resetGlobalState = (
 
 export const useResetGlobalState = (
   globalState: GlobalState,
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   forceEconomyRequery: boolean,
 ) => {
   useEffect(() => {
-    resetGlobalState(globalState, forceEconomyRequery);
+    resetGlobalState(setGlobalState, forceEconomyRequery);
   }, [globalState]);
+};
+
+export const isGoneResponse = (response: any) => {
+  return response.type === "GoneResponse";
 };
