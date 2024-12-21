@@ -127,8 +127,6 @@ export const resetGlobalState = (
     });
   } else {
     getStoredGameState(cachedEconomy.stateEconomy, setGlobalState, false); // *
-    // * If these are instead replaced with a call at the end of the function, we get mutliple erroneous
-    // calls to `/economy`, which does make sense when you walk through it
   }
 };
 
