@@ -1,6 +1,5 @@
 //TODO there is a way to define a `svg` component and define children props but I've forgotten
 // How to do this and am on a plane
-
 import BaseIcon from "./BaseIcon.tsx";
 
 export const SvgNorth = () => {
@@ -45,14 +44,11 @@ export const SvgSouth = () => {
 };
 
 export const SvgSouthWest = () => {
-  //return <svg className={"icon-svg"}>
   return (
     <BaseIcon>
-      {" "}
-      <path d="M15 19v-2H8.41L20 5.41 18.59 4 7 15.59V9H5v10z"></path>{" "}
+      <path d="M15 19v-2H8.41L20 5.41 18.59 4 7 15.59V9H5v10z"></path>
     </BaseIcon>
   );
-  //</svg>
 };
 
 export const SvgWest = () => {

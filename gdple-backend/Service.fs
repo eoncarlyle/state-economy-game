@@ -34,10 +34,19 @@ let rnd = Random()
 
 let internalErrorDto = getAppErrorDto 500 "Internal server error"
 
-let validationAppResultOption failCode failMessage result =
+let getRAppError failCode failMessage result =
     match result with
     | Ok _ -> Option.None
     | Error _ -> getAppErrorDto failCode failMessage |> Some
+
+let rSessionValidaiton (rPuzzleSession: Result<PuzzleSession, string>) =
+    match rPuzzleSession with
+    | Ok session ->
+        if (session.createdAt.Date = DateTime.Now.Date) then
+            Option.None
+        else
+            getAppErrorDto 410 "Token not up-to-date" |> Some
+    | Error _ -> getAppErrorDto 404 "`puzzleSession` not found" |> Some
 
 let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
     use connection = new SqliteConnection($"Data Source={sqliteDbFileName}")
@@ -76,9 +85,11 @@ let getPuzzleAnswer (dbConnection: DbConnection) =
         | Some value -> Ok value
         | None -> Error "Puzzle answer not found")
 
-
 let getState (stateName: StateName) =
     states |> List.find (fun state -> state.name = StateName.toString stateName)
+
+let isCurrentSession (rPuzzleSession: Result<PuzzleSession, string>) =
+    Result.exists (fun session -> session.createdAt.Day = DateTime.Now.Day) rPuzzleSession
 
 let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
     task {
@@ -119,7 +130,6 @@ let getPuzzleSession (dbConnection: DbConnection) puzzleSessionId =
     |> dbConnection.SelectAsync<PuzzleSession>
     |> getOneFromQuery
 
-
 let postPuzzleSession (dbConnection: DbConnection) =
     let guid = Guid.NewGuid().ToString()
     let now = DateTime.Now
@@ -140,15 +150,15 @@ let postPuzzleSession (dbConnection: DbConnection) =
 
 let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
     task {
-        let! puzzleSession = getPuzzleSession dbConnection id
+        let! rSession = getPuzzleSession dbConnection id
 
         let sessionGuesses =
-            puzzleSession
+            rSession
             |> Result.map (fun session -> getGuesses dbConnection session.id |> _.Result)
 
-        let validationErrors =
-            puzzleSession
-            |> validationAppResultOption 404 "`puzzleSession` not found"
+        let maybeValidationErrors =
+            rSession
+            |> rSessionValidaiton
             |> Option.orElseWith (fun _ ->
                 validationBoolOption
                     (sessionGuesses
@@ -158,7 +168,7 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
         let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
 
         return
-            match puzzleSession, sessionGuesses, puzzleAnswerState, validationErrors with
+            match rSession, sessionGuesses, puzzleAnswerState, maybeValidationErrors with
             | Ok _, Ok _, Ok answer, None ->
                 Ok
                     {| id = id
@@ -167,17 +177,16 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
             | _ -> Error internalErrorDto
     }
 
-
 let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmission) =
 
     task {
-        let! sessionResult = getPuzzleSession dbConnection guessSubmission.id
+        let! rPuzzleSession = getPuzzleSession dbConnection guessSubmission.id
 
         let guessStateResult =
             StateName.create guessSubmission.guessStateName |> Result.map getState
 
         let sessionGuesses =
-            sessionResult
+            rPuzzleSession
             |> Result.map (fun session -> getGuesses dbConnection session.id |> taskGet)
 
         let! answerStateResult = getPuzzleAnswerState dbConnection
@@ -185,11 +194,11 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
         // 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`
         // 2) Can be difficult to know when you're whitespacing correctly on long statements
         let maybeValidationErrors =
-            sessionResult
-            |> validationAppResultOption 404 "`puzzleSession` not found"
+            rPuzzleSession
+            |> rSessionValidaiton
             |> Option.orElseWith (fun _ ->
                 guessStateResult
-                |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
+                |> getRAppError 422 $"State '{guessSubmission.guessStateName}' does not exist")
             |> Option.orElseWith (fun _ ->
                 validationBoolOption
                     (sessionGuesses
@@ -205,7 +214,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                     (getAppErrorDto 422 "Duplicate of previous request"))
 
         return
-            match sessionResult, guessStateResult, answerStateResult, maybeValidationErrors with
+            match rPuzzleSession, guessStateResult, answerStateResult, maybeValidationErrors with
             | Ok session, Ok guessState, Ok answerState, None ->
                 let distance = haversineDistance guessState answerState
 
