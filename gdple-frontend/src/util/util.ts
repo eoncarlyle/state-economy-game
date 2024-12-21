@@ -101,17 +101,6 @@ export const getStoredGameState = (
   }
 };
 
-/*
-
-#43: Midnight problem/chaching state economy works right now, but I am not handling the invalidation well right now (or really at all)
-I think the best way to show to the user 'yes we have invalidated, now play again' is with a loading spinner modal that deliberately
-takes like a second.
-
-Also I don't love the way things are right now - even if they technically work. A lot of the function names don't make a ton of sense,
-must refactor this before merging
-
-*/
-
 export const resetGlobalState = (
   setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   forceRequery: boolean,
