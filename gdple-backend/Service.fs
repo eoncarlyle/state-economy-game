@@ -16,6 +16,12 @@ open Giraffe.ComputationExpressions
 
 //! F# lists != .NET lists, this got me in some type trouble with 4e18b9d
 
+let rnd = Random()
+let puzzleAnswerTable = table'<PuzzleAnswer> "target_states"
+let puzzleSessionTable = table'<PuzzleSession> "puzzle_sessions"
+let guessTable = table'<Guess> "guesses"
+let puzzleAnswerHistoryTable = table'<PuzzleAnswerHistory> "puzzle_answer_history"
+
 // H/T to Michael
 let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
     task {
@@ -23,40 +29,29 @@ let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
         return fn results
     }
 
-let taskGet (task: Task<'a>) = task.Result //Why no Result.get?
+let taskGet (task: Task<'a>) : 'a = task.Result //Why no Result.get?
 
-let validationBoolOption (isValid: bool) (appErrorOnFail: AppErrorDto) =
+let validationBoolOption isValid appErrorOnFail =
     if isValid then Option.None else Some appErrorOnFail
 
-let getAppErrorDto code message : AppErrorDto = { code = code; message = message }
+let getAppErrorDto code message = { code = code; message = message }
 
-let rnd = Random()
 
 let internalErrorDto = getAppErrorDto 500 "Internal server error"
 
-let validationAppResultOption failCode failMessage result =
-    match result with
-    | Ok _ -> Option.None
-    | Error _ -> getAppErrorDto failCode failMessage |> Some
-
-let sqliteConnection (sqliteDbFileName: string) = //! Use this as parameter
+let sqliteConnection sqliteDbFileName =
     use connection = new SqliteConnection($"Data Source={sqliteDbFileName}")
     OptionTypes.register ()
     connection.Open()
     connection
 
-let puzzleAnswerTable = table'<PuzzleAnswer> "target_states"
-let puzzleSessionTable = table'<PuzzleSession> "puzzle_sessions"
-let guessTable = table'<Guess> "guesses"
-let puzzleAnswerHistoryTable = table'<PuzzleAnswerHistory> "puzzle_answer_history"
-
-let getTotalGdp (economyNode: State) =
+let getTotalGdp state =
     let rec loop (economyNode: EconomyNode) =
         match economyNode.children with
         | [] -> economyNode.gdp
         | children -> children |> List.map loop |> List.sum
 
-    Convert.ToInt64(loop economyNode.stateEconomy)
+    Convert.ToInt64(loop state.stateEconomy)
 
 let getOneFromQuery =
     taskMap (fun result ->
@@ -76,7 +71,7 @@ let getPuzzleAnswer (dbConnection: DbConnection) =
         | Some value -> Ok value
         | None -> Error "Puzzle answer not found")
 
-let tryGetState (stateName: StateName) =
+let tryGetState stateName =
     let maybeState =
         states |> List.tryFind (fun state -> state.name = StateName.toString stateName)
 
@@ -173,7 +168,6 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
             | Error validationError, _, _ -> Error validationError
             | _ -> Error internalErrorDto
     }
-
 
 let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmission) =
     task {
