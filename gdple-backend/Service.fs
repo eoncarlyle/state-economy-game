@@ -12,7 +12,7 @@ open Quartz
 open StateEconomyGame.Model
 open StateEconomyGame.Constants
 open StateEconomyGame.Util
-
+open Giraffe.ComputationExpressions
 
 //! F# lists != .NET lists, this got me in some type trouble with 4e18b9d
 
@@ -76,9 +76,13 @@ let getPuzzleAnswer (dbConnection: DbConnection) =
         | Some value -> Ok value
         | None -> Error "Puzzle answer not found")
 
+let tryGetState (stateName: StateName) =
+    let maybeState =
+        states |> List.tryFind (fun state -> state.name = StateName.toString stateName)
 
-let getState (stateName: StateName) =
-    states |> List.find (fun state -> state.name = StateName.toString stateName)
+    match maybeState with
+    | Some state -> Ok state
+    | None -> Error "$State '{stateName}' does not exist"
 
 let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
     task {
@@ -87,7 +91,7 @@ let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
         return
             puzzleAnswer
             |> Result.bind (fun a -> StateName.create a.name)
-            |> Result.map getState
+            |> Result.bind tryGetState
     }
 
 let getPuzzleAnswerEconomy dbConnection : Task<AppResult<DtoOutStateEconomy>> =
@@ -119,7 +123,6 @@ let getPuzzleSession (dbConnection: DbConnection) puzzleSessionId =
     |> dbConnection.SelectAsync<PuzzleSession>
     |> getOneFromQuery
 
-
 let postPuzzleSession (dbConnection: DbConnection) =
     let guid = Guid.NewGuid().ToString()
     let now = DateTime.Now
@@ -140,75 +143,75 @@ let postPuzzleSession (dbConnection: DbConnection) =
 
 let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
     task {
-        let! puzzleSession = getPuzzleSession dbConnection id
+        let! sessionResult = getPuzzleSession dbConnection id
 
-        let sessionGuesses =
-            puzzleSession
-            |> Result.map (fun session -> getGuesses dbConnection session.id |> _.Result)
+        let maybeSessionGuesses =
+            match sessionResult with
+            | Ok session -> getGuesses dbConnection session.id |> _.Result |> Some
+            | Error _ -> None
 
-        let validationErrors =
-            puzzleSession
-            |> validationAppResultOption 404 "`puzzleSession` not found"
-            |> Option.orElseWith (fun _ ->
-                validationBoolOption
-                    (sessionGuesses
-                     |> Result.exists (fun guesses -> Seq.length guesses >= MAX_GUESSES))
-                    (getAppErrorDto 422 $"{MAX_GUESSES} guesses must be made before answer can be requested"))
+        let validatedSessionResult =
+            sessionResult
+            |> Result.mapError (fun msg -> getAppErrorDto 404 msg)
+            |> Result.bind (fun session ->
+                match maybeSessionGuesses with
+                | Some guesses ->
+                    if (Seq.length guesses >= MAX_GUESSES) then
+                        Error(getAppErrorDto 400 $"{MAX_GUESSES} guesses must be made before answer can be requested")
+                    else
+                        Ok session
+                | None -> Ok session)
 
         let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
 
         return
-            match puzzleSession, sessionGuesses, puzzleAnswerState, validationErrors with
-            | Ok _, Ok _, Ok answer, None ->
+            match validatedSessionResult, maybeSessionGuesses, puzzleAnswerState with
+            | Ok _, Some _, Ok answer ->
                 Ok
                     {| id = id
                        targetStateName = answer.name |}
-            | _, _, _, Some validationError -> Error validationError
+            | Error validationError, _, _ -> Error validationError
             | _ -> Error internalErrorDto
     }
 
 
 let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmission) =
-
     task {
         let! sessionResult = getPuzzleSession dbConnection guessSubmission.id
 
-        let guessStateResult =
-            StateName.create guessSubmission.guessStateName |> Result.map getState
+        let maybeSessionGuesses =
+            match sessionResult with
+            | Ok session -> getGuesses dbConnection session.id |> _.Result |> Some
+            | Error _ -> None
 
-        let sessionGuesses =
+
+        //Right now I think that guessStateResult would throw if an invalid state was requested, should fix
+        let guessStateResult =
+            StateName.create guessSubmission.guessStateName |> Result.bind tryGetState
+
+        let validatedSessionResult =
             sessionResult
-            |> Result.map (fun session -> getGuesses dbConnection session.id |> taskGet)
+            |> Result.mapError (fun msg -> getAppErrorDto 404 msg)
+            |> Result.bind (fun session ->
+                match guessStateResult with
+                | Ok _ -> Ok session
+                | Error msg -> Error(getAppErrorDto 404 msg))
+            |> Result.bind (fun session ->
+                match maybeSessionGuesses with
+                | Some guesses ->
+                    if (Seq.length guesses < MAX_GUESSES) then
+                        Error(getAppErrorDto 400 "Too many requests have been made for this game")
+                    elif (guesses |> Seq.exists (fun g -> g.stateName = guessSubmission.guessStateName)) then
+                        Error(getAppErrorDto 400 "Duplicate of previous request")
+                    else
+                        Ok session
+                | None -> Ok session)
 
         let! answerStateResult = getPuzzleAnswerState dbConnection
 
-        // 1)  Understand Haskell's love of infix operators, this is getting time-consuming with these `ModuleName.function`
-        // 2) Can be difficult to know when you're whitespacing correctly on long statements
-        let maybeValidationErrors =
-            sessionResult
-            |> validationAppResultOption 404 "`puzzleSession` not found"
-            |> Option.orElseWith (fun _ ->
-                guessStateResult
-                |> validationAppResultOption 422 $"State '{guessSubmission.guessStateName}' does not exist")
-            |> Option.orElseWith (fun _ ->
-                validationBoolOption
-                    (sessionGuesses
-                     |> Result.exists (fun guesses -> Seq.length guesses < MAX_GUESSES))
-                    (getAppErrorDto 422 "Too many requests have been made for this game"))
-            |> Option.orElseWith (fun _ ->
-                validationBoolOption
-                    (sessionGuesses
-                     |> Result.exists (fun guesses ->
-                         guesses
-                         |> Seq.exists (fun guess -> guess.stateName = guessSubmission.guessStateName))
-                     |> not)
-                    (getAppErrorDto 422 "Duplicate of previous request"))
-
         return
-            match sessionResult, guessStateResult, answerStateResult, maybeValidationErrors with
-            | Ok session, Ok guessState, Ok answerState, None ->
-                let distance = haversineDistance guessState answerState
-
+            match validatedSessionResult, guessStateResult, answerStateResult with
+            | Ok session, Ok guessState, Ok answerState ->
                 update {
                     for puzzleSession in puzzleSessionTable do
                         setColumn puzzleSession.lastRequestTimestamp guessSubmission.requestTimestamp
@@ -240,22 +243,8 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                       bearing = haversineBearing guessState answerState
                       gdpRatio = Math.Round(answerStateGdp / guessStateGdp, 2)
                       isWin = guessState.name = answerState.name }
-            | _, _, _, Some validationError -> Error validationError
+            | Error validationError, _, _ -> Error validationError
             | _ -> Error internalErrorDto
-    }
-
-let deleteObsoletePuzzleSessions (dbConnection: DbConnection) =
-    task {
-        let obsoleteDate = DateTime.Now.Subtract(TimeSpan(0, 1, 0))
-
-        let obsoleteSessionCount =
-            delete {
-                for puzzleSession in puzzleSessionTable do
-                    where (puzzleSession.createdAt < obsoleteDate)
-            }
-            |> dbConnection.DeleteAsync
-
-        Console.WriteLine($"Deleting {obsoleteSessionCount} obsolete sessions")
     }
 
 let getPuzzleAnswerCount (dbConnection: DbConnection) =
@@ -301,29 +290,6 @@ let cleanPuzzleAnswers (dbConnection: DbConnection) =
 
         if minId > 1 then
             dbConnection.Execute($"UPDATE target_states SET id = id - {(minId - 1)}, updatedAt = CURRENT_TIMESTAMP")
-            |> ignore
-    }
-
-let deleteObsoletePuzzleAnswers (dbConnection: DbConnection) =
-
-    task {
-        let! puzzleAnswerCount = getPuzzleAnswerCount dbConnection
-        let obsoletePuzzleAnswerCount = puzzleAnswerCount - PUZZLE_ANSWER_RETENTION + 1
-
-        if obsoletePuzzleAnswerCount > 0 then
-            delete {
-                for puzzleAnswer in puzzleAnswerTable do
-                    where (puzzleAnswer.id <= obsoletePuzzleAnswerCount)
-            }
-            |> dbConnection.DeleteAsync
-            |> taskGet
-            |> ignore
-
-            Console.WriteLine($"Deleting {obsoletePuzzleAnswerCount} obsolete puzzle answers")
-
-            dbConnection.Execute(
-                $"UPDATE target_states SET id = id - {obsoletePuzzleAnswerCount}, updatedAt = CURRENT_TIMESTAMP"
-            )
             |> ignore
     }
 
