@@ -1,6 +1,7 @@
 import { Link } from "wouter";
+
 import GuessRow from "../components/GuessRow.tsx";
-import { StateRecord } from "../util/model.ts";
+import { Guess, StateRecord } from "../util/model.ts";
 
 export default function AboutPage() {
   const guess: Guess = {

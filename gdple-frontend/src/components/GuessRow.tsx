@@ -1,7 +1,7 @@
 import ConfettiExplosion from "react-confetti-explosion";
 
-import BearingIcon from "./BearingIcon";
 import { Guess } from "../util/model.ts";
+import BearingIcon from "./BearingIcon";
 
 export default function GuessRow({
   guess,

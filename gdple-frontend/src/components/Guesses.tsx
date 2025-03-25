@@ -1,22 +1,25 @@
-import { useState } from "preact/hooks";
-
-import GuessRow from "./GuessRow";
-import {
-  getStoredGameState,
-  guessableStateRecords,
-  isGameOngoing,
-} from "../util/guess";
-import PuzzleAnswerModal from "./PuzzleAnswerModal";
-import MainButton from "./MainButton";
-import { MAX_GUESSES } from "../util/constants.ts";
-import { ToastContainer } from "react-tiny-toast";
-import ShareResultToast from "./ShareStateToast";
 import { Autocomplete } from "@mantine/core";
-import { GameState, Guess, StateRecord } from "../util/model.ts";
+import { Dispatch, StateUpdater } from "preact/hooks";
+import { ToastContainer } from "react-tiny-toast";
 
-export default function Guesses() {
-  const [gameState, setGameState] = useState<GameState | null>(null);
-  getStoredGameState(setGameState);
+import { MAX_GUESSES } from "../util/constants.ts";
+import { guessableStateRecords, isGameOngoing } from "../util/guess";
+import { GameState, GlobalState, Guess, StateRecord } from "../util/model.ts";
+import shareResultToast from "../util/shareStateToast.ts";
+import GuessRow from "./GuessRow";
+import MainButton from "./MainButton";
+import PuzzleAnswerModal from "./PuzzleAnswerModal";
+
+export default function Guesses(props: {
+  globalState: GlobalState;
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>;
+}) {
+  const { globalState, setGlobalState } = props;
+
+  const gameState = globalState.gameState;
+
+  const setGameState = (gameState: GameState | null) =>
+    setGlobalState({ ...globalState, gameState: gameState });
 
   //TODO Not proud of this Issue #22
   if (!gameState) return <></>;
@@ -33,6 +36,9 @@ export default function Guesses() {
   };
 
   //TODO: Handling inconsistent attempts remaining between frontend, backend is undefined right now, Issue #21
+
+  gameState.showShareableResultMessage &&
+    shareResultToast(gameState, setGameState);
   return (
     <>
       <div className="guesses">
@@ -50,13 +56,11 @@ export default function Guesses() {
           limit={5}
           value={gameState.currentGuessName ? gameState.currentGuessName : ""}
         />
-        <MainButton gameState={gameState} setGameState={setGameState} />
+        <MainButton {...props} />
       </div>
-      <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
+      {/* Todo: there has to be some better way to do this */}
+      <PuzzleAnswerModal {...props} />
       <ToastContainer />
-      {gameState.showShareableResultMessage && (
-        <ShareResultToast gameState={gameState} setGameState={setGameState} />
-      )}
     </>
   );
 }

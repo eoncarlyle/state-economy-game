@@ -183,6 +183,7 @@
 
 .guess-button {
   background-color: #007bff;
+  cursor: pointer;
 }
 
 .guess-button[data-hovered] {
@@ -195,6 +196,7 @@
 
 .share-button {
   background-color: #ff8c00;
+  cursor: pointer;
 }
 
 .share-button[data-hovered] {
@@ -281,6 +283,7 @@
 
 .close-button {
   background-color: #e63946;
+  cursor: pointer;
 }
 
 .custom-toast {

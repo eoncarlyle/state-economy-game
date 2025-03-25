@@ -1,31 +1,33 @@
-import { StateUpdater } from "preact/hooks";
 import { DateTime } from "luxon";
+import { Dispatch, StateUpdater } from "preact/hooks";
 
-import { getUsStateRecords } from "./util.ts";
-import { MAX_GUESSES } from "./constants.ts";
-import { postGuessSubmission, postPuzzleSession } from "./rest";
-import { useEffect } from "react";
-import {
-  GameState,
-  Guess,
-  IPuzzleSession,
-  PuzzleHistory,
-  StateRecord,
-} from "./model.ts";
 import { getBearingEmoji } from "../components/BearingIcon.tsx";
-
-const GAME_HISTORY = "gameHistory";
-const GREEN_SQUARE_VALUE = 20;
-const YELLOW_SQUARE_VALUE = 10;
+import { MAX_GUESSES } from "./constants.ts";
+import { GameState, GlobalState, Guess, StateRecord } from "./model.ts";
+import { postGuessSubmission } from "./rest";
+import {
+  getReferenceDate,
+  getUsStateRecords,
+  isGoneResponse,
+  resetGlobalState,
+  updatePuzzleHistory,
+} from "./util.ts";
 
 export function getGuessSubmitHandler(
+  globalState: GlobalState,
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>,
   maxGuesses: number,
-  gameState: GameState,
-  setGameState: StateUpdater<GameState | null>,
 ) {
   return async () => {
     //TODO: reflect on if the 'don't update anything if you hit an error' makes sense, Issue #20
+
+    const gameState = globalState.gameState;
+
+    const setGameState = (gameState: GameState | null) =>
+      setGlobalState({ ...globalState, gameState: gameState });
+
     if (
+      gameState &&
       gameState.currentGuessName &&
       guessableStateRecords(gameState).includes(
         StateRecord.of(gameState.currentGuessName),
@@ -38,7 +40,7 @@ export function getGuessSubmitHandler(
         requestTimestamp: Date.now(),
       });
 
-      if (guessSubmissionResponse) {
+      if (guessSubmissionResponse && "id" in guessSubmissionResponse) {
         const submittedGuess: Guess = {
           stateRecord: guessedStateRecord,
           bearing: guessSubmissionResponse.bearing,
@@ -63,76 +65,15 @@ export function getGuessSubmitHandler(
         }
         updatePuzzleHistory(updatedState);
         setGameState(updatedState);
+      } else if (isGoneResponse(guessSubmissionResponse)) {
+        resetGlobalState(setGlobalState, true);
       }
     }
   };
 }
 
-function getReferenceDate() {
-  return DateTime.now().setZone("America/Chicago");
-}
-
-function getReferenceDateString() {
-  return getReferenceDate().toFormat("yyyy-MM-dd");
-}
-
-function getPuzzleHistory(): PuzzleHistory {
-  const gameHistory = localStorage.getItem(GAME_HISTORY);
-  if (gameHistory) {
-    return JSON.parse(gameHistory);
-  } else return {};
-}
-
-//? Will strange things happen when players start a game on one reference...
-//? ...day and pick it up on the next reference day?
-export function updatePuzzleHistory(updatedState: GameState) {
-  const gameHistory = getPuzzleHistory();
-
-  gameHistory[getReferenceDateString()] = {
-    id: updatedState.id,
-    guesses: updatedState.guesses,
-    isWin: updatedState.isWin,
-  };
-  localStorage.setItem(GAME_HISTORY, JSON.stringify(gameHistory));
-}
-
-export function getStoredGameState(
-  setGameState: StateUpdater<GameState | null>,
-) {
-  useEffect(() => {
-    if (getReferenceDateString() in getPuzzleHistory()) {
-      const puzzleHistoryEntry = getPuzzleHistory()[getReferenceDateString()];
-      setGameState({
-        id: puzzleHistoryEntry.id,
-        guesses: puzzleHistoryEntry.guesses,
-        currentGuessName: null,
-        isWin: puzzleHistoryEntry.isWin,
-        showAnswer:
-          !puzzleHistoryEntry.isWin &&
-          puzzleHistoryEntry.guesses.length >= MAX_GUESSES,
-        showShareResultToast: false,
-      });
-    } else {
-      postPuzzleSession().then((puzzleSession: IPuzzleSession | null) => {
-        if (puzzleSession) {
-          const gameState = {
-            id: puzzleSession.id,
-            guesses: [],
-            currentGuessName: null,
-            isWin: false,
-            showAnswer: false,
-            showShareableResultMessage: false,
-          };
-          setGameState(gameState);
-          updatePuzzleHistory(gameState);
-        } else setGameState(null);
-      });
-    }
-  }, [setGameState]);
-}
-
 function getResultRow(guess: Guess) {
-  if (guess.isWin) return "🟩🟩";
+  if (guess.isWin) return "🏁🏁";
   else {
     if (guess.gdpRatio > 1) {
       return "📈" + getBearingEmoji(guess.bearing);
@@ -154,8 +95,8 @@ export function getShareableResult(gameState: GameState) {
 }
 
 export function shareableResultClickHandler(
-  gameState: GameState,
-  setGameState: StateUpdater<GameState | null>,
+  gameState: GameState | null,
+  setGameState: (gameState: GameState | null) => void,
 ) {
   return async () => {
     if (gameState) {
@@ -172,8 +113,11 @@ export function shareableResultClickHandler(
 }
 
 //TODO Change this for game state overhaul, Issue #21
-export function isGameOngoing(gameState: GameState) {
-  return gameState.guesses.length < MAX_GUESSES && !gameState.isWin;
+export function isGameOngoing(gameState: GameState | null) {
+  return (
+    gameState === null ||
+    (gameState.guesses.length < MAX_GUESSES && !gameState.isWin)
+  );
 }
 
 export function guessableStateRecords(gameState: GameState) {

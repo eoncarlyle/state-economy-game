@@ -1,29 +1,38 @@
-import { StateUpdater, useEffect, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
+import { Button, Dialog, Modal } from "react-aria-components";
 
-import { Modal, Dialog, Button } from "react-aria-components";
-
+import {
+  GameState,
+  GlobalState,
+  GoneResponse,
+  PuzzleAnswerResponse,
+} from "../util/model.ts";
 import { getPuzzleAnswer } from "../util/rest";
-import { GameState, PuzzleAnswerResponse } from "../util/model.ts";
+import { isGoneResponse, resetGlobalState } from "../util/util.ts";
 
 // TODO extract this out to dedicated type
-type PuzzleAnswerModalProps = {
-  gameState: GameState;
-  setGameState: StateUpdater<GameState | null>;
-};
 
-export default function PuzzleAnswerModal(
-  props: PuzzleAnswerModalProps,
-): React.ReactNode {
-  const { gameState, setGameState } = props;
-  if (!gameState.showAnswer) return <></>;
+export default function PuzzleAnswerModal(props: {
+  globalState: GlobalState;
+  setGlobalState: Dispatch<StateUpdater<GlobalState>>;
+}): React.ReactNode {
+  const { globalState, setGlobalState } = props;
+  const gameState = globalState.gameState;
+  const setGameState = (gameState: GameState | null) =>
+    setGlobalState({ ...globalState, gameState: gameState });
+
+  if (!gameState || !gameState.showAnswer) return <></>;
   const [targetStateName, setTargetStateName] = useState<String | null>(null);
 
   //TODO: Retry logic, Issue #21
   useEffect(() => {
     getPuzzleAnswer(gameState.id).then(
-      (response: PuzzleAnswerResponse | null) => {
-        if (response) setTargetStateName(response.targetStateName);
-        else setTargetStateName(null);
+      (response: PuzzleAnswerResponse | GoneResponse | null) => {
+        if (response && "targetStateName" in response) {
+          setTargetStateName(response.targetStateName);
+        } else if (isGoneResponse(response)) {
+          resetGlobalState(setGlobalState, true);
+        } else setTargetStateName(null);
       },
     );
   }, [setTargetStateName]);
