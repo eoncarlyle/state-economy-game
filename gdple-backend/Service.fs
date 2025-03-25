@@ -150,7 +150,7 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
             |> Result.bind (fun session ->
                 match maybeSessionGuesses with
                 | Some guesses ->
-                    if (Seq.length guesses >= MAX_GUESSES) then
+                    if (Seq.length guesses < MAX_GUESSES) then
                         Error(getAppErrorDto 400 $"{MAX_GUESSES} guesses must be made before answer can be requested")
                     else
                         Ok session
@@ -190,7 +190,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
             |> Result.bind (fun session ->
                 match maybeSessionGuesses with
                 | Some guesses ->
-                    if (Seq.length guesses < MAX_GUESSES) then
+                    if (Seq.length guesses >= MAX_GUESSES) then
                         Error(getAppErrorDto 400 "Too many requests have been made for this game")
                     elif (guesses |> Seq.exists (fun g -> g.stateName = guessSubmission.guessStateName)) then
                         Error(getAppErrorDto 400 "Duplicate of previous request")
