@@ -36,7 +36,6 @@ let validationBoolOption isValid appErrorOnFail =
 
 let getAppErrorDto code message = { code = code; message = message }
 
-
 let internalErrorDto = getAppErrorDto 500 "Internal server error"
 
 let sqliteConnection sqliteDbFileName =
@@ -178,8 +177,6 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
             | Ok session -> getGuesses dbConnection session.id |> _.Result |> Some
             | Error _ -> None
 
-
-        //Right now I think that guessStateResult would throw if an invalid state was requested, should fix
         let guessStateResult =
             StateName.create guessSubmission.guessStateName |> Result.bind tryGetState
 
@@ -323,7 +320,6 @@ let updatePuzzleAnswer (dbConnection: DbConnection) =
         |> dbConnection.InsertAsync
         |> ignore
     }
-
 
 type DailyJob() =
     interface IJob with
