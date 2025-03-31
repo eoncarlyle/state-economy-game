@@ -167,10 +167,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
 
         let validatedSessionResult =
             Result.mapError (fun msg -> getAppErrorDto 404 msg) sessionResult
-            >>= (fun session ->
-                match guessStateResult with
-                | Ok _ -> Ok session
-                | Error msg -> Error(getAppErrorDto 404 msg))
+            |> bindError Error
             >>= (fun session ->
                 match maybeSessionGuesses with
                 | Some guesses ->
