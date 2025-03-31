@@ -13,6 +13,7 @@ open StateEconomyGame.Model
 open StateEconomyGame.Constants
 open StateEconomyGame.Util
 open Giraffe.ComputationExpressions
+open FSharpPlus
 
 //! F# lists != .NET lists, this got me in some type trouble with 4e18b9d
 
@@ -21,18 +22,6 @@ let puzzleAnswerTable = table'<PuzzleAnswer> "target_states"
 let puzzleSessionTable = table'<PuzzleSession> "puzzle_sessions"
 let guessTable = table'<Guess> "guesses"
 let puzzleAnswerHistoryTable = table'<PuzzleAnswerHistory> "puzzle_answer_history"
-
-// H/T to Michael
-let taskMap<'a, 'b> (fn: 'a -> 'b) (a: Task<'a>) : Task<'b> =
-    task {
-        let! results = a
-        return fn results
-    }
-
-let taskGet (task: Task<'a>) : 'a = task.Result //Why no Result.get?
-
-let validationBoolOption isValid appErrorOnFail =
-    if isValid then Option.None else Some appErrorOnFail
 
 let getAppErrorDto code message = { code = code; message = message }
 
@@ -48,13 +37,13 @@ let getTotalGdp state =
     let rec loop (economyNode: EconomyNode) =
         match economyNode.children with
         | [] -> economyNode.gdp
-        | children -> children |> List.map loop |> List.sum
+        | children -> children |> map loop |> List.sum
 
     Convert.ToInt64(loop state.stateEconomy)
 
 let getOneFromQuery =
-    taskMap (fun result ->
-        match Seq.tryHead result with
+    map (fun result ->
+        match tryHead result with
         | Some value -> Ok value
         | None -> Error "No elements found")
 
@@ -65,14 +54,14 @@ let getPuzzleAnswer (dbConnection: DbConnection) =
             orderByDescending puzzleAnswer.id
     }
     |> dbConnection.SelectAsync<PuzzleAnswer>
-    |> taskMap (fun result ->
-        match Seq.tryHead result with
+    |> map (fun result ->
+        match tryHead result with
         | Some value -> Ok value
         | None -> Error "Puzzle answer not found")
 
 let tryGetState stateName =
     let maybeState =
-        states |> List.tryFind (fun state -> state.name = StateName.toString stateName)
+        states |> tryFind (fun state -> state.name = StateName.toString stateName)
 
     match maybeState with
     | Some state -> Ok state
@@ -81,11 +70,7 @@ let tryGetState stateName =
 let getPuzzleAnswerState dbConnection : Task<Result<State, string>> =
     task {
         let! puzzleAnswer = getPuzzleAnswer dbConnection
-
-        return
-            puzzleAnswer
-            |> Result.bind (fun a -> StateName.create a.name)
-            |> Result.bind tryGetState
+        return puzzleAnswer >>= (fun a -> StateName.create a.name) >>= tryGetState
     }
 
 let getPuzzleAnswerEconomy dbConnection : Task<AppResult<DtoOutStateEconomy>> =
@@ -147,16 +132,16 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
         let validatedSessionResult =
             sessionResult
             |> Result.mapError (fun msg -> getAppErrorDto 404 msg)
-            |> Result.bind (fun session ->
+            >>= (fun session ->
                 match maybeSessionGuesses with
                 | Some guesses ->
-                    if (Seq.length guesses < MAX_GUESSES) then
+                    if (length guesses < MAX_GUESSES) then
                         Error(getAppErrorDto 400 $"{MAX_GUESSES} guesses must be made before answer can be requested")
                     else
                         Ok session
                 | None -> Ok session)
 
-        let puzzleAnswerState = getPuzzleAnswerState dbConnection |> taskGet
+        let! puzzleAnswerState = getPuzzleAnswerState dbConnection
 
         return
             match validatedSessionResult, maybeSessionGuesses, puzzleAnswerState with
@@ -178,21 +163,20 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
             | Error _ -> None
 
         let guessStateResult =
-            StateName.create guessSubmission.guessStateName |> Result.bind tryGetState
+            StateName.create guessSubmission.guessStateName >>= tryGetState
 
         let validatedSessionResult =
-            sessionResult
-            |> Result.mapError (fun msg -> getAppErrorDto 404 msg)
-            |> Result.bind (fun session ->
+            Result.mapError (fun msg -> getAppErrorDto 404 msg) sessionResult
+            >>= (fun session ->
                 match guessStateResult with
                 | Ok _ -> Ok session
                 | Error msg -> Error(getAppErrorDto 404 msg))
-            |> Result.bind (fun session ->
+            >>= (fun session ->
                 match maybeSessionGuesses with
                 | Some guesses ->
-                    if (Seq.length guesses >= MAX_GUESSES) then
+                    if (length guesses >= MAX_GUESSES) then
                         Error(getAppErrorDto 400 "Too many requests have been made for this game")
-                    elif (guesses |> Seq.exists (fun g -> g.stateName = guessSubmission.guessStateName)) then
+                    elif (guesses |> exists (fun g -> g.stateName = guessSubmission.guessStateName)) then
                         Error(getAppErrorDto 400 "Duplicate of previous request")
                     else
                         Ok session
@@ -246,7 +230,7 @@ let getPuzzleAnswerCount (dbConnection: DbConnection) =
                     selectAll
             }
             |> dbConnection.SelectAsync<PuzzleAnswer>
-            |> taskMap Seq.length
+            |> map length
     }
 
 let updatePuzzleAnswerHistory (dbConnection: DbConnection) =
@@ -254,8 +238,8 @@ let updatePuzzleAnswerHistory (dbConnection: DbConnection) =
         let! puzzleAnswer = getPuzzleAnswer dbConnection
 
         puzzleAnswer
-        |> Result.map _.name
-        |> Result.iter (fun puzzleAnswer ->
+        |> map _.name
+        |> iter (fun puzzleAnswer ->
             insert {
                 into puzzleAnswerHistoryTable
 
@@ -277,7 +261,7 @@ let cleanPuzzleAnswers (dbConnection: DbConnection) =
             }
             |> dbConnection.SelectAsync<PuzzleAnswer>
 
-        let minId = puzzleAnswers |> Seq.map _.id |> Seq.min
+        let minId = puzzleAnswers |> map _.id |> Seq.min
 
         if minId > 1 then
             dbConnection.Execute($"UPDATE target_states SET id = id - {(minId - 1)}, updatedAt = CURRENT_TIMESTAMP")
@@ -286,25 +270,29 @@ let cleanPuzzleAnswers (dbConnection: DbConnection) =
 
 let updatePuzzleAnswer (dbConnection: DbConnection) =
     task {
-        let! unselectableTargetStateNames =
+        let! puzzleAnswers =
             select {
                 for puzzleAnswer in puzzleAnswerTable do
                     selectAll
+                    orderBy puzzleAnswer.createdAt
             } // What is done below should really be done by the type mapper instead
             |> dbConnection.SelectAsync<PuzzleAnswer>
-            |> taskMap (Seq.map _.name)
-            |> taskMap (fun puzzleAnswers ->
-                puzzleAnswers |> Seq.rev |> Seq.truncate PUZZLE_ANSWER_RETENTION |> Seq.toList)
+
+        let unselectableTargetStateNames =
+            toSeq puzzleAnswers
+            |> Seq.truncate PUZZLE_ANSWER_RETENTION
+            |> map _.name
+            |> toList
 
         let selectableStates =
             states
-            |> List.filter (fun state -> List.contains state.name unselectableTargetStateNames |> not)
+            |> filter (fun state -> List.contains state.name unselectableTargetStateNames |> not)
 
         let newState = List.item (rnd.Next(0, selectableStates.Length)) selectableStates
         Console.WriteLine($"Selected {newState.name} as the next puzzle answer")
 
         let now = DateTime.Now
-        let! id = getPuzzleAnswerCount dbConnection |> taskMap (fun x -> x + 1)
+        let! id = (fun x -> x + 1) <!> getPuzzleAnswerCount dbConnection
 
         let newPuzzleAnswer =
             { id = id
