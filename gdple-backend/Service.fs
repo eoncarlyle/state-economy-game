@@ -12,10 +12,7 @@ open Quartz
 open StateEconomyGame.Model
 open StateEconomyGame.Constants
 open StateEconomyGame.Util
-open Giraffe.ComputationExpressions
 open FSharpPlus
-
-//! F# lists != .NET lists, this got me in some type trouble with 4e18b9d
 
 let rnd = Random()
 let puzzleAnswerTable = table'<PuzzleAnswer> "target_states"
@@ -166,7 +163,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
             StateName.create guessSubmission.guessStateName >>= tryGetState
 
         let validatedSessionResult =
-            Result.mapError (fun msg -> getAppErrorDto 404 msg) sessionResult
+            Result.mapError (getAppErrorDto 404) sessionResult
             |> bindError Error
             >>= (fun session ->
                 match maybeSessionGuesses with
@@ -215,6 +212,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                       bearing = haversineBearing guessState answerState
                       gdpRatio = Math.Round(answerStateGdp / guessStateGdp, 2)
                       isWin = guessState.name = answerState.name }
+            | _, Error guessStateError, _ -> Error (getAppErrorDto 404 guessStateError)
             | Error validationError, _, _ -> Error validationError
             | _ -> Error internalErrorDto
     }
