@@ -271,7 +271,7 @@ let updatePuzzleAnswer (dbConnection: DbConnection) =
             select {
                 for puzzleAnswer in puzzleAnswerTable do
                     selectAll
-                    orderBy puzzleAnswer.createdAt
+                    orderByDescending puzzleAnswer.createdAt
             } // What is done below should really be done by the type mapper instead
             |> dbConnection.SelectAsync<PuzzleAnswer>
 
