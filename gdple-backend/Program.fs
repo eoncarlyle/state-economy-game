@@ -24,7 +24,12 @@ let errorHandler (ex: Exception) (logger: ILogger) =
 
 let configureCors (builder: CorsPolicyBuilder) =
     builder
-        .WithOrigins("https://gdple.iainschmitt.com", "http://localhost:5173", "http://localhost:4173")
+        .WithOrigins(
+            "https://gdple.iainschmitt.com",
+            "https://www.gdple.iainschmitt.com",
+            "http://localhost:5173",
+            "http://localhost:4173"
+        )
         .AllowAnyMethod()
         .AllowAnyHeader()
     |> ignore
