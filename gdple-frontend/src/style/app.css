@@ -309,12 +309,18 @@ h4 {
   margin: 0.3rem;
 }
 
-.center-link,
-.center-link:visited {
+.streak-container {
+  flex-direction: column;
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.center {
   margin: 2rem;
   display: flex;
   justify-content: center;
-  color: #004085;
 }
 
 a,

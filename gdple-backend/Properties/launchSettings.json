@@ -17,6 +17,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "commandLineArgs": "/home/iain/code/state-economy-game/gdple-backend/app.db"
+    },
+    "giraffe-backend-refactor-test": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "commandLineArgs": "/Users/iain/code/state-economy-game/gdple-backend-app-b.db"
     }
   }
 }

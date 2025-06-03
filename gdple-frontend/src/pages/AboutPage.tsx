@@ -38,7 +38,7 @@ export default function AboutPage() {
           <a href="https://github.com/eoncarlyle/state-economy-game">here</a>.
         </p>
       </div>
-      <Link href="/" className="center-link">
+      <Link href="/" className="center">
         Back to the game
       </Link>
     </>
