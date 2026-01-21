@@ -8,14 +8,13 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.Data.Sqlite //! Had annoying SQLite interop issues
 open Giraffe
 open Quartz
 
 open StateEconomyGame.Constants
 open StateEconomyGame.Service
 open StateEconomyGame.Controller
-
-
 
 
 let errorHandler (ex: Exception) (logger: ILogger) =
@@ -29,21 +28,20 @@ let configureCors (builder: CorsPolicyBuilder) =
         .AllowAnyHeader()
     |> ignore
 
+let configureApp (app: IApplicationBuilder) =
+    let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
 
-let configureAppFactory (sqliteDbFileName: string) =
-    let configureApp (app: IApplicationBuilder) =
-        let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
+    (match env.IsDevelopment() with
+     | true -> app.UseDeveloperExceptionPage()
+     | false -> app.UseGiraffeErrorHandler(errorHandler).UseHttpsRedirection())
+        .UseCors(configureCors)
+        .UseStaticFiles()
+        .UseGiraffe(giraffeApp)
 
-        (match env.IsDevelopment() with
-         | true -> app.UseDeveloperExceptionPage()
-         | false -> app.UseGiraffeErrorHandler(errorHandler).UseHttpsRedirection())
-            .UseCors(configureCors)
-            .UseStaticFiles()
-            .UseGiraffe(webApp sqliteDbFileName)
+let configureServices (sqliteDbFileName: string) (services: IServiceCollection) =
+    services.AddSingleton<SqliteConnection>(sqliteConnection sqliteDbFileName)
+    |> ignore
 
-    configureApp
-
-let configureServices (services: IServiceCollection) =
     services.AddCors() |> ignore
     services.AddGiraffe() |> ignore
     services.AddQuartz() |> ignore
@@ -53,7 +51,7 @@ let configureLogging (builder: ILoggingBuilder) =
 
 [<EntryPoint>]
 let giraffeMain args =
-    let configureApp = Array.item 0 args |> configureAppFactory
+    let sqliteDbFileName = Array.item 0 args
 
     let builder =
         Host
@@ -61,8 +59,8 @@ let giraffeMain args =
             .ConfigureWebHostDefaults(fun webHostBuilder ->
                 webHostBuilder
                     .UseUrls("http://localhost:5000")
-                    .Configure(Action<IApplicationBuilder> configureApp)
-                    .ConfigureServices(configureServices)
+                    .Configure(configureApp)
+                    .ConfigureServices(configureServices sqliteDbFileName)
                     .ConfigureLogging(configureLogging)
                 |> ignore)
             .Build()

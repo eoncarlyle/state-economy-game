@@ -117,7 +117,7 @@ let postPuzzleSession (dbConnection: DbConnection) =
 
     { id = guid }
 
-let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
+let getPuzzleAnswerForSession id (dbConnection: DbConnection) =
     task {
         let! sessionResult = getPuzzleSession dbConnection id
 
@@ -129,14 +129,14 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
         let validatedSessionResult =
             sessionResult
             |> Result.mapError (fun msg -> getAppErrorDto 404 msg)
-            >>= (fun session ->
+            >>= fun session ->
                 match maybeSessionGuesses with
                 | Some guesses ->
-                    if (length guesses < MAX_GUESSES) then
+                    if length guesses < MAX_GUESSES then
                         Error(getAppErrorDto 400 $"{MAX_GUESSES} guesses must be made before answer can be requested")
                     else
                         Ok session
-                | None -> Ok session)
+                | None -> Ok session
 
         let! puzzleAnswerState = getPuzzleAnswerState dbConnection
 
@@ -150,7 +150,7 @@ let getPuzzleAnswerForSession (dbConnection: DbConnection) id =
             | _ -> Error internalErrorDto
     }
 
-let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmission) =
+let postGuess (guessSubmission: DtoInGuessSubmission) (dbConnection: DbConnection) =
     task {
         let! sessionResult = getPuzzleSession dbConnection guessSubmission.id
 
@@ -212,7 +212,7 @@ let postGuess (dbConnection: DbConnection) (guessSubmission: DtoInGuessSubmissio
                       bearing = haversineBearing guessState answerState
                       gdpRatio = Math.Round(answerStateGdp / guessStateGdp, 2)
                       isWin = guessState.name = answerState.name }
-            | _, Error guessStateError, _ -> Error (getAppErrorDto 404 guessStateError)
+            | _, Error guessStateError, _ -> Error(getAppErrorDto 404 guessStateError)
             | Error validationError, _, _ -> Error validationError
             | _ -> Error internalErrorDto
     }
