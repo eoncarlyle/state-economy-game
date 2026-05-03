@@ -1,5 +1,3 @@
-import { Dispatch, StateUpdater } from "preact/hooks";
-
 import { getUsStateRecord } from "./util.ts";
 
 export interface Coordinates {
@@ -96,14 +94,4 @@ export interface GoneResponse {
   message: string;
   statusCode: 410;
   type: "GoneResponse";
-}
-
-export interface GlobalState {
-  gameState: GameState | null;
-  stateEconomy: StateEconomy | null;
-}
-
-export interface CachedEconomy {
-  stateEconomy: StateEconomy;
-  referenceDateString: string;
 }

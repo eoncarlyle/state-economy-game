@@ -4,22 +4,17 @@ import { ToastContainer } from "react-tiny-toast";
 
 import { MAX_GUESSES } from "../util/constants.ts";
 import { guessableStateRecords, isGameOngoing } from "../util/guess";
-import { GameState, GlobalState, Guess, StateRecord } from "../util/model.ts";
+import { GameState, Guess, StateRecord } from "../util/model.ts";
 import shareResultToast from "../util/shareStateToast.ts";
 import GuessRow from "./GuessRow";
 import MainButton from "./MainButton";
 import PuzzleAnswerModal from "./PuzzleAnswerModal";
 
 export default function Guesses(props: {
-  globalState: GlobalState;
-  setGlobalState: Dispatch<StateUpdater<GlobalState>>;
+  gameState: GameState | null;
+  setGameState: Dispatch<StateUpdater<GameState | null>>;
 }) {
-  const { globalState, setGlobalState } = props;
-
-  const gameState = globalState.gameState;
-
-  const setGameState = (gameState: GameState | null) =>
-    setGlobalState({ ...globalState, gameState: gameState });
+  const { gameState, setGameState } = props;
 
   //TODO Not proud of this Issue #22
   if (!gameState) return <></>;
@@ -56,10 +51,10 @@ export default function Guesses(props: {
           limit={5}
           value={gameState.currentGuessName ? gameState.currentGuessName : ""}
         />
-        <MainButton {...props} />
+        <MainButton gameState={gameState} setGameState={setGameState} />
       </div>
       {/* Todo: there has to be some better way to do this */}
-      <PuzzleAnswerModal {...props} />
+      <PuzzleAnswerModal gameState={gameState} setGameState={setGameState} />
       <ToastContainer />
     </>
   );

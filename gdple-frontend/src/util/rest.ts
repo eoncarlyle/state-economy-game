@@ -1,5 +1,4 @@
 import {
-  GlobalState,
   GoneResponse,
   GuessSubmissionRequest,
   GuessSubmissionResponse,

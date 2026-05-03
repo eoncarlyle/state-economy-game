@@ -1,65 +1,59 @@
-import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
+import { Dispatch, StateUpdater } from "preact/hooks";
 import { Button, Dialog, Modal } from "react-aria-components";
 
-import {
-  GameState,
-  GlobalState,
-  GoneResponse,
-  PuzzleAnswerResponse,
-} from "../util/model.ts";
-import { getPuzzleAnswer } from "../util/rest";
-import { isGoneResponse, resetGlobalState } from "../util/util.ts";
-
-// TODO extract this out to dedicated type
+import { GameState } from "../util/model.ts";
+import { useAnswerQuery } from "../util/queries.ts";
+import { isGoneResponse } from "../util/util.ts";
 
 export default function PuzzleAnswerModal(props: {
-  globalState: GlobalState;
-  setGlobalState: Dispatch<StateUpdater<GlobalState>>;
-}): React.ReactNode {
-  const { globalState, setGlobalState } = props;
-  const gameState = globalState.gameState;
-  const setGameState = (gameState: GameState | null) =>
-    setGlobalState({ ...globalState, gameState: gameState });
+  gameState: GameState;
+  setGameState: Dispatch<StateUpdater<GameState | null>>;
+}) {
+  const { gameState, setGameState } = props;
+
+  const { data: response, isLoading } = useAnswerQuery(
+    gameState?.id || "",
+    !!gameState?.showAnswer
+  );
 
   if (!gameState || !gameState.showAnswer) return <></>;
-  const [targetStateName, setTargetStateName] = useState<String | null>(null);
 
-  //TODO: Retry logic, Issue #21
-  useEffect(() => {
-    getPuzzleAnswer(gameState.id).then(
-      (response: PuzzleAnswerResponse | GoneResponse | null) => {
-        if (response && "targetStateName" in response) {
-          setTargetStateName(response.targetStateName);
-        } else if (isGoneResponse(response)) {
-          resetGlobalState(setGlobalState, true);
-        } else setTargetStateName(null);
-      },
-    );
-  }, [setTargetStateName]);
+  // Handle GoneResponse edge case
+  if (response && isGoneResponse(response)) {
+    // Session is gone, reset the game state
+    setGameState(null);
+    return <></>;
+  }
+
+  const targetStateName = response && "targetStateName" in response ? response.targetStateName : null;
 
   const closeAnswerHandler = () => {
     setGameState({ ...gameState, showAnswer: false });
   };
 
-  if (targetStateName) {
-    return (
-      <Modal
-        isDismissable
-        isOpen={gameState.showAnswer}
-        onOpenChange={closeAnswerHandler}
-      >
-        <Dialog>
-          <div className={"dialog"}>
+  return (
+    <Modal
+      isDismissable
+      isOpen={gameState.showAnswer}
+      onOpenChange={closeAnswerHandler}
+    >
+      <Dialog>
+        <div className={"dialog"}>
+          {isLoading ? (
+            <h3>Loading answer...</h3>
+          ) : targetStateName ? (
             <h3>Correct answer: {targetStateName}</h3>
-            <Button
-              className="button close-button"
-              onPress={closeAnswerHandler}
-            >
-              Close
-            </Button>
-          </div>
-        </Dialog>
-      </Modal>
-    ) as React.ReactNode;
-  } else return <></>;
+          ) : (
+            <h3>Failed to load answer</h3>
+          )}
+          <Button
+            className="button close-button"
+            onPress={closeAnswerHandler}
+          >
+            Close
+          </Button>
+        </div>
+      </Dialog>
+    </Modal>
+  );
 }

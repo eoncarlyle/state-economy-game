@@ -1,76 +1,12 @@
 import { DateTime } from "luxon";
-import { Dispatch, StateUpdater } from "preact/hooks";
 
 import { getBearingEmoji } from "../components/BearingIcon.tsx";
 import { MAX_GUESSES } from "./constants.ts";
-import { GameState, GlobalState, Guess, StateRecord } from "./model.ts";
-import { postGuessSubmission } from "./rest";
+import { GameState, Guess, StateRecord } from "./model.ts";
 import {
   getReferenceDate,
   getUsStateRecords,
-  isGoneResponse,
-  resetGlobalState,
-  updatePuzzleHistory,
 } from "./util.ts";
-
-export function getGuessSubmitHandler(
-  globalState: GlobalState,
-  setGlobalState: Dispatch<StateUpdater<GlobalState>>,
-  maxGuesses: number,
-) {
-  return async () => {
-    //TODO: reflect on if the 'don't update anything if you hit an error' makes sense, Issue #20
-
-    const gameState = globalState.gameState;
-
-    const setGameState = (gameState: GameState | null) =>
-      setGlobalState({ ...globalState, gameState: gameState });
-
-    if (
-      gameState &&
-      gameState.currentGuessName &&
-      guessableStateRecords(gameState).includes(
-        StateRecord.of(gameState.currentGuessName),
-      )
-    ) {
-      const guessedStateRecord = StateRecord.of(gameState.currentGuessName);
-      const guessSubmissionResponse = await postGuessSubmission({
-        id: gameState.id,
-        guessStateName: gameState.currentGuessName,
-        requestTimestamp: Date.now(),
-      });
-
-      if (guessSubmissionResponse && "id" in guessSubmissionResponse) {
-        const submittedGuess: Guess = {
-          stateRecord: guessedStateRecord,
-          bearing: guessSubmissionResponse.bearing,
-          gdpRatio: guessSubmissionResponse.gdpRatio,
-          isWin: guessSubmissionResponse.isWin,
-        };
-        let updatedState: GameState = {
-          ...gameState,
-          guesses: gameState.guesses.concat(submittedGuess),
-          currentGuessName: null,
-        };
-        if (guessSubmissionResponse.isWin) {
-          updatedState = {
-            ...updatedState,
-            isWin: true,
-          };
-        } else if (gameState.guesses.length + 1 >= maxGuesses) {
-          updatedState = {
-            ...updatedState,
-            showAnswer: true,
-          };
-        }
-        updatePuzzleHistory(updatedState);
-        setGameState(updatedState);
-      } else if (isGoneResponse(guessSubmissionResponse)) {
-        resetGlobalState(setGlobalState, true);
-      }
-    }
-  };
-}
 
 function getResultRow(guess: Guess) {
   if (guess.isWin) return "🏁🏁";

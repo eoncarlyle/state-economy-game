@@ -1,4 +1,5 @@
 import { MantineProvider, createTheme } from "@mantine/core";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@mantine/core/styles/CloseButton.css";
 import "@mantine/core/styles/Combobox.css";
 import "@mantine/core/styles/Flex.css";
@@ -20,15 +21,25 @@ import AboutPage from "./pages/AboutPage";
 import GamePage from "./pages/GamePage";
 import "./style/app.css";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 export function App() {
   return (
-    <MantineProvider
-      theme={createTheme({ fontFamily: "Helvetica, sans-serrif" })}
-    >
-      <Switch>
-        <Route path="/about" component={AboutPage} />
-        <Route path="/" component={GamePage} />
-      </Switch>
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider
+        theme={createTheme({ fontFamily: "Helvetica, sans-serrif" })}
+      >
+        <Switch>
+          <Route path="/about" component={AboutPage} />
+          <Route path="/" component={GamePage} />
+        </Switch>
+      </MantineProvider>
+    </QueryClientProvider>
   );
 }

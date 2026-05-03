@@ -8,10 +8,13 @@
     "prebuild": "vite build",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "test": "vitest run --environment happy-dom",
+    "test:watch": "vitest --environment happy-dom"
   },
   "dependencies": {
     "@mantine/core": "^7.13.2",
+    "@tanstack/react-query": "^5.100.8",
     "@types/haversine": "^1.1.8",
     "@types/react": "^18.2.47",
     "d3": "^7.8.5",
@@ -27,8 +30,11 @@
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
     "@types/luxon": "^3.4.0",
     "@types/material-ui": "^0.21.16",
+    "happy-dom": "^20.9.0",
+    "jsdom": "^29.1.1",
     "typescript": "^5.0.2",
-    "vite-bundle-visualizer": "^1.2.1"
+    "vite-bundle-visualizer": "^1.2.1",
+    "vitest": "^2.1.9"
   },
   "prettier": {
     "plugins": [

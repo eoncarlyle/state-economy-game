@@ -13,33 +13,60 @@ import "@mantine/core/styles/ScrollArea.css";
 import "@mantine/core/styles/UnstyledButton.css";
 import "@mantine/core/styles/VisuallyHidden.css";
 import "@mantine/core/styles/global.css";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { Link } from "wouter";
 
 import EconomyDiagram from "../components/EconomyDiagram";
 import Guesses from "../components/Guesses";
-import {
-  GameState,
-  GlobalState,
-  PuzzleHistory,
-  StateEconomy,
-} from "../util/model.ts";
+import { GameState } from "../util/model.ts";
+import { useEconomyQuery, usePuzzleSessionMutation } from "../util/queries.ts";
 import {
   getCurrentStreak,
   getMaxStreak,
   getPuzzleHistory,
-  useResetGlobalState,
+  getReferenceDateString,
+  updatePuzzleHistory,
 } from "../util/util.ts";
 
 export default function GamePage() {
-  const [globalState, setGlobalState] = useState<GlobalState>({
-    gameState: null,
-    stateEconomy: null,
-  });
+  const [gameState, setGameState] = useState<GameState | null>(null);
 
-  if (!globalState.stateEconomy && !globalState.gameState) {
-    useResetGlobalState(globalState, setGlobalState, false);
-  }
+  const { data: stateEconomy, isLoading: isEconomyLoading } = useEconomyQuery();
+  const sessionMutation = usePuzzleSessionMutation();
+
+  useEffect(() => {
+    const history = getPuzzleHistory();
+    const today = getReferenceDateString();
+    
+    if (today in history) {
+      const entry = history[today];
+      setGameState({
+        id: entry.id,
+        guesses: entry.guesses,
+        currentGuessName: null,
+        isWin: entry.isWin,
+        showAnswer: !entry.isWin && entry.guesses.length >= 5, // MAX_GUESSES is 5
+        showShareableResultMessage: false,
+      });
+    } else if (!sessionMutation.isPending && !gameState) {
+      sessionMutation.mutate(undefined, {
+        onSuccess: (session) => {
+          if (session) {
+            const newGameState: GameState = {
+              id: session.id,
+              guesses: [],
+              currentGuessName: null,
+              isWin: false,
+              showAnswer: false,
+              showShareableResultMessage: false,
+            };
+            setGameState(newGameState);
+            updatePuzzleHistory(newGameState);
+          }
+        }
+      });
+    }
+  }, []);
 
   const currentStreak = getCurrentStreak();
   const maxStreak = getMaxStreak();
@@ -49,9 +76,11 @@ export default function GamePage() {
       <h1 className="gdple-heading">
         GDP<span style={{ color: "#ffc107" }}>LE</span>
       </h1>
-      <EconomyDiagram stateEconomy={globalState.stateEconomy} />
+      
+      {stateEconomy && <EconomyDiagram stateEconomy={stateEconomy} />}
+      {isEconomyLoading && <div>Loading economy...</div>}
 
-      <Guesses globalState={globalState} setGlobalState={setGlobalState} />
+      <Guesses gameState={gameState} setGameState={setGameState} />
       <Link href="/about" className="center">
         How to play/about this project
       </Link>
