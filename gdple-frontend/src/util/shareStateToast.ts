@@ -1,4 +1,4 @@
-import { Dispatch, StateUpdater, useEffect } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { toast } from "react-tiny-toast";
 
 import { GameState } from "../util/model.ts";
