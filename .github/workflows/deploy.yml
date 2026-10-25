@@ -37,8 +37,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: npm --prefix gdple-frontend install
+
+      - name: Run tests
+        run: npm --prefix gdple-frontend run test
+
       - name: Build application
-        run: npm --prefix gdple-frontend install && npm --prefix gdple-frontend run prebuild
+        run: npm --prefix gdple-frontend run prebuild
 
       - name: Remove runtime directory
         run: sudo rm -rf /opt/gdple-frontend-dist

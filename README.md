@@ -2,6 +2,8 @@
 State guessing game hosted on [gdple.iainschmitt.com](https://gdple.iainschmitt.com). Inspired by [Tradle](https://games.oec.world/en/tradle/) and [Statele](https://statele.teuteuf.fr).
 
 
+The GDP-by-industry data comes from [BEA](https://www.bea.gov/data/gdp/gdp-state); see [gdp-analysis/README.md](gdp-analysis/README.md) for how to refresh `states.json`.
+
 ## References
 
 [1] Nickolous Justice. 2019. Haversine NPM module. Retrieved from https://github.com/njj/haversine
@@ -11,3 +13,5 @@ State guessing game hosted on [gdple.iainschmitt.com](https://gdple.iainschmitt.
 [3] Observable. 2023. Treemap, CSV. Retrieved from https://observablehq.com/@d3/treemap-stratify
 
 [4] Giorgio Fighera. 2020. Histogram with tooltips and bars highlighted on mouse over. Retrieved from https://observablehq.com/@giorgiofighera/histogram-with-tooltips-and-bars-highlighted-on-mouse-over
+
+[5] U.S. Bureau of Economic Analysis. 2026. Regional Data: GDP by State (SAGDP2). Retrieved from https://apps.bea.gov/regional/downloadzip.htm

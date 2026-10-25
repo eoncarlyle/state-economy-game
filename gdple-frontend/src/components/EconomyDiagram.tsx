@@ -10,7 +10,7 @@ export default function EconomyDiagram(props: {
     return (
       //@ts-ignore
       <div className="economy-diagram-container">
-        <h4>Total 2023 GDP: {priceNumberFormat(stateEconomy.totalGdp)}</h4>
+        <h4>Total 2025 GDP: {priceNumberFormat(stateEconomy.totalGdp)}</h4>
         {/* @ts-ignore */}
         <EconomyTreemap data={stateEconomy.economy} />
       </div>

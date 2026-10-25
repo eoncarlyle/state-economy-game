@@ -19,7 +19,7 @@ export default function AboutPage() {
         <p>
           The goal of the game is to guess US state that has the GDP breakdown
           shown! A new puzzle created every 24 hours. Puzzle data is from Bureau
-          of Economic Analysis, collected for 2023.
+          of Economic Analysis, collected for 2025.
         </p>
         <p>
           As an example, if you guessed "Alabama" then saw the following row,
